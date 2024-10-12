@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\ProductManager;
+use App\Livewire\CategoryComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,7 +10,12 @@ Route::get('/', function () {
 
 Route::get('products', ProductManager::class)
     ->middleware(['auth'])
-    ->name('products.index');
+    ->name('products');
+
+Route::get('categories', CategoryComponent::class)
+    ->middleware(['auth'])
+    ->name('categories');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

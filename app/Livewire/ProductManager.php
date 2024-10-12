@@ -4,15 +4,18 @@ namespace App\Livewire;
 
 use App\Models\Product;
 use Livewire\Component;
+use App\Models\Category;
 
 class ProductManager extends Component
 {
-    public $products, $name, $price, $stock, $description, $product_id;
+    public $products, $name, $price, $stock, $description, $product_id, $categories, $category_id;
+
     public $isOpen = 0;
 
     public function render()
     {
         $this->products = Product::all();
+        $this->categories = Category::all();
         return view('livewire.product-manager')->layout('layouts.app');
     }
     public function create()
@@ -34,6 +37,7 @@ class ProductManager extends Component
     private function resetInputFields()
     {
         $this->name = '';
+        $this->category_id = '';
         $this->price = '';
         $this->stock = '';
         $this->description = '';
@@ -44,12 +48,14 @@ class ProductManager extends Component
     {
         $this->validate([
             'name' => 'required',
+            'category_id' => 'required',
             'price' => 'required',
             'stock' => 'required',
         ]);
 
         Product::updateOrCreate(['id' => $this->product_id], [
             'name' => $this->name,
+            'category_id' => $this->category_id,
             'price' => $this->price,
             'stock' => $this->stock,
             'description' => $this->description,
@@ -69,6 +75,7 @@ class ProductManager extends Component
         $product = Product::findOrFail($id);
         $this->product_id = $id;
         $this->name = $product->name;
+        $this->category_id = $product->category_id;
         $this->price = $product->price;
         $this->stock = $product->stock;
         $this->description = $product->description;
