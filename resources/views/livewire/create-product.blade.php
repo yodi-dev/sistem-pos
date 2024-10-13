@@ -10,6 +10,7 @@
         <div class="mb-4">
             <label for="category">Category</label>
             <select id="category" class="w-full text-black p-2 border rounded" wire:model="category_id">
+                <option value="">Select Category</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach

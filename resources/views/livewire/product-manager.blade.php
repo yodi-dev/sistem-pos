@@ -29,7 +29,7 @@
                         @foreach($products as $product)
                             <tr class="border-b">
                                 <td class="px-4 py-2">{{ $product->name }}</td>
-                                <td class="py-2">{{ $product->category_id }}</td>
+                                <td class="py-2">{{ $product->category->name ?? 'No Category' }}</td>
                                 <td>{{ $product->price }}</td>
                                 <td>{{ $product->stock }}</td>
                                 <td>{{ $product->description }}</td>

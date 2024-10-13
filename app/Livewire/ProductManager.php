@@ -14,6 +14,7 @@ class ProductManager extends Component
 
     public function render()
     {
+        // $products = Product::with('category')->get();
         $this->products = Product::all();
         $this->categories = Category::all();
         return view('livewire.product-manager')->layout('layouts.app');
@@ -47,10 +48,11 @@ class ProductManager extends Component
     public function store()
     {
         $this->validate([
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'category_id' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'description' => 'nullable|string',
         ]);
 
         Product::updateOrCreate(['id' => $this->product_id], [
