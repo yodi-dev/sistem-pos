@@ -7,15 +7,16 @@ use Livewire\Component;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 
 class TransactionForm extends Component
 {
-    public $products = [], $cart = [], $total_price = 0, $total_paid, $change_due = 0;
+    public $products = [], $cart = [], $total_price = 0, $total_paid, $change_due = 0, $search = '', $selectedCategory = null;
 
-    public function mount()
-    {
-        $this->products = Product::all();
-    }
+    // public function mount()
+    // {
+    //     $this->products = Product::all();
+    // }
 
     public function addToCart($productId)
     {
@@ -95,6 +96,21 @@ class TransactionForm extends Component
 
     public function render()
     {
-        return view('livewire.transaction-form')->layout('layouts.app');
+        $productsQuery = Product::query();
+
+        if ($this->search) {
+            $productsQuery->where('name', 'like', '%' . $this->search . '%');
+        }
+
+        if ($this->selectedCategory) {
+            $productsQuery->where('category_id', $this->selectedCategory);
+        }
+
+        $this->products = $productsQuery->get();
+
+        return view('livewire.transaction-form', [
+            'products' => $this->products,
+            'categories' => Category::all()
+        ])->layout('layouts.app');
     }
 }
