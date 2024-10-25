@@ -36,7 +36,7 @@ class TransactionForm extends Component
     public function removeFromCart($index)
     {
         unset($this->cart[$index]);
-        $this->cart = array_values($this->cart); // Reindex array
+        $this->cart = array_values($this->cart);
         $this->calculateTotal();
     }
 
