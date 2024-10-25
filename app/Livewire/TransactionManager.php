@@ -9,7 +9,7 @@ use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 
-class TransactionForm extends Component
+class TransactionManager extends Component
 {
     public $products = [], $cart = [], $total_price = 0, $total_paid, $change_due = 0, $search = '', $selectedCategory = null;
 
@@ -108,7 +108,7 @@ class TransactionForm extends Component
 
         $this->products = $productsQuery->get();
 
-        return view('livewire.transaction-form', [
+        return view('livewire.transaction.index', [
             'products' => $this->products,
             'categories' => Category::all()
         ])->layout('layouts.app');

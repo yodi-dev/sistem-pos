@@ -5,7 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Category;
 
-class CategoryComponent extends Component
+class CategoryManager extends Component
 {
     public $categories, $name, $description, $category_id;
     public $isModalOpen = 0;
@@ -13,7 +13,7 @@ class CategoryComponent extends Component
     public function render()
     {
         $this->categories = Category::all();
-        return view('livewire.category-component')->layout('layouts.app');
+        return view('livewire.category.index')->layout('layouts.app');
     }
 
     public function create()

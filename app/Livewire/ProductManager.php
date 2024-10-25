@@ -17,7 +17,7 @@ class ProductManager extends Component
         $this->products = Product::with('category')->get();
         // $this->products = Product::all();
         $this->categories = Category::all();
-        return view('livewire.product-manager')->layout('layouts.app');
+        return view('livewire.product.index')->layout('layouts.app');
     }
     public function create()
     {

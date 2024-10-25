@@ -1,8 +1,8 @@
 <?php
 
 use App\Livewire\ProductManager;
-use App\Livewire\TransactionForm;
-use App\Livewire\CategoryComponent;
+use App\Livewire\CategoryManager;
+use App\Livewire\TransactionManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,15 +13,13 @@ Route::get('products', ProductManager::class)
     ->middleware(['auth'])
     ->name('products');
 
-Route::get('categories', CategoryComponent::class)
+Route::get('categories', CategoryManager::class)
     ->middleware(['auth'])
     ->name('categories');
 
-Route::get('/transactions', TransactionForm::class)
+Route::get('/transactions', TransactionManager::class)
     ->middleware(['auth'])
     ->name('transactions');
-
-
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
