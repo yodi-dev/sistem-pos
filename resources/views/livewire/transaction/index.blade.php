@@ -4,8 +4,19 @@
             <div class="col-12">
                 <x-card title="Produk" shadow separator>
                     <x-slot:menu>
-                        <input type="text" wire:model.live="search" class="input input-bordered w-full"
+                        <input type="text" wire:model.live="searchCustomer" class="input input-bordered w-full"
                             placeholder="Ketik Pelanggan..." />
+                        <!-- Dropdown Hasil Pencarian -->
+                        @if (!empty($customers))
+                            <ul class="absolute bg-white border border-gray-300 w-fit mt-20 rounded-lg z-10">
+                                @foreach ($customers as $customer)
+                                    <li wire:click="addCustomer({{ $customer->id }})"
+                                        class="px-4 py-2 cursor-pointer hover:bg-gray-200">
+                                        {{ $customer->name }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </x-slot:menu>
                     <div class="flex justify-center">
                         <!-- Input Search untuk Produk -->
@@ -14,7 +25,7 @@
 
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($products))
-                            <ul class="absolute bg-white border border-gray-300 w-full mt-1 rounded-lg z-10">
+                            <ul class="absolute bg-white border border-gray-300 w-full mt-20 rounded-lg z-10">
                                 @foreach ($products as $product)
                                     <li wire:click="addToCart({{ $product->id }})"
                                         class="px-4 py-2 cursor-pointer hover:bg-gray-200">
@@ -31,6 +42,11 @@
         <div class="row mt-3">
             <div>
                 <x-card title="Keranjang" shadow separator>
+                    <x-slot:menu>
+                        @if (!empty($customer))
+                            <p>Customer: {{ $customer->name }}</p>
+                        @endif
+                    </x-slot:menu>
                     <table class="w-full text-left bg-white dark:bg-gray-800 dark:text-white">
                         <thead class="bg-gray-100 dark:bg-gray-700">
                             <tr>

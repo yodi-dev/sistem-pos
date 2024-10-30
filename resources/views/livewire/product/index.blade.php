@@ -39,7 +39,7 @@
                                     <button wire:click="edit({{ $product->id }})"
                                         class="px-2 py-1 text-sm text-blue-500 dark:text-blue-400 ">Edit</button>
                                     <button wire:click="delete({{ $product->id }})"
-                                        class="px-2 py-1 text-sm text-red-500 dark:text-red-400 border-l">Hapus</button>
+                                        class="px-2 py-1 text-sm text-red-500 dark:text-red-400 border-l border-base-300">Hapus</button>
                                 </td>
                             </tr>
                         @endforeach

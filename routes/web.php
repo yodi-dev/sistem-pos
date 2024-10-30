@@ -2,6 +2,7 @@
 
 use App\Livewire\ProductManager;
 use App\Livewire\CategoryManager;
+use App\Livewire\CustomerManager;
 use App\Livewire\TransactionManager;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,10 @@ Route::get('categories', CategoryManager::class)
 Route::get('transactions', TransactionManager::class)
     ->middleware(['auth'])
     ->name('transactions');
+
+Route::get('customers', CustomerManager::class)
+    ->middleware(['auth'])
+    ->name('customers');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

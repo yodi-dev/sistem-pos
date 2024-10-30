@@ -40,9 +40,9 @@ new class extends Component {
             <x-menu-item title="KASA" icon="s-shopping-cart" :href="route('transactions')" :active="request()->routeIs('transactions')" wire:navigate />
             <x-menu-item title="Produk" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products')"
                 wire:navigate />
+            <x-menu-item title="Pembeli" icon="m-bars-arrow-down" :href="route('customers')" :active="request()->routeIs('customers')" wire:navigate />
             <x-menu-sub title="Data Master" icon="c-circle-stack">
                 <x-menu-item title="Kategori" icon="s-wallet" :href="route('categories')" :active="request()->routeIs('categories')" wire:navigate />
-                {{-- <x-menu-item title="Archives" icon="o-archive-box" link="####" /> --}}
             </x-menu-sub>
 
             {{-- User --}}

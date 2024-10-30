@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Customer;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Transaction;
@@ -11,16 +12,24 @@ use Illuminate\Support\Facades\DB;
 class TransactionManager extends Component
 {
     public $search = '';
+    public $searchCustomer = '';
     public $products = [];
+    public $customers = [];
+    public $customer;
     public $cart = [];
     public $total_price = 0;
     public $total_paid = 0;
-    public $change_due = 0,
-        $selectedProductId;
+    public $change_due = 0;
+    public $selectedProductId;
 
     public function updatedSearch()
     {
         $this->products = Product::where('name', 'like', '%' . $this->search . '%')->get();
+    }
+
+    public function updatedSearchCustomer()
+    {
+        $this->customers = Customer::where('name', 'like', '%' . $this->searchCustomer . '%')->get();
     }
 
     public function addToCart($productId)
@@ -39,10 +48,22 @@ class TransactionManager extends Component
         $this->resetSearch();
     }
 
+    public function addCustomer($customerId)
+    {
+        $customer = Customer::find($customerId);
+
+        if ($customer) {
+            $this->customer = $customer;
+        }
+        $this->resetSearch();
+    }
+
     public function resetSearch()
     {
         $this->products = [];
         $this->search = '';
+        $this->customers = [];
+        $this->searchCustomer = '';
     }
 
     public function removeFromCart($index)
@@ -73,6 +94,7 @@ class TransactionManager extends Component
                 'total_price' => $this->total_price,
                 'total_paid' => $this->total_paid,
                 'change_due' => $this->total_paid - $this->total_price,
+                'customer_id' => $this->customer->id,
             ]);
 
             foreach ($this->cart as $item) {
