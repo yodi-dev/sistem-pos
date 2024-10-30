@@ -6,19 +6,14 @@ use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 class ProductSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $faker = Faker::create();
         $categories = [1, 2, 3, 4, 5];
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             Product::create([
                 'name' => $faker->word . ' ' . $faker->randomElement(['Minuman', 'Makanan', 'Snack', 'Bumbu', 'Alat Dapur']),
                 'price' => $faker->numberBetween(1000, 50000),

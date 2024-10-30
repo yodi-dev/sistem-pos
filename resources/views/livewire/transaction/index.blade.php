@@ -3,7 +3,11 @@
         <div class="row">
             <div class="col-12">
                 <x-card title="Produk" shadow separator>
-                    <div class="mb-4 flex justify-center">
+                    <x-slot:menu>
+                        <input type="text" wire:model.live="search" class="input input-bordered w-full"
+                            placeholder="Ketik Pelanggan..." />
+                    </x-slot:menu>
+                    <div class="flex justify-center">
                         <!-- Input Search untuk Produk -->
                         <input type="text" wire:model.live="search" class="input input-bordered w-full"
                             placeholder="Cari Produk..." />
