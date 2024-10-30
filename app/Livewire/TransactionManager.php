@@ -7,49 +7,61 @@ use Livewire\Component;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB;
-use App\Models\Category;
 
 class TransactionManager extends Component
 {
-    public $products = [], $cart = [], $total_price = 0, $total_paid, $change_due = 0, $search = '', $selectedCategory = null;
+    public $search = '';
+    public $products = [];
+    public $cart = [];
+    public $total_price = 0;
+    public $total_paid = 0;
+    public $change_due = 0,
+        $selectedProductId;
 
-    // public function mount()
-    // {
-    //     $this->products = Product::all();
-    // }
+    public function updatedSearch()
+    {
+        $this->products = Product::where('name', 'like', '%' . $this->search . '%')->get();
+    }
 
     public function addToCart($productId)
     {
         $product = Product::find($productId);
-        $this->cart[] = [
-            'id' => $product->id,
-            'name' => $product->name,
-            'category_id' => $product->category_id,
-            'price' => $product->price,
-            'quantity' => 1,
-            'subtotal' => $product->price
-        ];
 
-        $this->calculateTotal();
+        if ($product) {
+            $this->cart[] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'quantity' => 1,
+                'subtotal' => $product->price,
+            ];
+            $this->updateTotal();
+        }
+        $this->resetSearch();
+    }
+
+    public function resetSearch()
+    {
+        $this->products = [];
+        $this->search = '';
     }
 
     public function removeFromCart($index)
     {
         unset($this->cart[$index]);
-        $this->cart = array_values($this->cart);
-        $this->calculateTotal();
+        $this->updateTotal();
     }
 
     public function updateQuantity($index, $quantity)
     {
+        // Update kuantitas dan subtotal item di keranjang
         $this->cart[$index]['quantity'] = $quantity;
-        $this->cart[$index]['subtotal'] = $this->cart[$index]['price'] * $quantity;
-        $this->calculateTotal();
+        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * Product::find($this->cart[$index]['id'])->price;
+        $this->updateTotal();
     }
 
-    public function calculateTotal()
+    public function updateTotal()
     {
-        $this->total_price = array_sum(array_column($this->cart, 'subtotal'));
+        $this->total_price = collect($this->cart)->sum('subtotal');
     }
 
     public function store()
@@ -96,21 +108,6 @@ class TransactionManager extends Component
 
     public function render()
     {
-        $productsQuery = Product::query();
-
-        if ($this->search) {
-            $productsQuery->where('name', 'like', '%' . $this->search . '%');
-        }
-
-        if ($this->selectedCategory) {
-            $productsQuery->where('category_id', $this->selectedCategory);
-        }
-
-        $this->products = $productsQuery->get();
-
-        return view('livewire.transaction.index', [
-            'products' => $this->products,
-            'categories' => Category::all()
-        ])->layout('layouts.app');
+        return view('livewire.transaction.index')->layout('layouts.app');
     }
 }

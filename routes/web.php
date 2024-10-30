@@ -17,7 +17,7 @@ Route::get('categories', CategoryManager::class)
     ->middleware(['auth'])
     ->name('categories');
 
-Route::get('/transactions', TransactionManager::class)
+Route::get('transactions', TransactionManager::class)
     ->middleware(['auth'])
     ->name('transactions');
 

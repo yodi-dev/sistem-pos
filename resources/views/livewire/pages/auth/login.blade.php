@@ -26,7 +26,7 @@ new #[Layout('layouts.guest')] class extends Component {
 <div>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <div class="card w-96 bg-base-100 shadow-lg rounded-lg">
+    <div class="card w-96 bg-base-200 shadow-lg rounded-lg">
         <div class="card-body">
             <form wire:submit="login">
                 <!-- Email Address -->

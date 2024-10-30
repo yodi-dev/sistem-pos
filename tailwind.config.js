@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -12,7 +13,7 @@ export default {
         require("daisyui")
     ],
     daisyui: {
-        themes: ["valentine", "dim"],
+        themes: ["pastel", "dim"],
     },
     darkMode: ['class', '[data-theme="dim"]']
 };

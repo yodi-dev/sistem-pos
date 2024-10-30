@@ -15,109 +15,51 @@ new class extends Component {
     }
 }; ?>
 
-<nav x-data="{ open: false }" class="bg-base-100 dark:bg-neutral border-b border-primary dark:border-gray-700 shadow-md">
+<nav x-data="{ open: false }" class="bg-base-200 dark:bg-neutral border-b border-primary dark:border-gray-700 shadow-md">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                {{-- <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" wire:navigate>
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
-                </div> --}}
+    <x-slot:sidebar drawer="main-drawer" collapsible collapse-text="Sembunyikan" right-mobile class="bg-base-200"
+        lg:bg-inherit>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Beranda') }}
-                    </x-nav-link>
+        <!-- Page Heading -->
+        @if (isset($header))
+            <header class="bg-white dark:bg-base-300 shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
                 </div>
+            </header>
+        @endif
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('transactions')" :active="request()->routeIs('transactions')">
-                        {{ __('Transaksi') }}
-                    </x-nav-link>
-                </div>
+        {{-- BRAND --}}
+        <div class="ml-5 text-base-content pt-5">YUDISTIRA, S.Ds</div>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('products')" :active="request()->routeIs('products')">
-                        {{ __('Produk') }}
-                    </x-nav-link>
-                </div>
+        <x-menu-separator />
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('categories')" :active="request()->routeIs('categories')">
-                        {{ __('Kategori Produk') }}
-                    </x-nav-link>
-                </div>
+        {{-- MENU --}}
+        <x-menu activate-by-route>
+            <x-menu-item title="Beranda" icon="s-home" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate />
+            <x-menu-item title="KASA" icon="s-shopping-cart" :href="route('transactions')" :active="request()->routeIs('transactions')" wire:navigate />
+            <x-menu-item title="Produk" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products')"
+                wire:navigate />
+            <x-menu-sub title="Data Master" icon="c-circle-stack">
+                <x-menu-item title="Kategori" icon="s-wallet" :href="route('categories')" :active="request()->routeIs('categories')" wire:navigate />
+                {{-- <x-menu-item title="Archives" icon="o-archive-box" link="####" /> --}}
+            </x-menu-sub>
 
-            </div>
+            {{-- User --}}
+            @if ($user = auth()->user())
+                <x-menu-separator />
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown>
-                    <x-slot:trigger>
-                        <x-button icon="s-user" class="btn-circle bg-base-100 btn-outline" />
-                    </x-slot:trigger>
+                <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover
+                    class="-mx-2 !-my-2 rounded">
+                    <x-slot:actions>
+                        <x-button wire:click="logout" icon="o-power" class="btn-circle btn-ghost btn-xs"
+                            tooltip-left="keluar" />
+                    </x-slot:actions>
+                </x-list-item>
 
-                    <x-dropdown-link :href="route('profile')" wire:navigate>
-                        {{ __('Profil') }}
-                    </x-dropdown-link>
+                <x-menu-separator />
+            @endif
 
-                    <!-- Authentication -->
-                    <button wire:click="logout" class="w-full text-start">
-                        <x-dropdown-link>
-                            {{ __('Keluar') }}
-                        </x-dropdown-link>
-                    </button>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{ 'hidden': open, 'inline-flex': !open }" class="inline-flex"
-                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{ 'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
-                            stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200" x-data="{{ json_encode(['name' => auth()->user()->name]) }}"
-                    x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-                <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile')" wire:navigate>
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <button wire:click="logout" class="w-full text-start">
-                    <x-responsive-nav-link>
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </button>
-            </div>
-        </div>
-    </div>
+        </x-menu>
+    </x-slot:sidebar>
 </nav>

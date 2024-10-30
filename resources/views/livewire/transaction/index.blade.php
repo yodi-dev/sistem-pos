@@ -1,48 +1,32 @@
-<div class="py-6 text-gray-900 dark:text-gray-100">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="p-4 bg-base-100 dark:bg-base-100 rounded-lg shadow-md px-4 sm:px-6 lg:px-8">
-
-            <div class="grid grid-cols-3 gap-4">
-
-                <!-- Daftar Produk -->
-                <div class="col-span-2">
-                    <h2 class="text-xl text-center font-semibold mb-3 text-neutral dark:text-white">Produk</h2>
-
+<div class="text-gray-900 dark:text-gray-100">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
+        <div class="row">
+            <div class="col-12">
+                <x-card title="Produk" shadow separator>
                     <div class="mb-4 flex justify-center">
-                        <!-- Input search -->
-                        <input type="text" placeholder="Cari produk..." wire:model.live="search"
-                            class="w-1/2 p-2 border rounded dark:bg-gray-700 dark:text-white mr-3" />
+                        <!-- Input Search untuk Produk -->
+                        <input type="text" wire:model.live="search" class="input input-bordered w-full"
+                            placeholder="Cari Produk..." />
 
-                        <!-- Filter kategori -->
-                        <select wire:model.live="selectedCategory"
-                            class="p-2 border rounded dark:bg-gray-700 dark:text-white">
-                            <option value="">Semua Kategori</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        @foreach ($products as $product)
-                            <div wire:click="addToCart({{ $product->id }})"
-                                class="bg-primary shadow-md rounded-lg overflow-hidden cursor-pointer dark:bg-gray-800 transition-transform transform hover:scale-105">
-                                <div class="p-4">
-                                    <h3 class="text-lg font-semibold mb-2 text-base-100 dark:text-white">
+                        <!-- Dropdown Hasil Pencarian -->
+                        @if (!empty($products))
+                            <ul class="absolute bg-white border border-gray-300 w-full mt-1 rounded-lg z-10">
+                                @foreach ($products as $product)
+                                    <li wire:click="addToCart({{ $product->id }})"
+                                        class="px-4 py-2 cursor-pointer hover:bg-gray-200">
                                         {{ $product->name }}
-                                    </h3>
-                                    <p class="text-base-100 dark:text-gray-300">Harga: Rp
-                                        {{ number_format($product->price, 0, ',', '.') }}
-                                    </p>
-                                </div>
-                            </div>
-                        @endforeach
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
-                </div>
+                </x-card>
+            </div>
+        </div>
 
-                <!-- Keranjang -->
-                <div>
-                    <h2 class="text-xl text-center font-semibold mb-3 dark:text-white">Keranjang</h2>
+        <div class="row mt-3">
+            <div>
+                <x-card title="Keranjang" shadow separator>
                     <table class="w-full text-left bg-white dark:bg-gray-800 dark:text-white">
                         <thead class="bg-gray-100 dark:bg-gray-700">
                             <tr>
@@ -72,32 +56,31 @@
                         </tbody>
                     </table>
                     <h3 class="text-xl font-semibold mt-4 dark:text-white">Total: Rp
-                        {{ number_format($total_price, 0, ',', '.') }}
-                    </h3>
+                        {{ number_format($total_price, 0, ',', '.') }}</h3>
 
                     <div class="mt-4">
                         <label for="total_paid" class="block mb-2 dark:text-white">Total Bayar</label>
                         <input type="number" id="total_paid" wire:model="total_paid"
-                            class="w-full p-2 border rounded dark:bg-gray-700 dark:text-white">
+                            class="w-1/2 p-2 border rounded dark:bg-gray-700 dark:text-white">
                     </div>
 
                     <button wire:click="store"
-                        class="mt-4 bg-secondary hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
+                        class="mt-4 bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
                         Simpan
                     </button>
+                </x-card>
 
-                    @if (session()->has('message'))
-                        <div class="mt-4 p-2 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200 rounded">
-                            {{ session('message') }}
-                        </div>
-                    @endif
+                @if (session()->has('message'))
+                    <div class="mt-4 p-2 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200 rounded">
+                        {{ session('message') }}
+                    </div>
+                @endif
 
-                    @if (session()->has('error'))
-                        <div class="mt-4 p-2 bg-red-100 dark:bg-red-700 text-red-800 dark:text-red-200 rounded">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                </div>
+                @if (session()->has('error'))
+                    <div class="mt-4 p-2 bg-red-100 dark:bg-red-700 text-red-800 dark:text-red-200 rounded">
+                        {{ session('error') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
