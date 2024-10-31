@@ -17,10 +17,11 @@ class TransactionManager extends Component
     public $customers = [];
     public $customer;
     public $cart = [];
-    public $total_price = 0;
+    public $total_price;
     public $totalPaid;
-    public $changeDue = 0;
+    public $changeDue;
     public $selectedProductId;
+    public $selectedCustomer = null;
 
     public function updatedSearch()
     {
@@ -30,6 +31,8 @@ class TransactionManager extends Component
             $this->products = [];
         }
     }
+
+
 
     public function updatedSearchCustomer()
     {
@@ -45,16 +48,41 @@ class TransactionManager extends Component
         $product = Product::find($productId);
 
         if ($product) {
-            $this->cart[] = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'quantity' => 1,
-                'subtotal' => $product->price,
-            ];
+            // Cek apakah produk sudah ada di keranjang
+            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
+
+            if ($index !== false) {
+                // Jika produk sudah ada, update quantity dan subtotal
+                $this->cart[$index]['quantity'] += 1;
+                $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $product->price;
+            } else {
+                // Jika produk belum ada, tambahkan ke keranjang
+                $this->cart[] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'quantity' => 1,
+                    'subtotal' => $product->price,
+                ];
+            }
+
             $this->updateTotal();
         }
+
         $this->resetSearch();
     }
+
+    public function addNominal($amount)
+    {
+        $this->totalPaid += $amount;
+        $this->updatedTotalPaid();
+    }
+
+    public function clearTotalPaid()
+    {
+        $this->totalPaid = 0;
+        $this->updatedTotalPaid();
+    }
+
 
     public function addCustomer($customerId)
     {
@@ -62,6 +90,8 @@ class TransactionManager extends Component
 
         if ($customer) {
             $this->customer = $customer;
+            $this->selectedCustomer = $customer;
+            $this->searchCustomer = $customer->name;
         }
         $this->resetSearch();
     }
@@ -71,7 +101,6 @@ class TransactionManager extends Component
         $this->products = [];
         $this->search = '';
         $this->customers = [];
-        $this->searchCustomer = '';
     }
 
     public function removeFromCart($index)
@@ -95,7 +124,12 @@ class TransactionManager extends Component
 
     public function updatedTotalPaid()
     {
-        $this->changeDue = $this->totalPaid - $this->total_price;
+
+        if (empty($this->totalPaid)) {
+            $this->changeDue = 0;
+        } else {
+            $this->changeDue = $this->totalPaid - $this->total_price;
+        }
     }
 
     public function store()

@@ -4,10 +4,11 @@
             <div class="col-12">
                 <x-card title="Produk" class="text-neutral" shadow separator>
                     <x-slot:menu>
-                        <input type="text" wire:model.live="searchCustomer"
+                        <label for="searchCustomer">Pembeli</label>
+                        <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
                             class="text-base-content input input-bordered w-full" placeholder="Ketik Pembeli..." />
                         <!-- Dropdown Hasil Pencarian -->
-                        @if (!empty($customers))
+                        @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))
                             <ul class="absolute bg-white border border-gray-300 w-fit top-0 mt-20 rounded-lg z-10">
                                 @foreach ($customers as $customer)
                                     <li wire:click="addCustomer({{ $customer->id }})"
@@ -40,19 +41,11 @@
         </div>
 
         <div class="row mt-3">
-            <div>
+            <div class="col-12">
                 <x-card title="Keranjang" class="text-neutral" shadow separator>
-                    <x-slot:menu>
-                        <p class="text-base-content">Customer:
-                            @if (!empty($customer))
-                                {{ $customer->name }}
-                            @endif
-                        </p>
-                    </x-slot:menu>
-
                     <table
-                        class="w-full text-left text-base-content bg-white dark:bg-gray-800 dark:text-white rounded-xl">
-                        <thead class="bg-gray-100 dark:bg-gray-700">
+                        class="w-full table-zebra text-left text-base-content bg-white dark:bg-gray-800 dark:text-white border-2 border-neutral">
+                        <thead class="bg-base-300 text-base-content dark:bg-gray-700">
                             <tr>
                                 <th class="p-2">Produk</th>
                                 <th class="p-2">Jumlah</th>
@@ -67,7 +60,7 @@
                                     <td class="p-2">
                                         <input type="number" value="{{ $item['quantity'] }}"
                                             wire:change="updateQuantity({{ $index }}, $event.target.value)"
-                                            class="w-16 p-1 text-black dark:text-white bg-gray-200 dark:bg-gray-700 border rounded"
+                                            class="w-16 p-1 text-black dark:text-white bg-base-300 dark:bg-gray-700 border rounded"
                                             min="1">
                                     </td>
                                     <td class="p-2">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
@@ -80,23 +73,55 @@
                         </tbody>
                     </table>
 
-                    <h3 class="text-xl text-base-content font-semibold mt-4 dark:text-white">Total: Rp
-                        {{ number_format($total_price, 0, ',', '.') }}</h3>
-                    <h3 class="text-lg text-base-content mt-4 dark:text-white">
-                        Kembalian: Rp
-                        {{ number_format($changeDue, 0, ',', '.') }}
-                    </h3>
+                    <div class="grid grid-cols-2 mt-3">
+                        <div class="col-6">
+                            <h3 class="text-xl text-base-content font-semibold mt-4 dark:text-white">Total: Rp
+                                {{ number_format($total_price, 0, ',', '.') }}
+                            </h3>
+                            <h3 class="text-lg text-base-content mt-4 dark:text-white">
+                                Kembalian: Rp
+                                {{ number_format($changeDue, 0, ',', '.') }}
+                            </h3>
 
-                    <div class="mt-4">
-                        <label for="total_paid" class="block mb-2 text-base-content dark:text-white">Bayar</label>
-                        <input type="number" id="total_paid" wire:model.live="totalPaid"
-                            class="w-1/2 p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white">
+                            <div class="mt-4">
+                                <label for="total_paid"
+                                    class="block mb-2 text-base-content dark:text-white">Bayar</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="number" id="total_paid" wire:model.live="totalPaid"
+                                        class="w-1/2 p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white">
+                                    <button type="button" icon="c-circle-stack" wire:click="clearTotalPaid"
+                                        class="px-4 py-2 bg-error text-base-100 rounded hover:bg-red-600">X
+                                    </button>
+                                </div>
+
+                                <!-- Tombol Nominal -->
+                                <div class="flex space-x-2 mt-2">
+                                    <button type="button" wire:click="addNominal(10000)"
+                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
+                                        Rp 10.000
+                                    </button>
+                                    <button type="button" wire:click="addNominal(50000)"
+                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
+                                        Rp 50.000
+                                    </button>
+                                    <button type="button" wire:click="addNominal(100000)"
+                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
+                                        Rp 100.000
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl text-base-content mt-4 dark:text-white">Metode Pembayaran
+                            </h3>
+                            <button wire:click="store"
+                                class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
+                                Simpan
+                            </button>
+                        </div>
                     </div>
 
-                    <button wire:click="store"
-                        class="mt-4 bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
-                        Simpan
-                    </button>
                 </x-card>
 
                 @if (session()->has('message'))
