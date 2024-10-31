@@ -18,18 +18,26 @@ class TransactionManager extends Component
     public $customer;
     public $cart = [];
     public $total_price = 0;
-    public $total_paid = 0;
-    public $change_due = 0;
+    public $totalPaid;
+    public $changeDue = 0;
     public $selectedProductId;
 
     public function updatedSearch()
     {
         $this->products = Product::where('name', 'like', '%' . $this->search . '%')->get();
+
+        if (empty($this->search)) {
+            $this->products = [];
+        }
     }
 
     public function updatedSearchCustomer()
     {
         $this->customers = Customer::where('name', 'like', '%' . $this->searchCustomer . '%')->get();
+
+        if (empty($this->searchCustomer)) {
+            $this->customers = [];
+        }
     }
 
     public function addToCart($productId)
@@ -83,6 +91,11 @@ class TransactionManager extends Component
     public function updateTotal()
     {
         $this->total_price = collect($this->cart)->sum('subtotal');
+    }
+
+    public function updatedTotalPaid()
+    {
+        $this->changeDue = $this->totalPaid - $this->total_price;
     }
 
     public function store()

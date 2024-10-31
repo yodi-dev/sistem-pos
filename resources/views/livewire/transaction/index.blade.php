@@ -2,17 +2,17 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
         <div class="row">
             <div class="col-12">
-                <x-card title="Produk" shadow separator>
+                <x-card title="Produk" class="text-neutral" shadow separator>
                     <x-slot:menu>
-                        <input type="text" wire:model.live="searchCustomer" class="input input-bordered w-full"
-                            placeholder="Ketik Pelanggan..." />
+                        <input type="text" wire:model.live="searchCustomer"
+                            class="text-base-content input input-bordered w-full" placeholder="Ketik Pembeli..." />
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($customers))
-                            <ul class="absolute bg-white border border-gray-300 w-fit mt-20 rounded-lg z-10">
+                            <ul class="absolute bg-white border border-gray-300 w-fit top-0 mt-20 rounded-lg z-10">
                                 @foreach ($customers as $customer)
                                     <li wire:click="addCustomer({{ $customer->id }})"
-                                        class="px-4 py-2 cursor-pointer hover:bg-gray-200">
-                                        {{ $customer->name }}
+                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200">
+                                        {{ $customer->name }} - {{ $customer->address }}
                                     </li>
                                 @endforeach
                             </ul>
@@ -20,15 +20,15 @@
                     </x-slot:menu>
                     <div class="flex justify-center">
                         <!-- Input Search untuk Produk -->
-                        <input type="text" wire:model.live="search" class="input input-bordered w-full"
-                            placeholder="Cari Produk..." />
+                        <input type="text" wire:model.live="search"
+                            class="text-base-content input input-bordered w-full" placeholder="Cari Produk..." />
 
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($products))
-                            <ul class="absolute bg-white border border-gray-300 w-full mt-20 rounded-lg z-10">
+                            <ul class="absolute bg-white border border-gray-300 top-40 w-full rounded-lg z-10">
                                 @foreach ($products as $product)
                                     <li wire:click="addToCart({{ $product->id }})"
-                                        class="px-4 py-2 cursor-pointer hover:bg-gray-200">
+                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200">
                                         {{ $product->name }}
                                     </li>
                                 @endforeach
@@ -41,13 +41,17 @@
 
         <div class="row mt-3">
             <div>
-                <x-card title="Keranjang" shadow separator>
+                <x-card title="Keranjang" class="text-neutral" shadow separator>
                     <x-slot:menu>
-                        @if (!empty($customer))
-                            <p>Customer: {{ $customer->name }}</p>
-                        @endif
+                        <p class="text-base-content">Customer:
+                            @if (!empty($customer))
+                                {{ $customer->name }}
+                            @endif
+                        </p>
                     </x-slot:menu>
-                    <table class="w-full text-left bg-white dark:bg-gray-800 dark:text-white">
+
+                    <table
+                        class="w-full text-left text-base-content bg-white dark:bg-gray-800 dark:text-white rounded-xl">
                         <thead class="bg-gray-100 dark:bg-gray-700">
                             <tr>
                                 <th class="p-2">Produk</th>
@@ -75,13 +79,18 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <h3 class="text-xl font-semibold mt-4 dark:text-white">Total: Rp
+
+                    <h3 class="text-xl text-base-content font-semibold mt-4 dark:text-white">Total: Rp
                         {{ number_format($total_price, 0, ',', '.') }}</h3>
+                    <h3 class="text-lg text-base-content mt-4 dark:text-white">
+                        Kembalian: Rp
+                        {{ number_format($changeDue, 0, ',', '.') }}
+                    </h3>
 
                     <div class="mt-4">
-                        <label for="total_paid" class="block mb-2 dark:text-white">Total Bayar</label>
-                        <input type="number" id="total_paid" wire:model="total_paid"
-                            class="w-1/2 p-2 border rounded dark:bg-gray-700 dark:text-white">
+                        <label for="total_paid" class="block mb-2 text-base-content dark:text-white">Bayar</label>
+                        <input type="number" id="total_paid" wire:model.live="totalPaid"
+                            class="w-1/2 p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white">
                     </div>
 
                     <button wire:click="store"

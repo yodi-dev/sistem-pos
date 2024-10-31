@@ -11,9 +11,9 @@
 
                 <button wire:click="create()" class="bg-neutral text-neutral-content px-4 py-2 mb-4 rounded">Baru</button>
 
-                {{-- @if ($isModalOpen)
-                    @include('livewire.create-category')
-                @endif --}}
+                @if ($isModalOpen)
+                    @include('livewire.customer.create')
+                @endif
 
                 <table class="table-auto w-full">
                     <thead class="bg-neutral text-neutral-content">
