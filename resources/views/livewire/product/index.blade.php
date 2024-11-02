@@ -10,7 +10,7 @@
 
                 <div class="flex justify-between items-center mb-4">
                     <!-- Tombol "Tambah" di sebelah kiri -->
-                    <button wire:click="create()" class="bg-neutral text-base-content px-4 py-2 rounded">
+                    <button wire:click="create()" class="bg-neutral text-base-100 px-4 py-2 rounded">
                         Tambah
                     </button>
 
@@ -24,7 +24,7 @@
                     @include('livewire.product.create')
                 @endif
 
-                <table class="table-auto w-full">
+                <table class="table w-full border-1 border-neutral shadow">
                     <thead class="bg-neutral">
                         <tr>
                             <th class="w-1/6 p-3 text-left">Nama Produk</th>
@@ -36,23 +36,22 @@
                     </thead>
                     <tbody>
                         @foreach ($products as $product)
-                            <tr class="border-b">
+                            <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                 <td class="px-4 py-2">{{ $product->name }}</td>
                                 <td class="py-2">{{ $product->category->name ?? 'No Category' }}</td>
-                                <td>Rp
-                                    {{ number_format($product->retail_price, 0, ',', '.') }}
-                                </td>
+                                <td>Rp {{ number_format($product->retail_price, 0, ',', '.') }}</td>
                                 <td>{{ $product->stock }}</td>
                                 <td>
                                     <button wire:click="edit({{ $product->id }})"
-                                        class="px-2 py-1 text-sm text-blue-500 dark:text-blue-400 ">Edit</button>
+                                        class="px-2 py-1 text-sm text-blue-500 dark:text-blue-400">Edit</button>
                                     <button wire:click="delete({{ $product->id }})"
-                                        class="px-2 py-1 text-sm text-red-500 dark:text-red-400 border-l border-base-300">Hapus</button>
+                                        class="px-2 py-1 text-sm text-red-500 dark:text-red-400 border-l border-neutral">Hapus</button>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+
 
                 <!-- Pagination Links -->
                 <div class="mt-4">

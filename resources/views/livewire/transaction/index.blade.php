@@ -54,8 +54,8 @@
             <div class="col-12">
                 <x-card title="Keranjang" class="text-neutral" shadow separator>
                     <table
-                        class="w-full table-zebra text-left text-base-content bg-white dark:bg-gray-800 dark:text-white border-2 border-neutral">
-                        <thead class="bg-base-300 text-base-content dark:bg-gray-700">
+                        class="table table-zebra text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
+                        <thead class="bg-neutral text-base-100 dark:bg-gray-700">
                             <tr>
                                 <th class="p-2">Produk</th>
                                 <th class="p-2">Jumlah</th>

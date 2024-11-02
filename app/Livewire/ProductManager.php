@@ -17,13 +17,12 @@ class ProductManager extends Component
 
     public function render()
     {
-        // $this->products = Product::with('category')->get();
         $products = Product::where('name', 'like', '%' . $this->search . '%')
             ->orWhereHas('category', function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
             ->paginate(10);
-        // $this->products = Product::all();
+
         $this->categories = Category::all();
         return view('livewire.product.index', compact('products'))->layout('layouts.app');
     }
