@@ -16,6 +16,7 @@ class TransactionManager extends Component
     public $products = [];
     public $customers = [];
     public $customer;
+    public $paymentMethod;
     public $cart = [];
     public $total_price;
     public $totalPaid;
@@ -31,8 +32,6 @@ class TransactionManager extends Component
             $this->products = [];
         }
     }
-
-
 
     public function updatedSearchCustomer()
     {
@@ -54,14 +53,14 @@ class TransactionManager extends Component
             if ($index !== false) {
                 // Jika produk sudah ada, update quantity dan subtotal
                 $this->cart[$index]['quantity'] += 1;
-                $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $product->price;
+                $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $product->retail_price;
             } else {
                 // Jika produk belum ada, tambahkan ke keranjang
                 $this->cart[] = [
                     'id' => $product->id,
                     'name' => $product->name,
                     'quantity' => 1,
-                    'subtotal' => $product->price,
+                    'subtotal' => $product->retail_price,
                 ];
             }
 
@@ -83,6 +82,13 @@ class TransactionManager extends Component
         $this->updatedTotalPaid();
     }
 
+    public function addPayment($method)
+    {
+        $this->paymentMethod = $method;
+        if ($method === 'utang') {
+            $this->totalPaid = 0;
+        }
+    }
 
     public function addCustomer($customerId)
     {
@@ -100,7 +106,8 @@ class TransactionManager extends Component
     {
         $this->products = [];
         $this->search = '';
-        $this->customers = [];
+        $this->customer = null;
+        $this->paymentMethod = null;
     }
 
     public function removeFromCart($index)
@@ -142,6 +149,7 @@ class TransactionManager extends Component
                 'total_paid' => $this->total_paid,
                 'change_due' => $this->total_paid - $this->total_price,
                 'customer_id' => $this->customer->id,
+                'payment_methode' => $this->paymentMethod,
             ]);
 
             foreach ($this->cart as $item) {

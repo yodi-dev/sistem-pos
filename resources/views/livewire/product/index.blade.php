@@ -21,7 +21,6 @@
                             <th class="w-1/6 p-3 text-left">Kategori</th>
                             <th class="w-1/6 p-3 text-left">Harga</th>
                             <th class="w-1/6 p-3 text-left">Stok</th>
-                            <th class="w-1/6 p-3 text-left">Keterangan</th>
                             <th class="w-1/6 p-3 text-left">Aksi</th>
                         </tr>
                     </thead>
@@ -31,10 +30,9 @@
                                 <td class="px-4 py-2">{{ $product->name }}</td>
                                 <td class="py-2">{{ $product->category->name ?? 'No Category' }}</td>
                                 <td>Rp
-                                    {{ number_format($product->price, 0, ',', '.') }}
+                                    {{ number_format($product->retail_price, 0, ',', '.') }}
                                 </td>
                                 <td>{{ $product->stock }}</td>
-                                <td>{{ $product->description }}</td>
                                 <td>
                                     <button wire:click="edit({{ $product->id }})"
                                         class="px-2 py-1 text-sm text-blue-500 dark:text-blue-400 ">Edit</button>

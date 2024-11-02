@@ -78,6 +78,7 @@
                             <h3 class="text-xl text-base-content font-semibold mt-4 dark:text-white">Total: Rp
                                 {{ number_format($total_price, 0, ',', '.') }}
                             </h3>
+
                             <h3 class="text-lg text-base-content mt-4 dark:text-white">
                                 Kembalian: Rp
                                 {{ number_format($changeDue, 0, ',', '.') }}
@@ -112,14 +113,37 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <h3 class="text-xl text-base-content mt-4 dark:text-white">Metode Pembayaran
-                            </h3>
+                        <div class="col-6">
+                            <h3 class="text-xl text-base-content mt-4 dark:text-white">Metode Pembayaran</h3>
+
+                            <div class="flex space-x-2 mt-2">
+                                <button type="button" wire:click="addPayment('tunai')"
+                                    class="px-4 py-2 rounded {{ $paymentMethod === 'tunai' ? 'bg-accent text-primary-content' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
+                                    Tunai
+                                </button>
+                                <button type="button" wire:click="addPayment('QRIS')"
+                                    class="px-4 py-2 rounded {{ $paymentMethod === 'QRIS' ? 'bg-accent text-primary-content' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
+                                    QRIS
+                                </button>
+                                <button type="button" wire:click="addPayment('utang')"
+                                    class="px-4 py-2 rounded {{ $paymentMethod === 'utang' ? 'bg-accent text-primary-content' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
+                                    Utang
+                                </button>
+                            </div>
+
                             <button wire:click="store"
                                 class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
                                 Simpan
                             </button>
+
+                            @if (session()->has('message'))
+                                <div
+                                    class="mt-4 p-2 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200 rounded">
+                                    {{ session('message') }}
+                                </div>
+                            @endif
                         </div>
+
                     </div>
 
                 </x-card>

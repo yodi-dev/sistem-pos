@@ -13,11 +13,19 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->decimal('price', 10, 2);
-            $table->integer('stock');
-            $table->text('description')->nullable();
+            $table->string('code')->nullable()->index();
+            $table->string('name')->index();
+            $table->foreignId('category_id')->constrained()->onDelete('cascade')->nullable();
+            $table->decimal('purchase_price', 10, 2)->nullable();
+            $table->decimal('reseller_price', 10, 2)->nullable();
+            $table->decimal('agent_price', 10, 2)->nullable();
+            $table->decimal('retail_price', 10, 2)->nullable();
+            $table->decimal('distributor_price', 10, 2)->nullable();
+            $table->integer('stock')->nullable();
+            $table->string('location')->nullable();
+            $table->string('supplier')->nullable();
+            $table->date('expired')->nullable();
+            $table->string('pack')->nullable();
             $table->timestamps();
         });
     }
