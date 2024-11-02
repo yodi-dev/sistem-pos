@@ -5,20 +5,34 @@ namespace App\Livewire;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
+use Livewire\WithPagination;
 
 class ProductManager extends Component
 {
-    public $products, $name, $price, $stock, $description, $product_id, $categories, $category_id;
+    use WithPagination;
 
-    public $isOpen = 0;
+    public $name, $price, $stock, $description, $product_id, $categories, $category_id;
+    public $search = '';
+    public $isOpen = false;
 
     public function render()
     {
-        $this->products = Product::with('category')->get();
+        // $this->products = Product::with('category')->get();
+        $products = Product::where('name', 'like', '%' . $this->search . '%')
+            ->orWhereHas('category', function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->paginate(10);
         // $this->products = Product::all();
         $this->categories = Category::all();
-        return view('livewire.product.index')->layout('layouts.app');
+        return view('livewire.product.index', compact('products'))->layout('layouts.app');
     }
+
+    public function updatingSearch()
+    {
+        $this->resetPage(); // Reset halaman ke pertama setiap kali pencarian berubah
+    }
+
     public function create()
     {
         $this->resetInputFields();

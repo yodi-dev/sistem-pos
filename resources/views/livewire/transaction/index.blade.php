@@ -6,13 +6,16 @@
                     <x-slot:menu>
                         <label for="searchCustomer">Pembeli</label>
                         <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
-                            class="text-base-content input input-bordered w-full" placeholder="Ketik Pembeli..." />
+                            wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
+                            wire:keydown.enter="confirmCustomer" class="text-base-content input input-bordered w-full"
+                            placeholder="Ketik Pembeli..." />
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))
                             <ul class="absolute bg-white border border-gray-300 w-fit top-0 mt-20 rounded-lg z-10">
-                                @foreach ($customers as $customer)
+                                @foreach ($customers as $index => $customer)
                                     <li wire:click="addCustomer({{ $customer->id }})"
-                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200">
+                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
+                    {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
                                         {{ $customer->name }} - {{ $customer->address }}
                                     </li>
                                 @endforeach
@@ -21,20 +24,27 @@
                     </x-slot:menu>
                     <div class="flex justify-center">
                         <!-- Input Search untuk Produk -->
-                        <input type="text" wire:model.live="search"
-                            class="text-base-content input input-bordered w-full" placeholder="Cari Produk..." />
+                        <div x-data x-init="$refs.searchInput.focus()" class="w-full">
+                            <input type="text" wire:model.live="search" wire:keydown.arrow-down="selectNext"
+                                wire:keydown.arrow-up="selectPrevious" wire:keydown.enter="confirmSelection"
+                                x-ref="searchInput" class="text-base-content input input-bordered w-full"
+                                placeholder="Cari Produk..." />
+                        </div>
+
 
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($products))
                             <ul class="absolute bg-white border border-gray-300 top-40 w-full rounded-lg z-10">
-                                @foreach ($products as $product)
+                                @foreach ($products as $index => $product)
                                     <li wire:click="addToCart({{ $product->id }})"
-                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200">
+                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
+                    {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
                                         {{ $product->name }}
                                     </li>
                                 @endforeach
                             </ul>
                         @endif
+
                     </div>
                 </x-card>
             </div>
@@ -100,6 +110,10 @@
                                     <button type="button" wire:click="addNominal(10000)"
                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
                                         Rp 10.000
+                                    </button>
+                                    <button type="button" wire:click="addNominal(20000)"
+                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
+                                        Rp 20.000
                                     </button>
                                     <button type="button" wire:click="addNominal(50000)"
                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">

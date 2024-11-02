@@ -30,12 +30,12 @@ new class extends Component {
         @endif
 
         {{-- BRAND --}}
-        <div class="ml-5 text-base-content pt-5">YUDISTIRA, S.Ds</div>
+        <div class="ml-5 text-neutral pt-5">YUDISTIRA, S.Ds</div>
 
         <x-menu-separator />
 
         {{-- MENU --}}
-        <x-menu activate-by-route>
+        <x-menu activate-by-route class="text-neutral">
             <x-menu-item title="Beranda" icon="s-home" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate />
             <x-menu-item title="KASA" icon="s-shopping-cart" :href="route('transactions')" :active="request()->routeIs('transactions')" wire:navigate />
             <x-menu-item title="Produk" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products')"

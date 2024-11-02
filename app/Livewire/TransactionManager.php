@@ -23,6 +23,8 @@ class TransactionManager extends Component
     public $changeDue;
     public $selectedProductId;
     public $selectedCustomer = null;
+    public $highlightIndex = 0;
+
 
     public function updatedSearch()
     {
@@ -33,12 +35,52 @@ class TransactionManager extends Component
         }
     }
 
+
     public function updatedSearchCustomer()
     {
         $this->customers = Customer::where('name', 'like', '%' . $this->searchCustomer . '%')->get();
 
         if (empty($this->searchCustomer)) {
             $this->customers = [];
+        }
+    }
+
+    public function selectNext()
+    {
+        if ($this->highlightIndex < count($this->products) - 1) {
+            $this->highlightIndex++;
+        }
+    }
+
+    public function selectPrevious()
+    {
+        if ($this->highlightIndex > 0) {
+            $this->highlightIndex--;
+        }
+    }
+
+    public function selectNextCust()
+    {
+        if ($this->highlightIndex < count($this->customers) - 1) {
+            $this->highlightIndex++;
+        }
+    }
+
+    public function confirmSelection()
+    {
+        if (!empty($this->products)) {
+            $selectedProduct = $this->products[$this->highlightIndex];
+            $this->addToCart($selectedProduct->id);
+            $this->highlightIndex = 0;
+        }
+    }
+
+    public function confirmCustomer()
+    {
+        if (!empty($this->customers)) {
+            $selectedCustomer = $this->customers[$this->highlightIndex];
+            $this->addCustomer($selectedCustomer->id);
+            $this->highlightIndex = 0;
         }
     }
 

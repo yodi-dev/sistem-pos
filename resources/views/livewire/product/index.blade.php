@@ -8,10 +8,20 @@
                     </div>
                 @endif
 
-                <button wire:click="create()" class="bg-neutral text-base-content px-4 py-2 mb-4 rounded">Tambah</button>
+                <div class="flex justify-between items-center mb-4">
+                    <!-- Tombol "Tambah" di sebelah kiri -->
+                    <button wire:click="create()" class="bg-neutral text-base-content px-4 py-2 rounded">
+                        Tambah
+                    </button>
+
+                    <!-- Search Field di sebelah kanan -->
+                    <input type="text" wire:model.live="search" class="input input-bordered w-1/3"
+                        placeholder="Cari Produk atau Kategori..." />
+                </div>
+
 
                 @if ($isOpen)
-                    @include('livewire.create-product')
+                    @include('livewire.product.create')
                 @endif
 
                 <table class="table-auto w-full">
@@ -43,6 +53,11 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                <!-- Pagination Links -->
+                <div class="mt-4">
+                    {{ $products->links() }}
+                </div>
             </div>
         </div>
     </div>
