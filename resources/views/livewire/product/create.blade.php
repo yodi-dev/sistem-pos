@@ -1,5 +1,6 @@
 <div class="fixed inset-0 z-10 flex items-center justify-center">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-1/3">
+    <div class="absolute inset-0 bg-gray-800 opacity-75"></div>
+    <div class="bg-white dark:bg-gray-800 w-1/2 p-6 rounded shadow-lg relative z-10">
         <h2 class="text-2xl mb-4">{{ $product_id ? 'Edit Product' : 'Add Product' }}</h2>
 
         <div class="mb-4">
@@ -11,7 +12,7 @@
             <label for="category">Category</label>
             <select id="category" class="w-full text-black p-2 border rounded" wire:model="category_id">
                 <option value="">Select Category</option>
-                @foreach($categories as $category)
+                @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
             </select>

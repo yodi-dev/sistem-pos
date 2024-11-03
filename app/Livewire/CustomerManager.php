@@ -7,13 +7,15 @@ use Livewire\Component;
 
 class CustomerManager extends Component
 {
-    public $customers, $code, $name, $address, $customer_id;
+    public $code, $name, $address, $customer_id;
+    public $search = '';
     public $isModalOpen = 0;
 
     public function render()
     {
-        $this->customers = Customer::all();
-        return view('livewire.customer.index')->layout('layouts.app');
+        $customers = Customer::where('name', 'like', '%' . $this->search . '%')->paginate(10);
+
+        return view('livewire.customer.index', compact('customers'))->layout('layouts.app');
     }
 
     public function create()

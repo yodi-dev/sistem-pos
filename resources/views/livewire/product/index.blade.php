@@ -10,13 +10,13 @@
 
                 <div class="flex justify-between items-center mb-4">
                     <!-- Tombol "Tambah" di sebelah kiri -->
-                    <button wire:click="create()" class="bg-neutral text-base-100 px-4 py-2 rounded">
+                    <button wire:click="create()" class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
                         Tambah
                     </button>
 
                     <!-- Search Field di sebelah kanan -->
                     <input type="text" wire:model.live="search" class="input input-bordered w-1/3"
-                        placeholder="Cari Produk atau Kategori..." />
+                        placeholder="Cari Produk..." />
                 </div>
 
 
@@ -24,28 +24,33 @@
                     @include('livewire.product.create')
                 @endif
 
+                @if ($isModalOpen)
+                    @include('livewire.product.show')
+                @endif
+
                 <table class="table w-full border-1 border-neutral shadow">
-                    <thead class="bg-neutral">
+                    <thead class="bg-neutral text-base-100 text-lg text-center">
                         <tr>
-                            <th class="w-1/6 p-3 text-left">Nama Produk</th>
-                            <th class="w-1/6 p-3 text-left">Kategori</th>
-                            <th class="w-1/6 p-3 text-left">Harga</th>
-                            <th class="w-1/6 p-3 text-left">Stok</th>
-                            <th class="w-1/6 p-3 text-left">Aksi</th>
+                            <th class="w-1/6 p-3 border-r">Nama Produk</th>
+                            <th class="w-1/6 p-3 border-r">Kategori</th>
+                            <th class="w-1/6 p-3 border-r">Harga</th>
+                            <th class="w-1/6 p-3 border-r">Stok</th>
+                            <th class="w-1/6 p-3 border-r">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($products as $product)
-                            <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
-                                <td class="px-4 py-2">{{ $product->name }}</td>
-                                <td class="py-2">{{ $product->category->name ?? 'No Category' }}</td>
+                            <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}"
+                                wire:click="showDetails({{ $product->id }})">
+                                <td>{{ $product->name }}</td>
+                                <td>{{ $product->category->name ?? 'No Category' }}</td>
                                 <td>Rp {{ number_format($product->retail_price, 0, ',', '.') }}</td>
                                 <td>{{ $product->stock }}</td>
                                 <td>
                                     <button wire:click="edit({{ $product->id }})"
-                                        class="px-2 py-1 text-sm text-blue-500 dark:text-blue-400">Edit</button>
+                                        class="px-2 text-sm text-blue-500 dark:text-blue-400">Edit</button>
                                     <button wire:click="delete({{ $product->id }})"
-                                        class="px-2 py-1 text-sm text-red-500 dark:text-red-400 border-l border-neutral">Hapus</button>
+                                        class="px-2 text-sm text-red-500 dark:text-red-400 border-l border-neutral">Hapus</button>
                                 </td>
                             </tr>
                         @endforeach

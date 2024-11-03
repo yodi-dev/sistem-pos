@@ -14,6 +14,8 @@ class ProductManager extends Component
     public $name, $price, $stock, $description, $product_id, $categories, $category_id;
     public $search = '';
     public $isOpen = false;
+    public $isModalOpen = false;
+    public $Product;
 
     public function render()
     {
@@ -25,6 +27,12 @@ class ProductManager extends Component
 
         $this->categories = Category::all();
         return view('livewire.product.index', compact('products'))->layout('layouts.app');
+    }
+
+    public function showDetails($productId)
+    {
+        $this->Product = Product::with('category')->find($productId);
+        $this->isModalOpen = true;
     }
 
     public function updatingSearch()
@@ -46,6 +54,8 @@ class ProductManager extends Component
     public function closeModal()
     {
         $this->isOpen = false;
+        $this->isModalOpen = false;
+        $this->selectedProduct = null;
     }
 
     private function resetInputFields()
