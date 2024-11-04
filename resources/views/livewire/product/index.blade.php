@@ -32,15 +32,14 @@
                     @include('livewire.product.satuan')
                 @endif
 
-                <table class="table w-full border-1 border-neutral shadow">
+                <table class="table table-auto w-full border-1 border-neutral shadow">
                     <thead class="bg-neutral text-base-100 text-lg text-center">
                         <tr>
-                            <th class="w-1/6 p-3 border-r">Nama Produk</th>
-                            <th class="w-1/6 p-3 border-r">Harga Beli</th>
-                            <th class="w-1/6 p-3 border-r">Harga Jual</th>
-                            <th class="w-1/6 p-3 border-r">Stok</th>
-                            <th class="w-1/6 p-3 border-r">Aksi</th>
-                            <th class="w-1/6 p-3">Edit Satuan</th> <!-- Kolom untuk Edit Satuan -->
+                            <th class="p-3 border-r">Nama Produk</th>
+                            <th class="p-3 border-r">Harga Beli</th>
+                            <th class="p-3 border-r">Harga Jual</th>
+                            <th class="p-3 border-r">Stok</th>
+                            <th class="p-3 border-r">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,10 +55,7 @@
                                     <button wire:click="edit({{ $product->id }})"
                                         class="px-2 text-sm text-blue-500 dark:text-blue-400">Edit</button>
                                     <button wire:click="delete({{ $product->id }})"
-                                        class="px-2 text-sm text-red-500 dark:text-red-400 border-l border-neutral">Hapus</button>
-                                </td>
-                                <!-- Tombol Edit Satuan -->
-                                <td class="text-center">
+                                        class="px-2 text-sm text-red-500 dark:text-red-400 border-x border-neutral">Hapus</button>
                                     <button wire:click="editUnit({{ $product->id }})"
                                         class="px-2 text-sm text-purple-500 dark:text-purple-400">Edit Satuan</button>
                                 </td>

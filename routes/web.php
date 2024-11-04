@@ -27,10 +27,6 @@ Route::get('customers', CustomerManager::class)
     ->middleware(['auth'])
     ->name('customers');
 
-Route::get('units', UnitManagement::class)
-    ->middleware(['auth'])
-    ->name('units');
-
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
