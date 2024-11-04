@@ -9,30 +9,30 @@
                     </div>
                 @endif
 
-                <button wire:click="create()" class="bg-neutral text-neutral-content px-4 py-2 mb-4 rounded">Baru</button>
+                <button wire:click="create()" class="bg-neutral text-base-100 px-4 py-2 mb-4 rounded">Baru</button>
 
                 @if ($isModalOpen)
                     @include('livewire.create-category')
                 @endif
 
-                <table class="table-auto w-full">
-                    <thead class="bg-neutral text-neutral-content">
+                <table class="table w-full border-1 border-neutral shadow">
+                    <thead class="bg-neutral text-base-100 text-lg text-center">
                         <tr>
-                            <th class="w-2/5 p-3 text-left">Nama Kategori</th>
-                            <th class="w-2/5 p-3 text-left">Keterangan</th>
-                            <th class="w-1/5 p-3 text-left">Aksi</th>
+                            <th class="w-2/5 p-3">Nama Kategori</th>
+                            <th class="w-2/5 p-3">Keterangan</th>
+                            <th class="w-1/5 p-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($categories as $category)
-                            <tr class="border-b">
+                            <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                 <td class=" px-4 py-2">{{ $category->name }}</td>
                                 <td class=" px-4 py-2">{{ $category->description }}</td>
                                 <td class=" px-4 py-2">
                                     <button wire:click="edit({{ $category->id }})"
                                         class="px-2 py-1 text-sm text-blue-500 dark:text-blue-400">Edit</button>
                                     <button wire:click="delete({{ $category->id }})"
-                                        class="px-2 py-1 text-sm text-red-500 dark:text-red-400 border-l">Hapus</button>
+                                        class="px-2 py-1 text-sm text-red-500 dark:text-red-400 border-l border-neutral">Hapus</button>
                                 </td>
                             </tr>
                         @endforeach

@@ -32,8 +32,8 @@
                     <thead class="bg-neutral text-base-100 text-lg text-center">
                         <tr>
                             <th class="w-1/6 p-3 border-r">Nama Produk</th>
-                            <th class="w-1/6 p-3 border-r">Kategori</th>
-                            <th class="w-1/6 p-3 border-r">Harga</th>
+                            <th class="w-1/6 p-3 border-r">Harga Beli</th>
+                            <th class="w-1/6 p-3 border-r">Harga Jual</th>
                             <th class="w-1/6 p-3 border-r">Stok</th>
                             <th class="w-1/6 p-3 border-r">Aksi</th>
                         </tr>
@@ -43,7 +43,7 @@
                             <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}"
                                 wire:click="showDetails({{ $product->id }})">
                                 <td>{{ $product->name }}</td>
-                                <td>{{ $product->category->name ?? 'No Category' }}</td>
+                                <td>Rp {{ number_format($product->purchase_price, 0, ',', '.') }}</td>
                                 <td>Rp {{ number_format($product->retail_price, 0, ',', '.') }}</td>
                                 <td>{{ $product->stock }}</td>
                                 <td>

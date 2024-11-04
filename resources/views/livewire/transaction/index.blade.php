@@ -1,8 +1,8 @@
 <div class="text-gray-900 dark:text-gray-100">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
         <div class="row">
-            <div class="col-12">
-                <x-card title="Produk" class="text-neutral" shadow separator>
+            <div class="col-12 ">
+                <x-card title="Produk" class="text-neutral bg-base-200" shadow separator>
                     <x-slot:menu>
                         <label for="searchCustomer">Pembeli</label>
                         <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
@@ -52,27 +52,29 @@
 
         <div class="row mt-3">
             <div class="col-12">
-                <x-card title="Keranjang" class="text-neutral" shadow separator>
+                <x-card title="Keranjang" class="text-neutral bg-base-200" shadow separator>
                     <table
                         class="table table-zebra text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
-                        <thead class="bg-neutral text-base-100 dark:bg-gray-700">
+                        <thead class="bg-neutral text-lg text-base-100 dark:bg-gray-700">
                             <tr>
                                 <th class="p-2">Produk</th>
                                 <th class="p-2">Jumlah</th>
+                                <th class="p-2">Harga Satuan</th>
                                 <th class="p-2">Subtotal</th>
                                 <th class="p-2"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($cart as $index => $item)
-                                <tr class="border-b dark:border-gray-600">
+                                <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                     <td class="p-2">{{ $item['name'] }}</td>
                                     <td class="p-2">
                                         <input type="number" value="{{ $item['quantity'] }}"
                                             wire:change="updateQuantity({{ $index }}, $event.target.value)"
-                                            class="w-16 p-1 text-black dark:text-white bg-base-300 dark:bg-gray-700 border rounded"
+                                            class="w-16 p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
                                             min="1">
                                     </td>
+                                    <td class="p-2">Rp {{ number_format($item['retail_price'], 0, ',', '.') }}</td>
                                     <td class="p-2">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
                                     <td class="p-2">
                                         <button wire:click="removeFromCart({{ $index }})"

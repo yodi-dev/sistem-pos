@@ -71,6 +71,7 @@ class TransactionManager extends Component
         if (!empty($this->products)) {
             $selectedProduct = $this->products[$this->highlightIndex];
             $this->addToCart($selectedProduct->id);
+            $this->updateTotal();
             $this->highlightIndex = 0;
         }
     }
@@ -102,6 +103,7 @@ class TransactionManager extends Component
                     'id' => $product->id,
                     'name' => $product->name,
                     'quantity' => 1,
+                    'retail_price' => $product->retail_price,
                     'subtotal' => $product->retail_price,
                 ];
             }
@@ -162,7 +164,7 @@ class TransactionManager extends Component
     {
         // Update kuantitas dan subtotal item di keranjang
         $this->cart[$index]['quantity'] = $quantity;
-        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * Product::find($this->cart[$index]['id'])->price;
+        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * Product::find($this->cart[$index]['id'])->retail_price;
         $this->updateTotal();
     }
 
