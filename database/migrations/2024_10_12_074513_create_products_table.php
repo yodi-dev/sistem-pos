@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->nullable()->index();
             $table->string('name')->index();
-            $table->foreignId('category_id')->constrained()->onDelete('cascade')->nullable();
+            $table->string('category')->nullable();
             $table->decimal('purchase_price', 10, 2)->nullable();
             $table->decimal('reseller_price', 10, 2)->nullable();
             $table->decimal('agent_price', 10, 2)->nullable();
@@ -24,8 +24,6 @@ return new class extends Migration
             $table->integer('stock')->nullable();
             $table->string('location')->nullable();
             $table->string('supplier')->nullable();
-            $table->date('expired')->nullable();
-            $table->string('pack')->nullable();
             $table->timestamps();
         });
     }

@@ -102,8 +102,9 @@ class TransactionManager extends Component
                 $this->cart[] = [
                     'id' => $product->id,
                     'name' => $product->name,
+                    'sub_quantity' => 1,
                     'quantity' => 1,
-                    'retail_price' => $product->retail_price,
+                    'price' => $product->retail_price,
                     'subtotal' => $product->retail_price,
                 ];
             }
@@ -112,6 +113,14 @@ class TransactionManager extends Component
         }
 
         $this->resetSearch();
+    }
+
+    public function updateQuantity($index, $quantity)
+    {
+        // Update kuantitas dan subtotal item di keranjang
+        $this->cart[$index]['quantity'] = $quantity;
+        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * Product::find($this->cart[$index]['id'])->retail_price;
+        $this->updateTotal();
     }
 
     public function addNominal($amount)
@@ -160,13 +169,7 @@ class TransactionManager extends Component
         $this->updateTotal();
     }
 
-    public function updateQuantity($index, $quantity)
-    {
-        // Update kuantitas dan subtotal item di keranjang
-        $this->cart[$index]['quantity'] = $quantity;
-        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * Product::find($this->cart[$index]['id'])->retail_price;
-        $this->updateTotal();
-    }
+
 
     public function updateTotal()
     {
@@ -190,8 +193,8 @@ class TransactionManager extends Component
         try {
             $transaction = Transaction::create([
                 'total_price' => $this->total_price,
-                'total_paid' => $this->total_paid,
-                'change_due' => $this->total_paid - $this->total_price,
+                'total_paid' => $this->totalPaid,
+                'change_due' => $this->changeDue,
                 'customer_id' => $this->customer->id,
                 'payment_methode' => $this->paymentMethod,
             ]);
@@ -205,6 +208,7 @@ class TransactionManager extends Component
                     'subtotal' => $item['subtotal'],
                 ]);
 
+                // mengurangi stok produk
                 $product = Product::find($item['id']);
                 $product->stock -= $item['quantity'];
                 $product->save();

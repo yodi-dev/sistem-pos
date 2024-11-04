@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained('products');
+            $table->string('name', 255);
+            $table->integer('qty');
             $table->timestamps();
         });
     }

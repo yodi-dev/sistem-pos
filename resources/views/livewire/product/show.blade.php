@@ -14,8 +14,9 @@
                 <span class="material-icons text-neutral dark:text-base-100 mr-4">category</span>
                 <div>
                     <p class="font-semibold text-base-content dark:text-base-100">Kategori</p>
-                    <p>{{ $Product->category->name ?? '-' }}</p>
+                    <p>{{ $Product->category ?? '-' }}</p>
                 </div>
+
             </div>
 
             <!-- Tab: Harga -->
@@ -68,4 +69,6 @@
             Tutup
         </button>
     </div>
+
+
 </div>

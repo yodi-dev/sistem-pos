@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Unit;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
@@ -15,15 +16,66 @@ class ProductManager extends Component
     public $search = '';
     public $isOpen = false;
     public $isModalOpen = false;
+    public $isModalSatuan = false;
     public $Product;
+    public $productId;
+    public $unitId;
+    public $unit_name;
+    public $quantity_per_unit;
+    public $units = [];
+
+
+    protected $rules = [
+        'unit_name' => 'required|string|max:50',
+        'quantity_per_unit' => 'required|integer|min:1',
+    ];
+
+
+    public function editUnit($productId)
+    {
+        // Ambil produk berdasarkan ID
+        $product = Product::find($productId);
+        $this->productId = $product->id;
+        $this->units = $product->units;
+
+        // Emit event untuk membuka modal
+        $this->isModalSatuan = true;
+    }
+
+    public function loadUnits()
+    {
+        $this->units = Unit::where('product_id', $this->productId)->get();
+    }
+
+    public function resetForm()
+    {
+        $this->unitId = null;
+        $this->unit_name = '';
+        $this->quantity_per_unit = '';
+    }
+
+    public function saveUnit()
+    {
+        $this->validate();
+
+        Unit::updateOrCreate(
+            ['id' => $this->unitId],
+            [
+                'product_id' => $this->productId,
+                'name' => $this->unit_name,
+                'qty' => $this->quantity_per_unit,
+            ]
+        );
+
+        $this->resetForm();
+        $this->loadUnits();
+        $this->closeModal();
+    }
+
 
     public function render()
     {
-        $products = Product::where('name', 'like', '%' . $this->search . '%')
-            ->orWhereHas('category', function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
-            })
-            ->paginate(10);
+        $products = Product::where('name', 'like', '%' . $this->search . '%')->paginate(10);
 
         $this->categories = Category::all();
         return view('livewire.product.index', compact('products'))->layout('layouts.app');
@@ -55,7 +107,7 @@ class ProductManager extends Component
     {
         $this->isOpen = false;
         $this->isModalOpen = false;
-        $this->selectedProduct = null;
+        $this->isModalSatuan = false;
     }
 
     private function resetInputFields()
