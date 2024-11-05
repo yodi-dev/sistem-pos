@@ -22,13 +22,9 @@
 
                 @if ($isOpen)
                     @include('livewire.product.create')
-                @endif
-
-                @if ($isModalOpen)
+                @elseif ($isModalOpen)
                     @include('livewire.product.show')
-                @endif
-
-                @if ($isModalSatuan)
+                @elseif($isModalSatuan)
                     @include('livewire.product.satuan')
                 @endif
 
@@ -39,6 +35,7 @@
                             <th class="p-3 border-r">Harga Beli</th>
                             <th class="p-3 border-r">Harga Jual</th>
                             <th class="p-3 border-r">Stok</th>
+                            <th class="p-3 border-r">Satuan</th>
                             <th class="p-3 border-r">Aksi</th>
                         </tr>
                     </thead>
@@ -51,13 +48,22 @@
                                 <td wire:click="showDetails({{ $product->id }})">Rp
                                     {{ number_format($product->retail_price, 0, ',', '.') }}</td>
                                 <td wire:click="showDetails({{ $product->id }})">{{ $product->stock }}</td>
+                                <td wire:click="editUnit({{ $product->id }})">
+                                    @foreach ($product->units as $unit)
+                                        <span
+                                            class="badge badge-accent py-3 px-4 text-base-content">{{ $unit->name }}</span>
+                                    @endforeach
+                                </td>
                                 <td>
                                     <button wire:click="edit({{ $product->id }})"
-                                        class="px-2 text-sm text-blue-500 dark:text-blue-400">Edit</button>
+                                        class="px-2 text-sm text-neutral dark:text-blue-400">
+                                        <x-icon name="m-pencil-square" />
+
+                                    </button>
                                     <button wire:click="delete({{ $product->id }})"
-                                        class="px-2 text-sm text-red-500 dark:text-red-400 border-x border-neutral">Hapus</button>
-                                    <button wire:click="editUnit({{ $product->id }})"
-                                        class="px-2 text-sm text-purple-500 dark:text-purple-400">Edit Satuan</button>
+                                        class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
+                                        <x-icon name="s-trash" />
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach

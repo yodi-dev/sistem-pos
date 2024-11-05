@@ -31,7 +31,6 @@
                                 placeholder="Cari Produk..." />
                         </div>
 
-
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($products))
                             <ul class="absolute bg-white border border-gray-300 top-40 w-full rounded-lg z-10">
@@ -67,26 +66,26 @@
                         </thead>
                         <tbody>
                             @foreach ($cart as $index => $item)
-                                <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
+                                <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-200' }}">
                                     <td class="p-2">{{ $item['name'] }}</td>
                                     <td class="p-2">
                                         <input type="number" value="{{ $item['sub_quantity'] }}"
                                             wire:change="updateQuantity({{ $index }}, $event.target.value)"
                                             class="w-16 p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
                                             min="1">
-                                        <select class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
-                                            <option>PCS</option>
-                                            <option>Renteng</option>
+                                        <select wire:model="cart.{{ $index }}.unit"
+                                            class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
+                                            @foreach ($item['units'] as $unit)
+                                                <option value="{{ $unit->name }}">{{ $unit->name }}</option>
+                                            @endforeach
                                         </select>
-
                                     </td>
                                     <td class="p-2">
                                         <input type="number" value="{{ $item['quantity'] }}"
                                             class="w-16 p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
                                             min="1" disabled>
                                     </td>
-                                    <td class="p-2">
-                                        Rp {{ number_format($item['price'], 0, ',', '.') }}
+                                    <td class="p-2">Rp {{ number_format($item['price'], 0, ',', '.') }}
                                         <select class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
                                             <option>Grosir</option>
                                             <option>Ecer</option>
@@ -102,6 +101,7 @@
                             @endforeach
                         </tbody>
                     </table>
+
 
                     <div class="grid grid-cols-2 mt-3">
                         <div class="col-6">

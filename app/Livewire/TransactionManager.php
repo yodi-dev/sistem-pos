@@ -28,13 +28,15 @@ class TransactionManager extends Component
 
     public function updatedSearch()
     {
-        $this->products = Product::where('name', 'like', '%' . $this->search . '%')->get();
+        $this->products = Product::where('name', 'like', '%' . $this->search . '%')
+            ->orWhere('code', 'like', '%' . $this->search . '%')
+            ->get();
+
 
         if (empty($this->search)) {
             $this->products = [];
         }
     }
-
 
     public function updatedSearchCustomer()
     {
@@ -100,12 +102,12 @@ class TransactionManager extends Component
             } else {
                 // Jika produk belum ada, tambahkan ke keranjang
                 $this->cart[] = [
-                    'id' => $product->id,
                     'name' => $product->name,
                     'sub_quantity' => 1,
-                    'quantity' => 1,
-                    'price' => $product->retail_price,
-                    'subtotal' => $product->retail_price,
+                    'quantity' => 1, // Hitung berdasarkan satuan
+                    'price' => $product->price,
+                    'subtotal' => $product->price,
+                    'units' => $product->units, // Misalkan produk juga memiliki relasi units
                 ];
             }
 
@@ -169,11 +171,10 @@ class TransactionManager extends Component
         $this->updateTotal();
     }
 
-
-
     public function updateTotal()
     {
         $this->total_price = collect($this->cart)->sum('subtotal');
+        $this->updatedTotalPaid();
     }
 
     public function updatedTotalPaid()

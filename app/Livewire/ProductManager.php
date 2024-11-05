@@ -30,22 +30,32 @@ class ProductManager extends Component
         'quantity_per_unit' => 'required|integer|min:1',
     ];
 
+    public function fillDefaultValues($name, $quantity)
+    {
+        $this->unit_name = $name;
+        $this->quantity_per_unit = $quantity;
+    }
 
     public function editUnit($productId)
     {
         // Ambil produk berdasarkan ID
-        $product = Product::find($productId);
-        $this->productId = $product->id;
-        $this->units = $product->units;
+        $this->Product = Product::find($productId);
+        $this->productId = $this->Product->id;
+        $this->units = $this->Product->units;
 
         // Emit event untuk membuka modal
         $this->isModalSatuan = true;
     }
 
-    public function loadUnits()
+    public function deleteUnit($unitId)
     {
-        $this->units = Unit::where('product_id', $this->productId)->get();
+        $unit = Unit::find($unitId);
+        if ($unit) {
+            $unit->delete();
+            $this->units = $this->Product->units;
+        }
     }
+
 
     public function resetForm()
     {
@@ -68,14 +78,12 @@ class ProductManager extends Component
         );
 
         $this->resetForm();
-        $this->loadUnits();
-        $this->closeModal();
+        $this->units = $this->Product->units;
     }
-
 
     public function render()
     {
-        $products = Product::where('name', 'like', '%' . $this->search . '%')->paginate(10);
+        $products = Product::with('units')->where('name', 'like', '%' . $this->search . '%')->paginate(10);
 
         $this->categories = Category::all();
         return view('livewire.product.index', compact('products'))->layout('layouts.app');
