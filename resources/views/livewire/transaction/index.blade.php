@@ -69,16 +69,25 @@
                                 <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-200' }}">
                                     <td class="p-2">{{ $item['name'] }}</td>
                                     <td class="p-2">
-                                        <input type="number" value="{{ $item['sub_quantity'] }}"
+                                        <input type="number" wire:model="cart.{{ $index }}.sub_quantity"
+                                            value="{{ $item['sub_quantity'] }}"
                                             wire:change="updateQuantity({{ $index }}, $event.target.value)"
                                             class="w-16 p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
                                             min="1">
                                         <select wire:model="cart.{{ $index }}.unit"
+                                            wire:change="updateQuantityOnUnitChange({{ $index }})"
                                             class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
-                                            @foreach ($item['units'] as $unit)
-                                                <option value="{{ $unit->name }}">{{ $unit->name }}</option>
-                                            @endforeach
+                                            @if (empty($item['units']))
+                                                <!-- Display PCS as the default if no units are available -->
+                                                <option value="Default">Default</option>
+                                            @else
+                                                <!-- List all available units -->
+                                                @foreach ($item['units'] as $unit)
+                                                    <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
+
                                     </td>
                                     <td class="p-2">
                                         <input type="number" value="{{ $item['quantity'] }}"

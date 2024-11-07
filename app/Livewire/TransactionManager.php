@@ -2,9 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Models\Customer;
+use App\Models\Unit;
 use App\Models\Product;
 use Livewire\Component;
+use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,68 @@ class TransactionManager extends Component
     public $selectedCustomer = null;
     public $highlightIndex = 0;
 
+    public function mount()
+    {
+        foreach ($this->cart as $index => $item) {
+            // Set default unit as the first unit of the product, or "PCS" if no units are available
+            $this->cart[$index]['unit'] = !empty($item['units']) ? $item['units'][0]->id : 'Default';
+        }
+    }
+
+    public function updateQuantityOnUnitChange($index)
+    {
+        $selectedUnitId = $this->cart[$index]['unit'];
+        $subQuantity = $this->cart[$index]['sub_quantity'];
+        $unit = Unit::find($selectedUnitId);
+
+        if ($unit) {
+            $this->cart[$index]['quantity'] = $subQuantity * $unit->qty;
+            // $this->calculateSubtotal($index);
+            $this->updateQuantity($index, $subQuantity);
+        }
+    }
+
+    public function updateQuantity($index, $quantity)
+    {
+        $selectedUnitId = $this->cart[$index]['unit'];
+        $unit = Unit::find($selectedUnitId);
+
+        $this->cart[$index]['quantity'] = $quantity * $unit->qty;
+        $this->calculateSubtotal($index);
+    }
+
+    private function calculateSubtotal($index)
+    {
+        $product = Product::find($this->cart[$index]['id']);
+        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $product->retail_price;
+        $this->updateTotal();
+    }
+
+    public function addToCart($productId)
+    {
+        $product = Product::find($productId);
+
+        if ($product) {
+            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
+
+            if ($index !== false) {
+                $this->cart[$index]['quantity'] += 1;
+            } else {
+                $this->cart[] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'sub_quantity' => 1,
+                    'quantity' => 1,
+                    'price' => $product->price,
+                    'subtotal' => $product->price,
+                    'units' => $product->units,
+                ];
+            }
+
+            $this->calculateSubtotal($index ?? count($this->cart) - 1);
+            $this->resetSearch();
+        }
+    }
 
     public function updatedSearch()
     {
@@ -87,43 +150,9 @@ class TransactionManager extends Component
         }
     }
 
-    public function addToCart($productId)
-    {
-        $product = Product::find($productId);
 
-        if ($product) {
-            // Cek apakah produk sudah ada di keranjang
-            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
 
-            if ($index !== false) {
-                // Jika produk sudah ada, update quantity dan subtotal
-                $this->cart[$index]['quantity'] += 1;
-                $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $product->retail_price;
-            } else {
-                // Jika produk belum ada, tambahkan ke keranjang
-                $this->cart[] = [
-                    'name' => $product->name,
-                    'sub_quantity' => 1,
-                    'quantity' => 1, // Hitung berdasarkan satuan
-                    'price' => $product->price,
-                    'subtotal' => $product->price,
-                    'units' => $product->units, // Misalkan produk juga memiliki relasi units
-                ];
-            }
 
-            $this->updateTotal();
-        }
-
-        $this->resetSearch();
-    }
-
-    public function updateQuantity($index, $quantity)
-    {
-        // Update kuantitas dan subtotal item di keranjang
-        $this->cart[$index]['quantity'] = $quantity;
-        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * Product::find($this->cart[$index]['id'])->retail_price;
-        $this->updateTotal();
-    }
 
     public function addNominal($amount)
     {
@@ -224,12 +253,12 @@ class TransactionManager extends Component
         }
     }
 
-    public function resetCart()
+    private function resetCart()
     {
         $this->cart = [];
         $this->total_price = 0;
-        $this->total_paid = null;
-        $this->change_due = 0;
+        $this->totalPaid = 0;
+        $this->changeDue = 0;
     }
 
     public function render()
