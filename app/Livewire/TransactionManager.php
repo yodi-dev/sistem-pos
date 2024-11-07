@@ -54,8 +54,8 @@ class TransactionManager extends Component
 
     private function calculateSubtotal($index)
     {
-        $product = Product::find($this->cart[$index]['id']);
-        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $product->retail_price;
+        // $product = Product::find($this->cart[$index]['id']);
+        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $this->cart[$index]['price'];
         $this->updateTotal();
     }
 
@@ -81,18 +81,43 @@ class TransactionManager extends Component
                     'units' => $product->units,
                     'unit' => $defaultUnit
                 ];
-
-                // $selectedUnitId = $this->cart[$index]['unit'];
-                // $unit = Unit::find($selectedUnitId);
-
-                // $this->cart[] = [
-                //     'unit' => $unit,
-                // ];
             }
 
             $this->calculateSubtotal($index ?? count($this->cart) - 1);
             $this->resetSearch();
         }
+    }
+
+    public function updatePriceType($index, $type)
+    {
+        // $cart = $this->cart['id']
+        $product = Product::find($this->cart[$index]['id']);
+
+        // Update tipe harga di item sesuai pilihan
+        // $this->cart[$index]['price'] = $product->$type;
+
+        // Ubah harga berdasarkan tipe harga yang dipilih
+        switch ($type) {
+            case 'retail_price':
+                $this->cart[$index]['price'] = $product->retail_price;
+                break;
+            case 'distributor_price':
+                $this->cart[$index]['price'] = $product->distributor_price;
+                break;
+            case 'agent_price':
+                $this->cart[$index]['price'] = $product->agent_price;
+                break;
+            case 'reseller_price':
+                $this->cart[$index]['price'] = $product->reseller_price;
+                break;
+            default:
+                $this->cart[$index]['price'] = $product->retail_price;
+                break;
+        }
+
+        // Update subtotal jika harga berubah
+        $this->calculateSubtotal($index);
+        // $this->cart[$index]['subtotal'] = $this->cart[$index]['price'] * $this->cart[$index]['quantity'];
     }
 
     public function updatedSearch()

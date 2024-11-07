@@ -91,12 +91,28 @@
                                             class="w-16 p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
                                             min="1" disabled>
                                     </td>
-                                    <td class="p-2">Rp {{ number_format($item['price'], 0, ',', '.') }}
-                                        <select class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
-                                            <option>Grosir</option>
-                                            <option>Ecer</option>
+                                    <td class="p-2">
+                                        Rp {{ number_format($item['price'], 0, ',', '.') }}
+                                        <select class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded"
+                                            wire:change="updatePriceType({{ $index }}, $event.target.value)">
+                                            <option value="">
+                                                Ganti Harga
+                                            </option>
+                                            <option value="retail_price">
+                                                Ecer
+                                            </option>
+                                            <option value="reseller_price">
+                                                Reseller
+                                            </option>
+                                            <option value="agent_price">
+                                                Agen
+                                            </option>
+                                            <option value="distributor_price">
+                                                Grosir
+                                            </option>
                                         </select>
                                     </td>
+
                                     <td class="p-2">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
                                     <td class="p-2">
                                         <button wire:click="removeFromCart({{ $index }})">
