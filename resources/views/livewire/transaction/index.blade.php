@@ -78,16 +78,13 @@
                                             wire:change="updateQuantityOnUnitChange({{ $index }})"
                                             class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
                                             @if (empty($item['units']))
-                                                <!-- Display PCS as the default if no units are available -->
-                                                <option value="Default">Default</option>
+                                                <option value="1">PCS</option>
                                             @else
-                                                <!-- List all available units -->
                                                 @foreach ($item['units'] as $unit)
                                                     <option value="{{ $unit->id }}">{{ $unit->name }}</option>
                                                 @endforeach
                                             @endif
                                         </select>
-
                                     </td>
                                     <td class="p-2">
                                         <input type="number" value="{{ $item['quantity'] }}"

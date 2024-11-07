@@ -26,14 +26,6 @@ class TransactionManager extends Component
     public $selectedCustomer = null;
     public $highlightIndex = 0;
 
-    public function mount()
-    {
-        foreach ($this->cart as $index => $item) {
-            // Set default unit as the first unit of the product, or "PCS" if no units are available
-            $this->cart[$index]['unit'] = !empty($item['units']) ? $item['units'][0]->id : 'Default';
-        }
-    }
-
     public function updateQuantityOnUnitChange($index)
     {
         $selectedUnitId = $this->cart[$index]['unit'];
@@ -52,7 +44,11 @@ class TransactionManager extends Component
         $selectedUnitId = $this->cart[$index]['unit'];
         $unit = Unit::find($selectedUnitId);
 
-        $this->cart[$index]['quantity'] = $quantity * $unit->qty;
+        if (empty($unit)) {
+            $this->cart[$index]['quantity'] = $quantity * $selectedUnitId;
+        } else {
+            $this->cart[$index]['quantity'] = $quantity * $unit->qty;
+        }
         $this->calculateSubtotal($index);
     }
 
@@ -67,6 +63,8 @@ class TransactionManager extends Component
     {
         $product = Product::find($productId);
 
+        $defaultUnit = $product->units->first() ? $product->units->first()->id : '1';
+
         if ($product) {
             $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
 
@@ -78,10 +76,18 @@ class TransactionManager extends Component
                     'name' => $product->name,
                     'sub_quantity' => 1,
                     'quantity' => 1,
-                    'price' => $product->price,
-                    'subtotal' => $product->price,
+                    'price' => $product->retail_price,
+                    'subtotal' => $product->retail_price,
                     'units' => $product->units,
+                    'unit' => $defaultUnit
                 ];
+
+                // $selectedUnitId = $this->cart[$index]['unit'];
+                // $unit = Unit::find($selectedUnitId);
+
+                // $this->cart[] = [
+                //     'unit' => $unit,
+                // ];
             }
 
             $this->calculateSubtotal($index ?? count($this->cart) - 1);
