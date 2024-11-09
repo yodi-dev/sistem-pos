@@ -59,35 +59,6 @@ class TransactionManager extends Component
         $this->updateTotal();
     }
 
-    public function addToCart($productId)
-    {
-        $product = Product::find($productId);
-
-        $defaultUnit = $product->units->first() ? $product->units->first()->id : '1';
-
-        if ($product) {
-            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
-
-            if ($index !== false) {
-                $this->cart[$index]['quantity'] += 1;
-            } else {
-                $this->cart[] = [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'sub_quantity' => 1,
-                    'quantity' => 1,
-                    'price' => $product->retail_price,
-                    'subtotal' => $product->retail_price,
-                    'units' => $product->units,
-                    'unit' => $defaultUnit
-                ];
-            }
-
-            $this->calculateSubtotal($index ?? count($this->cart) - 1);
-            $this->resetSearch();
-        }
-    }
-
     public function updatePriceType($index, $type)
     {
         $product = Product::find($this->cart[$index]['id']);
@@ -120,6 +91,7 @@ class TransactionManager extends Component
         $this->cart[$index]['discount'] = (float)$discount;
         $this->calculateSubtotal($index);
     }
+
     public function updatedSearch()
     {
         $this->products = Product::where('name', 'like', '%' . $this->search . '%')
@@ -181,10 +153,6 @@ class TransactionManager extends Component
         }
     }
 
-
-
-
-
     public function addNominal($amount)
     {
         $this->totalPaid += $amount;
@@ -203,6 +171,7 @@ class TransactionManager extends Component
         if ($method === 'utang') {
             $this->totalPaid = 0;
         }
+        $this->updateTotal();
     }
 
     public function addCustomer($customerId)
@@ -214,15 +183,16 @@ class TransactionManager extends Component
             $this->selectedCustomer = $customer;
             $this->searchCustomer = $customer->name;
         }
-        $this->resetSearch();
+        $this->resetErrorBag('customer');
+        // $this->resetSearch();
     }
 
     public function resetSearch()
     {
         $this->products = [];
         $this->search = '';
-        $this->customer = null;
-        $this->paymentMethod = null;
+        $this->searchCustomer = '';
+        $this->customers = [];
     }
 
     public function removeFromCart($index)
@@ -247,17 +217,52 @@ class TransactionManager extends Component
         }
     }
 
+    public function addToCart($productId)
+    {
+        $product = Product::find($productId);
+
+        $defaultUnit = $product->units->first() ? $product->units->first()->id : '1';
+
+        if ($product) {
+            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
+
+            if ($index !== false) {
+                $this->cart[$index]['quantity'] += 1;
+            } else {
+                $this->cart[] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'sub_quantity' => 1,
+                    'quantity' => 1,
+                    'price' => $product->retail_price,
+                    'subtotal' => $product->retail_price,
+                    'units' => $product->units,
+                    'unit' => $defaultUnit
+                ];
+            }
+
+            $this->calculateSubtotal($index ?? count($this->cart) - 1);
+            $this->resetSearch();
+        }
+    }
+
     public function store()
     {
+        // validasi customer jika pembayaran dengan utang
+        if ($this->paymentMethod === 'utang' && empty($this->customer)) {
+            $this->addError('customer', 'Data customer harus diisi jika metode pembayaran adalah utang.');
+            return;
+        }
+
         DB::beginTransaction();
 
         try {
             $transaction = Transaction::create([
+                'customer_id' => $this->customer->id ?? null,
+                'payment_method' => $this->paymentMethod,
                 'total_price' => $this->total_price,
                 'total_paid' => $this->totalPaid,
                 'change_due' => $this->changeDue,
-                'customer_id' => $this->customer->id,
-                'payment_methode' => $this->paymentMethod,
             ]);
 
             foreach ($this->cart as $item) {
@@ -290,6 +295,11 @@ class TransactionManager extends Component
         $this->total_price = 0;
         $this->totalPaid = 0;
         $this->changeDue = 0;
+        $this->paymentMethod = null;
+        $this->customer = null;
+        $this->totalPaid = null;
+
+        $this->resetSearch();
     }
 
     public function render()

@@ -3,8 +3,8 @@
 use App\Livewire\ProductManager;
 use App\Livewire\CategoryManager;
 use App\Livewire\CustomerManager;
+use App\Livewire\DebtTransactions;
 use App\Livewire\TransactionManager;
-use App\Livewire\UnitManagement;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,6 +26,10 @@ Route::get('transactions', TransactionManager::class)
 Route::get('customers', CustomerManager::class)
     ->middleware(['auth'])
     ->name('customers');
+
+Route::get('debts', DebtTransactions::class)
+    ->middleware(['auth'])
+    ->name('debts');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

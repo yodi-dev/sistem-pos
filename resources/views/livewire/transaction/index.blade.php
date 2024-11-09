@@ -9,6 +9,7 @@
                             wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
                             wire:keydown.enter="confirmCustomer" class="text-base-content input input-bordered w-full"
                             placeholder="Ketik Pembeli..." />
+
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))
                             <ul class="absolute bg-white border border-gray-300 w-fit top-0 mt-20 rounded-lg z-10">
@@ -22,6 +23,7 @@
                             </ul>
                         @endif
                     </x-slot:menu>
+
                     <div class="flex justify-center">
                         <!-- Input Search untuk Produk -->
                         <div x-data x-init="$refs.searchInput.focus()" class="w-full">
@@ -48,6 +50,18 @@
                 </x-card>
             </div>
         </div>
+
+        @if (session()->has('message'))
+            <div class="mt-4 p-2 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200 rounded">
+                {{ session('message') }}
+            </div>
+        @endif
+
+        @if (session()->has('error'))
+            <div class="mt-4 p-2 bg-red-100 dark:bg-red-700 text-red-800 dark:text-red-200 rounded">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <div class="row mt-3">
             <div class="col-12">
@@ -131,7 +145,6 @@
                         </tbody>
                     </table>
 
-
                     <div class="grid grid-cols-2 mt-3">
                         <div class="col-6">
                             <h3 class="text-xl text-base-content mt-4 dark:text-white">Metode Pembayaran</h3>
@@ -150,15 +163,6 @@
                                     Utang
                                 </button>
                             </div>
-
-
-
-                            @if (session()->has('message'))
-                                <div
-                                    class="mt-4 p-2 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200 rounded">
-                                    {{ session('message') }}
-                                </div>
-                            @endif
                         </div>
                         <div class="col-6">
                             <h3 class="text-xl text-base-content text-right font-semibold mt-4 dark:text-white">Total:
@@ -208,24 +212,15 @@
                                 class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
                                 Simpan
                             </button>
+                            @error('customer')
+                                <span class="text-red-600 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
 
 
                     </div>
 
                 </x-card>
-
-                @if (session()->has('message'))
-                    <div class="mt-4 p-2 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200 rounded">
-                        {{ session('message') }}
-                    </div>
-                @endif
-
-                @if (session()->has('error'))
-                    <div class="mt-4 p-2 bg-red-100 dark:bg-red-700 text-red-800 dark:text-red-200 rounded">
-                        {{ session('error') }}
-                    </div>
-                @endif
             </div>
         </div>
     </div>
