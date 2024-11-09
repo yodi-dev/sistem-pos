@@ -60,6 +60,7 @@
                                 <th class="p-2">Subjumlah</th>
                                 <th class="p-2">Jumlah</th>
                                 <th class="p-2">Harga Satuan</th>
+                                <th class="p-2">Potongan</th>
                                 <th class="p-2">Subtotal</th>
                                 <th class="p-2"></th>
                             </tr>
@@ -113,6 +114,12 @@
                                         </select>
                                     </td>
 
+                                    <td class="p-2">
+                                        <input type="number" wire:model.lazy="cart.{{ $index }}.discount"
+                                            wire:change="updateDiscount({{ $index }}, $event.target.value)"
+                                            class="w-20 p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
+                                            min="0" placeholder="Diskon">
+                                    </td>
                                     <td class="p-2">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
                                     <td class="p-2">
                                         <button wire:click="removeFromCart({{ $index }})">

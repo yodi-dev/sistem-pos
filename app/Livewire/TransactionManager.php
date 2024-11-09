@@ -55,7 +55,7 @@ class TransactionManager extends Component
     private function calculateSubtotal($index)
     {
         // $product = Product::find($this->cart[$index]['id']);
-        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $this->cart[$index]['price'];
+        $this->cart[$index]['subtotal'] = $this->cart[$index]['quantity'] * $this->cart[$index]['price'] - ($this->cart[$index]['discount'] ?? 0);
         $this->updateTotal();
     }
 
@@ -90,11 +90,7 @@ class TransactionManager extends Component
 
     public function updatePriceType($index, $type)
     {
-        // $cart = $this->cart['id']
         $product = Product::find($this->cart[$index]['id']);
-
-        // Update tipe harga di item sesuai pilihan
-        // $this->cart[$index]['price'] = $product->$type;
 
         // Ubah harga berdasarkan tipe harga yang dipilih
         switch ($type) {
@@ -117,9 +113,13 @@ class TransactionManager extends Component
 
         // Update subtotal jika harga berubah
         $this->calculateSubtotal($index);
-        // $this->cart[$index]['subtotal'] = $this->cart[$index]['price'] * $this->cart[$index]['quantity'];
     }
 
+    public function updateDiscount($index, $discount)
+    {
+        $this->cart[$index]['discount'] = (float)$discount;
+        $this->calculateSubtotal($index);
+    }
     public function updatedSearch()
     {
         $this->products = Product::where('name', 'like', '%' . $this->search . '%')
