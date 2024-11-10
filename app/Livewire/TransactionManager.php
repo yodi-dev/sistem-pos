@@ -252,6 +252,9 @@ class TransactionManager extends Component
         if ($this->paymentMethod === 'utang' && empty($this->customer)) {
             $this->addError('customer', 'Data customer harus diisi jika metode pembayaran adalah utang.');
             return;
+        } elseif ($this->paymentMethod === 'utang') {
+            $status = 'Belum Lunas';
+            $utang = $this->total_price - $this->totalPaid;
         }
 
         DB::beginTransaction();
@@ -263,6 +266,8 @@ class TransactionManager extends Component
                 'total_price' => $this->total_price,
                 'total_paid' => $this->totalPaid,
                 'change_due' => $this->changeDue,
+                'utang' => $utang,
+                'status' => $status,
             ]);
 
             foreach ($this->cart as $item) {

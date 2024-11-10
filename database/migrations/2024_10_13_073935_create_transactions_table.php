@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2);
             $table->decimal('total_paid', 10, 2);
             $table->decimal('change_due', 10, 2)->nullable();
+            $table->decimal('utang', 10, 2)->nullable();
+            $table->string('status', 20)->nullable();
             $table->dateTime('date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });

@@ -7,19 +7,33 @@ use App\Models\Transaction;
 
 class DebtTransactions extends Component
 {
-    public $transactions;
-
-    public function mount()
-    {
-        $this->transactions = Transaction::where('payment_method', 'utang')
-            ->with('customer')
-            ->orderBy('customer_id')
-            ->get();
-    }
+    public $payment = [];
 
     public function render()
     {
-        // dd($this->transactions);
-        return view('livewire.debt-transactions')->layout('layouts.app');
+        $transactions = Transaction::where('payment_method', 'utang')
+            ->with('customer')
+            ->orderBy('customer_id')
+            ->where('status', 'Belum Lunas')
+            ->paginate(10);
+        return view('livewire.debt.index', compact('transactions'))->layout('layouts.app');
+    }
+
+    public function payDebt($transactionId, $index)
+    {
+        // Temukan transaksi dan kurangi total price
+        $transaction = Transaction::find($transactionId);
+        $transaction->utang -= $this->payment[$index]['amount'];
+
+        // Update status jika utang sudah lunas
+        if ($transaction->utang <= 0) {
+            $transaction->utang = 0;
+            $transaction->status = 'Lunas';
+        }
+        $transaction->save();
+
+        $this->payment[$index]['amount'] = '';
+
+        session()->flash('message', 'Pembayaran berhasil.');
     }
 }
