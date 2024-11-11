@@ -26,7 +26,10 @@
                     @include('livewire.product.show')
                 @elseif($isModalSatuan)
                     @include('livewire.product.satuan')
+                @elseif($isBarcodeModalOpen)
+                    @include('livewire.product.barcode')
                 @endif
+
 
                 <table class="table table-auto w-full border-1 border-neutral shadow">
                     <thead class="bg-neutral text-base-100 text-lg text-center">
@@ -54,11 +57,14 @@
                                             class="badge badge-accent py-3 px-4 text-base-content">{{ $unit->name }}</span>
                                     @endforeach
                                 </td>
-                                <td>
-                                    <button wire:click="edit({{ $product->id }})"
+                                <td class="w-40">
+                                    <button wire:click="barcode({{ $product->id }})"
                                         class="px-2 text-sm text-neutral dark:text-blue-400">
+                                        <x-icon name="m-qr-code" />
+                                    </button>
+                                    <button wire:click="edit({{ $product->id }})"
+                                        class="px-2 text-sm text-neutral dark:text-blue-400 border-l border-neutral">
                                         <x-icon name="m-pencil-square" />
-
                                     </button>
                                     <button wire:click="delete({{ $product->id }})"
                                         class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">

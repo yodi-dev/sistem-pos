@@ -6,6 +6,7 @@ use App\Models\Unit;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
+use Milon\Barcode\DNS1D;
 use Livewire\WithPagination;
 
 class ProductManager extends Component
@@ -23,6 +24,22 @@ class ProductManager extends Component
     public $unit_name;
     public $quantity_per_unit;
     public $units = [];
+    public $isBarcodeModalOpen = false;
+    public $barcodeImage;
+
+
+    public function barcode($productId)
+    {
+        $this->Product = Product::find($productId); // Temukan produk berdasarkan ID
+
+        if ($this->Product) {
+            $generator = new DNS1D();
+            $barcodeData = $generator->getBarcodePNG($this->Product->code, 'C39', 3, 33); // Sesuaikan ukuran jika diperlukan
+            $this->barcodeImage = 'data:image/png;base64,' . $barcodeData;
+        }
+
+        $this->isBarcodeModalOpen = true;
+    }
 
 
     protected $rules = [
