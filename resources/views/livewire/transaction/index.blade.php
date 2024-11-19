@@ -4,11 +4,11 @@
             <div class="col-12 ">
                 <x-card title="Produk" class="text-neutral bg-base-200" shadow separator>
                     <x-slot:menu>
-                        <label for="searchCustomer">Pembeli</label>
+                        <label for="searchCustomer" class="font-medium">Pembeli</label>
                         <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
                             wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
                             wire:keydown.enter="confirmCustomer" class="text-base-content input input-bordered w-full"
-                            placeholder="Ketik Pembeli..." />
+                            placeholder="ketik nama..." />
 
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))

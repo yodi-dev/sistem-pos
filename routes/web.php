@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\BarcodePrint;
 use App\Livewire\ProductManager;
 use App\Livewire\CategoryManager;
 use App\Livewire\CustomerManager;
@@ -11,25 +12,15 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('products', ProductManager::class)
-    ->middleware(['auth'])
-    ->name('products');
+Route::middleware(['auth'])->group(function () {
+    Route::get('products', ProductManager::class)->name('products');
+    Route::get('categories', CategoryManager::class)->name('categories');
+    Route::get('transactions', TransactionManager::class)->name('transactions');
+    Route::get('customers', CustomerManager::class)->name('customers');
+    Route::get('debts', DebtTransactions::class)->name('debts');
+    Route::get('barcode-print', BarcodePrint::class)->name('barcode.print');
+});
 
-Route::get('categories', CategoryManager::class)
-    ->middleware(['auth'])
-    ->name('categories');
-
-Route::get('transactions', TransactionManager::class)
-    ->middleware(['auth'])
-    ->name('transactions');
-
-Route::get('customers', CustomerManager::class)
-    ->middleware(['auth'])
-    ->name('customers');
-
-Route::get('debts', DebtTransactions::class)
-    ->middleware(['auth'])
-    ->name('debts');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

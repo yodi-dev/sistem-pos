@@ -10,15 +10,21 @@
 
                 <div class="flex justify-between items-center mb-4">
                     <!-- Tombol "Tambah" di sebelah kiri -->
-                    <button wire:click="create()" class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
-                        Tambah
-                    </button>
+                    <div class="flex space-x-4">
+                        <button wire:click="create()" class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
+                            Tambah
+                        </button>
+                        <!-- Tombol "Cetak Barcode" di samping tombol "Tambah" -->
+                        <a title="Untuk cetak barcode beberapa produk" href="{{ route('barcode.print') }}"
+                            class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
+                            Cetak Barcode
+                        </a>
+                    </div>
 
                     <!-- Search Field di sebelah kanan -->
                     <input type="text" wire:model.live="search" class="input input-bordered w-1/3"
                         placeholder="Cari Produk..." />
                 </div>
-
 
                 @if ($isOpen)
                     @include('livewire.product.create')
@@ -54,7 +60,7 @@
                                 <td wire:click="editUnit({{ $product->id }})">
                                     @foreach ($product->units as $unit)
                                         <span
-                                            class="badge badge-accent py-3 px-4 text-base-content">{{ $unit->name }}</span>
+                                            class="badge badge-accent py-3 px-4 my-0.5 text-base-content">{{ $unit->name }}</span>
                                     @endforeach
                                 </td>
                                 <td class="w-40">

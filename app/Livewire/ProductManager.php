@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use PDF;
 use App\Models\Unit;
 use App\Models\Product;
 use Livewire\Component;
@@ -26,21 +27,65 @@ class ProductManager extends Component
     public $units = [];
     public $isBarcodeModalOpen = false;
     public $barcodeImage;
+    public $barcodeQuantity = 1;
 
+    // Method untuk menghasilkan kode unik
+    private function generateUniqueCode()
+    {
+        do {
+            // Generate angka acak sepanjang 13 digit
+            $code = (string) mt_rand(1000000000000, 9999999999999);
+        } while (Product::where('code', $code)->exists()); // Cek apakah kode sudah ada di database
+
+        return $code;
+    }
+
+    public function printBarcode($productId)
+    {
+        $product = Product::findOrFail($productId);
+        $barcodes = [];
+        $generator = new DNS1D();
+
+
+        for ($i = 0; $i < $this->barcodeQuantity; $i++) {
+            $barcodes[] = $generator->getBarcodePNG($product->code, 'C39', 3, 33);
+        }
+
+        $pdf = \PDF::loadView('livewire.barcode.print', [
+            'product' => $product,
+            'barcodes' => $barcodes,
+        ])->setPaper([0, 0, 226, 567], 'portrait'); // Kertas 58mm x panjang dinamis
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, "barcode_{$product->name}.pdf");
+    }
+
+    // Method untuk membuat gambar barcode dalam format base64
+    private function generateBarcodeImage($code)
+    {
+        $generator = new DNS1D();
+        $barcodeData = $generator->getBarcodePNG($code, 'C39', 3, 33);
+        return 'data:image/png;base64,' . $barcodeData;
+    }
 
     public function barcode($productId)
     {
-        $this->Product = Product::find($productId); // Temukan produk berdasarkan ID
+        $this->Product = Product::find($productId);
 
         if ($this->Product) {
-            $generator = new DNS1D();
-            $barcodeData = $generator->getBarcodePNG($this->Product->code, 'C39', 3, 33); // Sesuaikan ukuran jika diperlukan
-            $this->barcodeImage = 'data:image/png;base64,' . $barcodeData;
+            // Jika produk tidak memiliki kode, buat kode baru
+            if (empty($this->Product->code)) {
+                $this->Product->code = $this->generateUniqueCode();
+                $this->Product->save(); // Simpan kode baru ke database
+            }
+
+            // Generate gambar barcode dari kode produk
+            $this->barcodeImage = $this->generateBarcodeImage($this->Product->code);
         }
 
         $this->isBarcodeModalOpen = true;
     }
-
 
     protected $rules = [
         'unit_name' => 'required|string|max:50',
@@ -72,7 +117,6 @@ class ProductManager extends Component
             $this->units = $this->Product->units;
         }
     }
-
 
     public function resetForm()
     {
