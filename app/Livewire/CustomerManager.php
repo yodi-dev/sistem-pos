@@ -15,7 +15,7 @@ class CustomerManager extends Component
     {
         $customers = Customer::where('name', 'like', '%' . $this->search . '%')->paginate(10);
 
-        return view('livewire.customer.index', compact('customers'))->layout('layouts.app');
+        return view('livewire.customer.index', compact('customers'));
     }
 
     public function create()

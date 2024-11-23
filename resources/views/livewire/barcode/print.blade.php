@@ -25,7 +25,6 @@
             margin: 5px 0 5px;
         }
 
-        /* Aturan untuk cetak */
         @media print {
             body {
                 margin: 0;

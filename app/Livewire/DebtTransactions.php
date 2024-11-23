@@ -16,7 +16,7 @@ class DebtTransactions extends Component
             ->orderBy('customer_id')
             ->where('status', 'Belum Lunas')
             ->paginate(10);
-        return view('livewire.debt.index', compact('transactions'))->layout('layouts.app');
+        return view('livewire.debt.index', compact('transactions'));
     }
 
     public function payDebt($transactionId, $index)

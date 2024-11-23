@@ -309,6 +309,6 @@ class TransactionManager extends Component
 
     public function render()
     {
-        return view('livewire.transaction.index')->layout('layouts.app');
+        return view('livewire.transaction.index');
     }
 }

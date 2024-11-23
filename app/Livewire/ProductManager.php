@@ -2,14 +2,15 @@
 
 namespace App\Livewire;
 
-use PDF;
 use App\Models\Unit;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
 use Milon\Barcode\DNS1D;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 
+#[Title('Halaman Produk | Yudis')]
 class ProductManager extends Component
 {
     use WithPagination;
@@ -147,7 +148,7 @@ class ProductManager extends Component
         $products = Product::with('units')->where('name', 'like', '%' . $this->search . '%')->paginate(10);
 
         $this->categories = Category::all();
-        return view('livewire.product.index', compact('products'))->layout('layouts.app');
+        return view('livewire.product.index', compact('products'));
     }
 
     public function showDetails($productId)

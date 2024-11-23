@@ -30,7 +30,7 @@ new class extends Component {
         @endif
 
         {{-- BRAND --}}
-        <div class="ml-5 text-neutral pt-5">YUDISTIRA, S.Ds</div>
+        <div class="ml-5 text-neutral pt-5">Habiba Store</div>
 
         <x-menu-separator />
 

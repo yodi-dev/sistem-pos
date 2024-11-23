@@ -1,5 +1,15 @@
 <div class="text-base-content dark:text-gray-100">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
+        @if (session('success'))
+            <div role="alert" class="alert mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
         <div class="bg-base-200 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
                 @if (session()->has('message'))
@@ -15,9 +25,9 @@
                             Tambah
                         </button>
                         <!-- Tombol "Cetak Barcode" di samping tombol "Tambah" -->
-                        <a title="Untuk cetak barcode beberapa produk" href="{{ route('barcode.print') }}"
+                        <a title="Klik untuk memperbarui jumlah stok pada produk" href="{{ route('update.products') }}"
                             class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
-                            Cetak Barcode
+                            Perbarui Stok
                         </a>
                     </div>
 
@@ -35,7 +45,6 @@
                 @elseif($isBarcodeModalOpen)
                     @include('livewire.product.barcode')
                 @endif
-
 
                 <table class="table table-auto w-full border-1 border-neutral shadow">
                     <thead class="bg-neutral text-base-100 text-lg text-center">
