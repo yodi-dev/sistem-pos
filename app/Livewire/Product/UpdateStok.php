@@ -66,7 +66,16 @@ class UpdateStok extends Component
 
     public function save()
     {
-        $downloadUrls = []; // Untuk menyimpan URL file yang akan diunduh
+        $zip = new \ZipArchive();
+        $zipFileName = storage_path('app/public/barcodes.zip');
+
+        // Buat ZIP baru
+        if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+            session()->flash('error', 'Gagal membuat file ZIP.');
+            return;
+        }
+
+        $generator = new DNS1D();
 
         foreach ($this->cart as $item) {
             if ($item['checked']) {
@@ -77,52 +86,34 @@ class UpdateStok extends Component
 
             if ($item['print_barcode']) {
                 $product = Product::find($item['id']);
-                $downloadUrls[] = $this->printBarcode($product->id, $item['stock']);
+                $barcodes = [];
+
+                for ($i = 0; $i < $item['stock']; $i++) {
+                    $barcodes[] = $generator->getBarcodePNG($product->code, 'C39', 3, 33);
+                }
+
+                $pdf = \PDF::loadView('livewire.barcode.print', [
+                    'product' => $product,
+                    'barcodes' => $barcodes,
+                ])->setPaper([0, 0, 226, 567], 'portrait'); // Kertas 58mm x panjang dinamis
+
+                $pdfFilePath = storage_path("app/public/{$product->name}_barcode.pdf");
+                file_put_contents($pdfFilePath, $pdf->output());
+
+                // Tambahkan file PDF ke dalam ZIP
+                $zip->addFile($pdfFilePath, "{$product->name}_barcode.pdf");
             }
         }
 
-        session()->flash('success', 'Stok Berhasil Diperbarui.');
+        session()->flash('success', 'Proses selesai.');
         $this->cart = [];
 
-        // Jika ada file yang harus diunduh, redirect ke file pertama
-        if (!empty($downloadUrls)) {
-            return redirect($downloadUrls[0]); // Unduh file pertama
-        }
+        // Tutup ZIP dan bersihkan file PDF sementara
+        $zip->close();
 
-        return redirect()->route('products'); // Jika tidak ada file, kembali ke halaman produk
+        // Unduh file ZIP
+        return response()->download($zipFileName)->deleteFileAfterSend();
     }
-
-
-    public function printBarcode($productId, $quantity)
-    {
-        $product = Product::findOrFail($productId);
-        $barcodes = [];
-        $generator = new DNS1D();
-
-        for ($i = 0; $i < $quantity; $i++) {
-            $barcodes[] = $generator->getBarcodePNG($product->code, 'C39', 3, 33);
-        }
-
-        $pdf = \PDF::loadView('livewire.barcode.print', [
-            'product' => $product,
-            'barcodes' => $barcodes,
-        ])->setPaper([0, 0, 226, 567], 'portrait'); // Kertas 58mm x panjang dinamis
-
-        // Pastikan direktori `storage/app/temp` tersedia
-        $tempPath = storage_path('app/temp');
-        if (!file_exists($tempPath)) {
-            mkdir($tempPath, 0755, true); // Buat folder jika belum ada
-        }
-
-        // Simpan file PDF
-        $fileName = "barcode_{$product->name}.pdf";
-        $filePath = $tempPath . "/{$fileName}";
-        \File::put($filePath, $pdf->output());
-
-        // Kembalikan URL file untuk diunduh
-        return asset("storage/temp/{$fileName}");
-    }
-
 
     public function render()
     {
