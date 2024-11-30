@@ -14,27 +14,13 @@ class UpdateStok extends Component
 
     public function updatedSearch()
     {
-        $this->products = Product::where('name', 'like', "%{$this->search}%")->get();
+        $this->products = Product::where('name', 'like', "%{$this->search}%")
+            ->orWhere('code', 'like', '%' . $this->search . '%')
+            ->get();
 
         if (empty($this->search)) {
             $this->products = [];
         }
-    }
-
-    public function addToCart($productId)
-    {
-        $product = Product::find($productId);
-
-        if (!isset($this->cart[$productId])) {
-            $this->cart[$productId] = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'stock' => 1,
-                'checked' => false,
-                'print_barcode' => false,
-            ];
-        }
-        $this->resetSearch();
     }
 
     public function resetSearch()
@@ -47,6 +33,30 @@ class UpdateStok extends Component
     {
         if (isset($this->cart[$productId])) {
             $this->cart[$productId]['stock'] = max(0, (int)$stock);
+        }
+    }
+
+    public function updateCartPurchase($productId, $purchase_price)
+    {
+        $purchase_price = str_replace('.', '', $purchase_price);
+        if (isset($this->cart[$productId])) {
+            $this->cart[$productId]['purchase_price'] = $purchase_price;
+        }
+    }
+
+    public function updateCartRetail($productId, $retail_price)
+    {
+        $retail_price = str_replace('.', '', $retail_price);
+        if (isset($this->cart[$productId])) {
+            $this->cart[$productId]['retail_price'] = $retail_price;
+        }
+    }
+
+    public function updateCartDistributor($productId, $distributor_price)
+    {
+        $distributor_price = str_replace('.', '', $distributor_price);
+        if (isset($this->cart[$productId])) {
+            $this->cart[$productId]['distributor_price'] = $distributor_price;
         }
     }
 
@@ -64,10 +74,32 @@ class UpdateStok extends Component
         }
     }
 
+    public function addToCart($productId)
+    {
+        $product = Product::find($productId);
+
+        if (!isset($this->cart[$productId])) {
+            $this->cart[$productId] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'purchase_price' => $product->purchase_price,
+                'retail_price' => $product->retail_price,
+                'distributor_price' => $product->distributor_price,
+                'stock' => 0,
+                'checked' => false,
+                'print_barcode' => false,
+            ];
+        }
+        $this->resetSearch();
+    }
+
     public function save()
     {
+        $generator = new DNS1D();
+        $barcodesData = [];
         $zip = new \ZipArchive();
         $zipFileName = storage_path('app/public/barcodes.zip');
+        $barcodeGenerated = false;
 
         // Buat ZIP baru
         if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
@@ -75,45 +107,60 @@ class UpdateStok extends Component
             return;
         }
 
-        $generator = new DNS1D();
-
         foreach ($this->cart as $item) {
+            // Ambil data produk hanya sekali
+            $product = Product::find($item['id']);
+
+            // Update stok dan harga jika "checked"
             if ($item['checked']) {
-                $product = Product::find($item['id']);
                 $product->stock += $item['stock'];
+                $product->purchase_price = $item['purchase_price'];
+                $product->retail_price = $item['retail_price'];
+                $product->distributor_price = $item['distributor_price'];
                 $product->save();
             }
 
+            // Proses cetak barcode jika "print_barcode"
             if ($item['print_barcode']) {
-                $product = Product::find($item['id']);
                 $barcodes = [];
+                $barcodeGenerated = true;
 
+                // Generate barcode sebanyak stok
                 for ($i = 0; $i < $item['stock']; $i++) {
                     $barcodes[] = $generator->getBarcodePNG($product->code, 'C39', 3, 33);
                 }
 
+                // Buat file PDF untuk produk
                 $pdf = \PDF::loadView('livewire.barcode.print', [
                     'product' => $product,
                     'barcodes' => $barcodes,
                 ])->setPaper([0, 0, 226, 567], 'portrait'); // Kertas 58mm x panjang dinamis
 
+                // Simpan PDF ke storage sementara
                 $pdfFilePath = storage_path("app/public/{$product->name}_barcode.pdf");
                 file_put_contents($pdfFilePath, $pdf->output());
 
-                // Tambahkan file PDF ke dalam ZIP
-                $zip->addFile($pdfFilePath, "{$product->name}_barcode.pdf");
+                // Tambahkan file PDF ke ZIP
+                $zip->addFile($pdfFilePath, "{$product->code}_barcode.pdf");
+
+                // Simpan data barcode untuk log/debugging jika diperlukan
+                $barcodesData[$product->code] = $barcodes;
             }
         }
 
-        session()->flash('success', 'Proses selesai.');
-        $this->cart = [];
-
-        // Tutup ZIP dan bersihkan file PDF sementara
+        // Tutup ZIP setelah semua file ditambahkan
         $zip->close();
 
+        // Bersihkan keranjang dan berikan feedback
+        $this->cart = [];
+        session()->flash('success', 'Proses selesai.');
+
         // Unduh file ZIP
-        return response()->download($zipFileName)->deleteFileAfterSend();
+        if ($barcodeGenerated) {
+            return response()->download($zipFileName)->deleteFileAfterSend();
+        }
     }
+
 
     public function render()
     {

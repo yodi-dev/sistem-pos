@@ -7,7 +7,8 @@
                         <label for="searchCustomer" class="font-medium">Pembeli</label>
                         <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
                             wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
-                            wire:keydown.enter="confirmCustomer" class="text-base-content input input-bordered w-full"
+                            wire:keydown.enter="confirmCustomer"
+                            class="text-base-content input input-bordered w-full rounded-md"
                             placeholder="ketik nama..." />
 
                         <!-- Dropdown Hasil Pencarian -->
@@ -29,7 +30,7 @@
                         <div x-data x-init="$refs.searchInput.focus()" class="w-full">
                             <input type="text" wire:model.live="search" wire:keydown.arrow-down="selectNext"
                                 wire:keydown.arrow-up="selectPrevious" wire:keydown.enter="confirmSelection"
-                                x-ref="searchInput" class="text-base-content input input-bordered w-full"
+                                x-ref="searchInput" class="text-base-content input input-bordered w-full rounded-md"
                                 placeholder="Cari Produk..." />
                         </div>
 
@@ -70,13 +71,12 @@
                         class="table table-zebra table-auto text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
                         <thead class="bg-neutral text-lg text-base-100 dark:bg-gray-700">
                             <tr>
-                                <th class="p-2">Produk</th>
-                                <th class="p-2">Subjumlah</th>
-                                <th class="p-2">Jumlah</th>
-                                <th class="p-2">Harga Satuan</th>
-                                <th class="p-2">Potongan</th>
-                                <th class="p-2">Subtotal</th>
-                                <th class="p-2"></th>
+                                <th class="p-2 border-r">Produk</th>
+                                <th class="p-2 border-r">Subjumlah</th>
+                                <th class="p-2 border-r">Jumlah</th>
+                                <th class="p-2 border-r">Harga Satuan</th>
+                                <th class="p-2 border-r">Potongan</th>
+                                <th colspan="2" class="p-2 border-r">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -208,10 +208,17 @@
                                 </div>
                             </div>
 
-                            <button wire:click="store"
-                                class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
-                                Simpan
-                            </button>
+                            <div class="flex space-x-2">
+                                <button wire:click="store"
+                                    class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
+                                    Simpan
+                                </button>
+                                <button wire:click="andprint"
+                                    class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
+                                    Simpan & Print
+                                </button>
+                            </div>
+
                             @error('customer')
                                 <span class="text-red-600 text-sm">{{ $message }}</span>
                             @enderror

@@ -32,7 +32,7 @@
                     </div>
 
                     <!-- Search Field di sebelah kanan -->
-                    <input type="text" wire:model.live="search" class="input input-bordered w-1/3"
+                    <input type="text" wire:model.live="search" class="input input-bordered w-1/3 rounded-md"
                         placeholder="Cari Produk..." />
                 </div>
 

@@ -34,8 +34,8 @@ new #[Layout('layouts.guest')] class extends Component {
                     <label class="label">
                         <span class="label-text">Email</span>
                     </label>
-                    <x-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email"
-                        required autofocus autocomplete="username" />
+                    <x-input wire:model="form.email" id="email" class="block mt-1 w-full rounded-md" type="email"
+                        name="email" required autofocus autocomplete="username" />
                     <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
                 </div>
 
@@ -45,7 +45,7 @@ new #[Layout('layouts.guest')] class extends Component {
                         <span class="label-text">Password</span>
                     </label>
                     <input type="password" wire:model="form.password" name="password" required id="password"
-                        placeholder="********" class="input input-bordered w-full" />
+                        placeholder="********" class="input input-bordered w-full rounded-md" />
                     <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
                 </div>
 

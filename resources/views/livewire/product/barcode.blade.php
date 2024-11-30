@@ -18,7 +18,7 @@
                     <label class="block text-sm font-medium mb-1 text-base-content dark:text-base-100">
                         Jumlah
                     </label>
-                    <input type="number" wire:model="barcodeQuantity" class="form-input w-12 border rounded mb-1"
+                    <input type="number" wire:model="barcodeQuantity" class="form-input w-12 border rounded-md mb-1"
                         min="1" value="1" />
                 </div>
                 <div class="flex justify-end">

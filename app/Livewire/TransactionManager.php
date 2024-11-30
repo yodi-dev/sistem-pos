@@ -255,6 +255,9 @@ class TransactionManager extends Component
         } elseif ($this->paymentMethod === 'utang') {
             $status = 'Belum Lunas';
             $utang = $this->total_price - $this->totalPaid;
+        } else {
+            $status = null;
+            $utang = null;
         }
 
         DB::beginTransaction();
@@ -292,6 +295,11 @@ class TransactionManager extends Component
             DB::rollBack();
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function andprint()
+    {
+        $this->store();
     }
 
     private function resetCart()
