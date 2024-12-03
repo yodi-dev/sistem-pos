@@ -26,8 +26,8 @@
                             Tambah
                         </a>
                         <!-- Tombol "Cetak Barcode" di samping tombol "Tambah" -->
-                        <a title="Klik untuk memperbarui jumlah stok pada produk" href="{{ route('update.products') }}"
-                            class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
+                        <a title="Klik untuk memperbarui jumlah stok pada produk" wire:navigate
+                            href="{{ route('update.products') }}" class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
                             Perbarui Stok
                         </a>
                     </div>
@@ -39,8 +39,6 @@
 
                 @if ($isModalOpen)
                     @include('livewire.product.show')
-                @elseif($isBarcodeModalOpen)
-                    @include('livewire.product.barcode')
                 @endif
 
                 <table class="table table-auto w-full border-1 border-neutral shadow">
@@ -70,11 +68,11 @@
                                     @endforeach
                                 </td>
                                 <td class="w-40">
-                                    <button wire:click="barcode({{ $product->id }})"
+                                    <a wire:navigate href="{{ route('barcode.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400">
                                         <x-icon name="m-qr-code" />
-                                    </button>
-                                    <a href="{{ route('edit.product', $product->id) }}"
+                                    </a>
+                                    <a wire:navigate href="{{ route('edit.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400 border-l border-neutral">
                                         <x-icon name="m-pencil-square" />
                                     </a>

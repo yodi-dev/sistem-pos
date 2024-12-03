@@ -5,6 +5,7 @@ use App\Livewire\ProductManager;
 use App\Livewire\CategoryManager;
 use App\Livewire\CustomerManager;
 use App\Livewire\DebtTransactions;
+use App\Livewire\Product\BarcodeManager;
 use App\Livewire\Product\CreateProduct;
 use App\Livewire\Product\UnitManager;
 use App\Livewire\Product\UpdateStok;
@@ -21,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('products/create', CreateProduct::class)->name('create.product');
     Route::get('products/edit/{id}', CreateProduct::class)->name('edit.product');
     Route::get('products/unit/{id}', UnitManager::class)->name('unit.product');
+    Route::get('products/barcode/{id}', BarcodeManager::class)->name('barcode.product');
     Route::get('categories', CategoryManager::class)->name('categories');
     Route::get('transactions', TransactionManager::class)->name('transactions');
     Route::get('customers', CustomerManager::class)->name('customers');
