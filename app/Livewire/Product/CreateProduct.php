@@ -12,6 +12,8 @@ class CreateProduct extends Component
     public $code, $name, $category_name, $purchase_price, $retail_price, $reseller_price, $agent_price, $distributor_price, $stock, $location, $supplier;
     public $product_id;
 
+    // edit produk
+    public $isEditing = false;
 
     public function render()
     {
@@ -48,5 +50,19 @@ class CreateProduct extends Component
         );
 
         redirect('products');
+    }
+
+    // edit produk
+    public function edit($id)
+    {
+        $this->isEditing = true;
+
+        $product = Product::findOrFail($id);
+        $this->product_id = $id;
+        $this->name = $product->name;
+        $this->category_name = $product->category_name;
+        // $this->price = $product->price;
+        $this->stock = $product->stock;
+        // $this->description = $product->description;
     }
 }

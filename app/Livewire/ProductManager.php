@@ -17,18 +17,13 @@ class ProductManager extends Component
 
     public $search = '';
     public $isModalOpen = false;
-    public $isModalSatuan = false;
     public $Product;
     public $productId;
-    public $unitId;
-    public $unit_name;
-    public $quantity_per_unit;
-    public $units = [];
+
     public $isBarcodeModalOpen = false;
     public $barcodeImage;
     public $barcodeQuantity = 1;
 
-    // Method untuk menghasilkan kode unik
     private function generateUniqueCode()
     {
         do {
@@ -60,7 +55,6 @@ class ProductManager extends Component
         }, "barcode_{$product->name}.pdf");
     }
 
-    // Method untuk membuat gambar barcode dalam format base64
     private function generateBarcodeImage($code)
     {
         $generator = new DNS1D();
@@ -86,66 +80,10 @@ class ProductManager extends Component
         $this->isBarcodeModalOpen = true;
     }
 
-    protected $rules = [
-        'unit_name' => 'required|string|max:50',
-        'quantity_per_unit' => 'required|integer|min:1',
-    ];
-
-    public function fillDefaultValues($name, $quantity)
-    {
-        $this->unit_name = $name;
-        $this->quantity_per_unit = $quantity;
-    }
-
-    public function editUnit($productId)
-    {
-        // Ambil produk berdasarkan ID
-        $this->Product = Product::find($productId);
-        $this->productId = $this->Product->id;
-        $this->units = $this->Product->units;
-
-        // Emit event untuk membuka modal
-        $this->isModalSatuan = true;
-    }
-
-    public function deleteUnit($unitId)
-    {
-        $unit = Unit::find($unitId);
-        if ($unit) {
-            $unit->delete();
-            $this->units = $this->Product->units;
-        }
-    }
-
-    public function resetForm()
-    {
-        $this->unitId = null;
-        $this->unit_name = '';
-        $this->quantity_per_unit = '';
-    }
-
-    public function saveUnit()
-    {
-        $this->validate();
-
-        Unit::updateOrCreate(
-            ['id' => $this->unitId],
-            [
-                'product_id' => $this->productId,
-                'name' => $this->unit_name,
-                'qty' => $this->quantity_per_unit,
-            ]
-        );
-
-        $this->resetForm();
-        $this->units = $this->Product->units;
-    }
-
     public function render()
     {
         $products = Product::with('units')->where('name', 'like', '%' . $this->search . '%')->paginate(10);
 
-        $this->categories = Category::all();
         return view('livewire.product.index', compact('products'));
     }
 
@@ -157,7 +95,7 @@ class ProductManager extends Component
 
     public function updatingSearch()
     {
-        $this->resetPage(); // Reset halaman ke pertama setiap kali pencarian berubah
+        $this->resetPage();
     }
 
     public function closeModal()
@@ -175,19 +113,6 @@ class ProductManager extends Component
         $this->stock = '';
         $this->description = '';
         $this->product_id = '';
-    }
-
-    public function edit($id)
-    {
-        $product = Product::findOrFail($id);
-        $this->product_id = $id;
-        $this->name = $product->name;
-        $this->category_id = $product->category_id;
-        $this->price = $product->price;
-        $this->stock = $product->stock;
-        $this->description = $product->description;
-
-        $this->openModal();
     }
 
     public function delete($id)

@@ -21,7 +21,8 @@
                 <div class="flex justify-between items-center mb-4">
                     <!-- Tombol "Tambah" di sebelah kiri -->
                     <div class="flex space-x-4">
-                        <a href="{{ route('create.product') }}" class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
+                        <a wire:navigate href="{{ route('create.product') }}"
+                            class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
                             Tambah
                         </a>
                         <!-- Tombol "Cetak Barcode" di samping tombol "Tambah" -->
@@ -38,8 +39,6 @@
 
                 @if ($isModalOpen)
                     @include('livewire.product.show')
-                @elseif($isModalSatuan)
-                    @include('livewire.product.satuan')
                 @elseif($isBarcodeModalOpen)
                     @include('livewire.product.barcode')
                 @endif
@@ -64,7 +63,7 @@
                                 <td wire:click="showDetails({{ $product->id }})">Rp
                                     {{ number_format($product->retail_price, 0, ',', '.') }}</td>
                                 <td wire:click="showDetails({{ $product->id }})">{{ $product->stock }}</td>
-                                <td wire:click="editUnit({{ $product->id }})">
+                                <td wire:navigate href="{{ route('unit.product', $product->id) }}">
                                     @foreach ($product->units as $unit)
                                         <span
                                             class="badge badge-accent py-3 px-4 my-0.5 text-base-content">{{ $unit->name }}</span>
@@ -75,10 +74,10 @@
                                         class="px-2 text-sm text-neutral dark:text-blue-400">
                                         <x-icon name="m-qr-code" />
                                     </button>
-                                    <button wire:click="edit({{ $product->id }})"
+                                    <a href="{{ route('edit.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400 border-l border-neutral">
                                         <x-icon name="m-pencil-square" />
-                                    </button>
+                                    </a>
                                     <button wire:click="delete({{ $product->id }})"
                                         class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
                                         <x-icon name="s-trash" />
