@@ -35,7 +35,7 @@
                     <p>Rp {{ number_format($Product->agent_price ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="mx-2">
-                    <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Jual</p>
+                    <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Ecer</p>
                     <p>Rp {{ number_format($Product->retail_price ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="mx-2">
