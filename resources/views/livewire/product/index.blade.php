@@ -19,13 +19,11 @@
                 @endif
 
                 <div class="flex justify-between items-center mb-4">
-                    <!-- Tombol "Tambah" di sebelah kiri -->
                     <div class="flex space-x-4">
                         <a wire:navigate href="{{ route('create.product') }}"
                             class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
                             Tambah
                         </a>
-                        <!-- Tombol "Cetak Barcode" di samping tombol "Tambah" -->
                         <a title="Klik untuk memperbarui jumlah stok pada produk" wire:navigate
                             href="{{ route('update.products') }}" class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
                             Perbarui Stok

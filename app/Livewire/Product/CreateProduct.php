@@ -22,6 +22,27 @@ class CreateProduct extends Component
         return view('livewire.product.create-product');
     }
 
+    public function mount($id = null)
+    {
+        if ($id) {
+            $this->isEditing = true;
+
+            $product = Product::findOrFail($id);
+            $this->product_id = $id;
+            $this->code = $product->code;
+            $this->name = $product->name;
+            $this->category_name = $product->category;
+            $this->purchase_price = $product->purchase_price;
+            $this->retail_price = $product->retail_price;
+            $this->reseller_price = $product->reseller_price;
+            $this->agent_price = $product->agent_price;
+            $this->distributor_price = $product->distributor_price;
+            $this->stock = $product->stock;
+            $this->location = $product->location;
+            $this->supplier = $product->supplier;
+        }
+    }
+
     public function save()
     {
         $this->validate([
@@ -49,20 +70,25 @@ class CreateProduct extends Component
             $this->product_id ? 'Product Updated Successfully.' : 'Product Created Successfully.'
         );
 
+        $this->resetForm();
+
         redirect('products');
     }
 
-    // edit produk
-    public function edit($id)
+    public function resetForm()
     {
-        $this->isEditing = true;
-
-        $product = Product::findOrFail($id);
-        $this->product_id = $id;
-        $this->name = $product->name;
-        $this->category_name = $product->category_name;
-        // $this->price = $product->price;
-        $this->stock = $product->stock;
-        // $this->description = $product->description;
+        $this->isEditing = false;
+        $this->product_id = null;
+        $this->code = '';
+        $this->name = '';
+        $this->category_name = '';
+        $this->purchase_price = '';
+        $this->retail_price = '';
+        $this->reseller_price = '';
+        $this->agent_price = '';
+        $this->distributor_price = '';
+        $this->stock = '';
+        $this->location = '';
+        $this->supplier = '';
     }
 }
