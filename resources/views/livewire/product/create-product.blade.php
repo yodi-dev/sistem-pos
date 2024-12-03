@@ -27,10 +27,10 @@
                             </div>
 
                             <div class="mb-5">
-                                <select id="category" class="w-full p-2 border rounded" wire:model="category_id">
+                                <select id="category" class="w-full p-2 border rounded" wire:model="category_name">
                                     <option>Pilih kategori</option>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <option value="{{ $category->name }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

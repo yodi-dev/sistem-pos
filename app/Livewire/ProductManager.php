@@ -15,9 +15,7 @@ class ProductManager extends Component
 {
     use WithPagination;
 
-    public $name, $price, $stock, $description, $product_id, $categories, $category_id;
     public $search = '';
-    public $isOpen = false;
     public $isModalOpen = false;
     public $isModalSatuan = false;
     public $Product;
@@ -162,17 +160,6 @@ class ProductManager extends Component
         $this->resetPage(); // Reset halaman ke pertama setiap kali pencarian berubah
     }
 
-    public function create()
-    {
-        $this->resetInputFields();
-        $this->openModal();
-    }
-
-    public function openModal()
-    {
-        $this->isOpen = true;
-    }
-
     public function closeModal()
     {
         $this->isOpen = false;
@@ -188,33 +175,6 @@ class ProductManager extends Component
         $this->stock = '';
         $this->description = '';
         $this->product_id = '';
-    }
-
-    public function store()
-    {
-        $this->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'description' => 'nullable|string',
-        ]);
-
-        Product::updateOrCreate(['id' => $this->product_id], [
-            'name' => $this->name,
-            'category_id' => $this->category_id,
-            'price' => $this->price,
-            'stock' => $this->stock,
-            'description' => $this->description,
-        ]);
-
-        session()->flash(
-            'message',
-            $this->product_id ? 'Product Updated Successfully.' : 'Product Created Successfully.'
-        );
-
-        $this->closeModal();
-        $this->resetInputFields();
     }
 
     public function edit($id)

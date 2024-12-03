@@ -4,7 +4,7 @@
             <div class="p-6">
 
                 @if (session()->has('message'))
-                    <div class="bg-green-500 text-white p-3 rounded shadow-sm">
+                    <div class="bg-green-500 text-white p-3 m-3 rounded shadow-sm">
                         {{ session('message') }}
                     </div>
                 @endif
@@ -12,15 +12,15 @@
                 <button wire:click="create()" class="bg-neutral text-base-100 px-4 py-2 mb-4 rounded">Baru</button>
 
                 @if ($isModalOpen)
-                    @include('livewire.create-category')
+                    @include('livewire.category.create-category')
                 @endif
 
                 <table class="table w-full border-1 border-neutral shadow">
                     <thead class="bg-neutral text-base-100 text-lg text-center">
                         <tr>
-                            <th class="w-2/5 p-3">Nama Kategori</th>
-                            <th class="w-2/5 p-3">Keterangan</th>
-                            <th class="w-1/5 p-3">Aksi</th>
+                            <th class="w-2/5 border-r">Nama Kategori</th>
+                            <th class="w-2/5 border-r">Keterangan</th>
+                            <th class="w-1/5 border-r">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
