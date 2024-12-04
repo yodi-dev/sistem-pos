@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Transaction;
 
 use App\Models\Unit;
 use App\Models\Product;

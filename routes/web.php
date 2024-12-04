@@ -1,15 +1,14 @@
 <?php
 
-use App\Livewire\BarcodePrint;
-use App\Livewire\ProductManager;
-use App\Livewire\CategoryManager;
-use App\Livewire\CustomerManager;
-use App\Livewire\DebtTransactions;
+use App\Livewire\Product\ProductManager;
+use App\Livewire\Category\CategoryManager;
+use App\Livewire\Customer\CustomerManager;
+use App\Livewire\Debt\DebtTransactions;
 use App\Livewire\Product\BarcodeManager;
 use App\Livewire\Product\CreateProduct;
 use App\Livewire\Product\UnitManager;
 use App\Livewire\Product\UpdateStok;
-use App\Livewire\TransactionManager;
+use App\Livewire\Transaction\TransactionManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,7 +26,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('transactions', TransactionManager::class)->name('transactions');
     Route::get('customers', CustomerManager::class)->name('customers');
     Route::get('debts', DebtTransactions::class)->name('debts');
-    Route::get('barcode-print', BarcodePrint::class)->name('barcode.print');
 });
 
 

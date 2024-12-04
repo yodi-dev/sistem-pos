@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Debt;
 
 use Livewire\Component;
 use App\Models\Transaction;
