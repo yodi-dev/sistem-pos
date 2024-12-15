@@ -7,6 +7,7 @@ use App\Models\Product;
 use Livewire\Component;
 use App\Models\Customer;
 use App\Models\Transaction;
+use Livewire\Attributes\On;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB;
 
@@ -25,6 +26,26 @@ class TransactionManager extends Component
     public $selectedProductId;
     public $selectedCustomer = null;
     public $highlightIndex = 0;
+
+    // shorcut
+    #[On('uangPas')]
+    public function uangPas()
+    {
+        session()->flash('message', 'pembayaran uang pas');
+    }
+
+    #[On('simpanTransaksi')]
+    public function simpanTransaksi()
+    {
+        $this->store();
+    }
+
+    #[On('andPrint')]
+    public function shortcutAndPrint()
+    {
+        $this->andprint();
+    }
+    // endshorcut
 
     public function updateQuantityOnUnitChange($index)
     {

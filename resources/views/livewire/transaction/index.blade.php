@@ -228,4 +228,23 @@
             </div>
         </div>
     </div>
+
+    @script
+        <script>
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'F9') {
+                    event.preventDefault();
+                    $wire.dispatch('uangPas');
+                } else
+                if (event.key === 'F10') {
+                    event.preventDefault();
+                    $wire.dispatch('simpanTransaksi');
+                } else
+                if (event.key === 'F11') {
+                    event.preventDefault();
+                    $wire.dispatch('andPrint');
+                }
+            });
+        </script>
+    @endscript
 </div>
