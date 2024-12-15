@@ -60,13 +60,6 @@ class UpdateStok extends Component
         }
     }
 
-    public function toggleChecked($productId)
-    {
-        if (isset($this->cart[$productId])) {
-            $this->cart[$productId]['checked'] = !$this->cart[$productId]['checked'];
-        }
-    }
-
     public function togglePrintBarcode($productId)
     {
         if (isset($this->cart[$productId])) {
@@ -111,14 +104,11 @@ class UpdateStok extends Component
             // Ambil data produk hanya sekali
             $product = Product::find($item['id']);
 
-            // Update stok dan harga jika "checked"
-            if ($item['checked']) {
-                $product->stock += $item['stock'];
-                $product->purchase_price = $item['purchase_price'];
-                $product->retail_price = $item['retail_price'];
-                $product->distributor_price = $item['distributor_price'];
-                $product->save();
-            }
+            $product->stock += $item['stock'];
+            $product->purchase_price = $item['purchase_price'];
+            $product->retail_price = $item['retail_price'];
+            $product->distributor_price = $item['distributor_price'];
+            $product->save();
 
             // Proses cetak barcode jika "print_barcode"
             if ($item['print_barcode']) {

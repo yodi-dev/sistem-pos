@@ -248,59 +248,32 @@ class TransactionManager extends Component
 
     public function store()
     {
-        // validasi customer jika pembayaran dengan utang
-        if ($this->paymentMethod === 'utang' && empty($this->customer)) {
-            $this->addError('customer', 'Data customer harus diisi jika metode pembayaran adalah utang.');
-            return;
-        } elseif ($this->paymentMethod === 'utang') {
-            $status = 'Belum Lunas';
-            $utang = $this->total_price - $this->totalPaid;
-        } else {
-            $status = null;
-            $utang = null;
-        }
+        $transaction = $this->saveTransaction();
 
-        DB::beginTransaction();
-
-        try {
-            $transaction = Transaction::create([
-                'customer_id' => $this->customer->id ?? null,
-                'payment_method' => $this->paymentMethod,
-                'total_price' => $this->total_price,
-                'total_paid' => $this->totalPaid,
-                'change_due' => $this->changeDue,
-                'utang' => $utang,
-                'status' => $status,
-            ]);
-
-            foreach ($this->cart as $item) {
-                TransactionItem::create([
-                    'transaction_id' => $transaction->id,
-                    'product_id' => $item['id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'subtotal' => $item['subtotal'],
-                ]);
-
-                // mengurangi stok produk
-                $product = Product::find($item['id']);
-                $product->stock -= $item['quantity'];
-                $product->save();
-            }
-
-            DB::commit();
+        if ($transaction) {
             session()->flash('message', 'Transaksi berhasil disimpan.');
             $this->resetCart();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
 
     public function andprint()
     {
-        $this->store();
+        $transaction = $this->saveTransaction();
+
+        if ($transaction) {
+            session([
+                'cart' => $this->cart,
+                'total' => $this->total_price,
+            ]);
+            $this->resetCart(); // reset cart setelah transaksi berhasil
+            return redirect()->route('redirect.print');
+        }
+
+        // Jika gagal, tampilkan error
+        session()->flash('error', 'Gagal menyimpan transaksi. Nota tidak dicetak.');
     }
+
 
     private function resetCart()
     {
@@ -318,5 +291,53 @@ class TransactionManager extends Component
     public function render()
     {
         return view('livewire.transaction.index');
+    }
+
+    private function saveTransaction()
+    {
+        // validasi customer jika pembayaran dengan utang
+        if ($this->paymentMethod === 'utang' && empty($this->customer)) {
+            $this->addError('customer', 'Data customer harus diisi jika metode pembayaran adalah utang.');
+            return false;
+        } else {
+            $status = $this->paymentMethod === 'utang' ? 'Belum Lunas' : null;
+            $utang = $this->paymentMethod === 'utang' ? $this->total_price - $this->totalPaid : null;
+
+            DB::beginTransaction();
+
+            try {
+                $transaction = Transaction::create([
+                    'customer_id' => $this->customer->id ?? null,
+                    'payment_method' => $this->paymentMethod,
+                    'total_price' => $this->total_price,
+                    'total_paid' => $this->totalPaid,
+                    'change_due' => $this->changeDue,
+                    'utang' => $utang,
+                    'status' => $status,
+                ]);
+
+                foreach ($this->cart as $item) {
+                    TransactionItem::create([
+                        'transaction_id' => $transaction->id,
+                        'product_id' => $item['id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'subtotal' => $item['subtotal'],
+                    ]);
+
+                    // mengurangi stok produk
+                    $product = Product::find($item['id']);
+                    $product->stock -= $item['quantity'];
+                    $product->save();
+                }
+
+                DB::commit();
+                return $transaction;
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $this->addError('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                return false;
+            }
+        }
     }
 }

@@ -47,7 +47,6 @@
                                 <th class="p-2 border-r">Harga Jual</th>
                                 <th class="p-2 border-r">Harga Distributor</th>
                                 <th class="p-2 border-r">Stok</th>
-                                <th class="p-2 border-r">Perbarui</th>
                                 <th class="p-2 border-r">Cetak Barcode</th>
                             </tr>
                         </thead>
@@ -76,14 +75,6 @@
                                             wire:change="updateCartStock({{ $key }}, $event.target.value)"
                                             class="input input-sm w-16 rounded-md" value="{{ $item['stock'] }}"
                                             min="0">
-                                    </td>
-                                    <td>
-                                        <div class="form-control">
-                                            <input type="checkbox"
-                                                class="checkbox checkbox-neutral bg-base-100 mx-auto rounded-md"
-                                                wire:click="toggleChecked({{ $key }})"
-                                                {{ $item['checked'] ? 'checked' : '' }}>
-                                        </div>
                                     </td>
                                     <td>
                                         <div class="form-control">

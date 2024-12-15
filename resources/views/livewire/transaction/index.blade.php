@@ -215,7 +215,7 @@
                                 </button>
                                 <button wire:click="andprint"
                                     class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
-                                    Simpan & Print
+                                    Simpan & Cetak Nota
                                 </button>
                             </div>
 
@@ -223,10 +223,7 @@
                                 <span class="text-red-600 text-sm">{{ $message }}</span>
                             @enderror
                         </div>
-
-
                     </div>
-
                 </x-card>
             </div>
         </div>
