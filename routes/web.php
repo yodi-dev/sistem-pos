@@ -8,6 +8,7 @@ use App\Livewire\Product\BarcodeManager;
 use App\Livewire\Product\CreateProduct;
 use App\Livewire\Product\UnitManager;
 use App\Livewire\Product\UpdateStok;
+use App\Livewire\Transaction\Penjualan;
 use App\Livewire\Transaction\PrintNota;
 use App\Livewire\Transaction\TransactionManager;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('products/barcode/{id}', BarcodeManager::class)->name('barcode.product');
     Route::get('categories', CategoryManager::class)->name('categories');
     Route::get('transactions', TransactionManager::class)->name('transactions');
+    Route::get('selling', Penjualan::class)->name('selling');
     Route::get('transactions/print', PrintNota::class)->name('print.transaction');
     Route::get('customers', CustomerManager::class)->name('customers');
     Route::get('debts', DebtTransactions::class)->name('debts');

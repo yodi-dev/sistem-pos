@@ -20,11 +20,14 @@
         <x-menu activate-by-route class="text-neutral">
             <x-menu-item title="Beranda" icon="s-home" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate />
             <x-menu-item title="KASA" icon="s-shopping-cart" :href="route('transactions')" :active="request()->routeIs('transactions')" wire:navigate />
+            <x-menu-item title="Penjualan" icon="m-credit-card" :href="route('selling')" :active="request()->routeIs('debts')" wire:navigate />
             <x-menu-item title="Utang" icon="m-credit-card" :href="route('debts')" :active="request()->routeIs('debts')" wire:navigate />
-            <x-menu-item title="Produk" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products') || request()->routeIs('barcode.print')"
-                wire:navigate />
-            <x-menu-item title="Pembeli" icon="m-bars-arrow-down" :href="route('customers')" :active="request()->routeIs('customers')" wire:navigate />
+
             <x-menu-sub title="Data Master" icon="c-circle-stack">
+                <x-menu-item title="Produk" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products') || request()->routeIs('barcode.print')"
+                    wire:navigate />
+                <x-menu-item title="Pembeli" icon="m-bars-arrow-down" :href="route('customers')" :active="request()->routeIs('customers')"
+                    wire:navigate />
                 <x-menu-item title="Kategori" icon="s-wallet" :href="route('categories')" :active="request()->routeIs('categories')" wire:navigate />
             </x-menu-sub>
 
