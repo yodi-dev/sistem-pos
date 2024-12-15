@@ -3,27 +3,7 @@
         <div class="row">
             <div class="col-12 ">
                 <x-card title="Produk" class="text-neutral bg-base-200" shadow separator>
-                    <x-slot:menu>
-                        <label for="searchCustomer" class="font-medium">Pembeli</label>
-                        <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
-                            wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
-                            wire:keydown.enter="confirmCustomer"
-                            class="text-base-content input input-bordered w-full rounded-md"
-                            placeholder="ketik nama..." />
 
-                        <!-- Dropdown Hasil Pencarian -->
-                        @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))
-                            <ul class="absolute bg-white border border-gray-300 w-fit top-0 mt-20 rounded-lg z-10">
-                                @foreach ($customers as $index => $customer)
-                                    <li wire:click="addCustomer({{ $customer->id }})"
-                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
-                    {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
-                                        {{ $customer->name }} - {{ $customer->address }}
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </x-slot:menu>
 
                     <div class="flex justify-center">
                         <!-- Input Search untuk Produk -->
@@ -67,12 +47,33 @@
         <div class="row mt-3">
             <div class="col-12">
                 <x-card title="Keranjang" class="text-neutral bg-base-200" shadow separator>
+                    <x-slot:menu>
+                        <label for="searchCustomer" class="font-medium">Pembeli</label>
+                        <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
+                            wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
+                            wire:keydown.enter="confirmCustomer"
+                            class="text-base-content input input-bordered w-full rounded-md"
+                            placeholder="ketik nama..." />
+
+                        <!-- Dropdown Hasil Pencarian -->
+                        @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))
+                            <ul class="absolute bg-white border border-gray-300 w-fit top-0 mt-20 rounded-lg z-10">
+                                @foreach ($customers as $index => $customer)
+                                    <li wire:click="addCustomer({{ $customer->id }})"
+                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
+                    {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
+                                        {{ $customer->name }} - {{ $customer->address }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </x-slot:menu>
                     <table
                         class="table table-zebra table-auto text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
                         <thead class="bg-neutral text-lg text-base-100 dark:bg-gray-700">
                             <tr>
                                 <th class="p-2 border-r">Produk</th>
-                                <th class="p-2 border-r">Subjumlah</th>
+                                <th class="p-2 border-r">Sub Jumlah</th>
                                 <th class="p-2 border-r">Jumlah</th>
                                 <th class="p-2 border-r">Harga Satuan</th>
                                 <th class="p-2 border-r">Potongan</th>
@@ -145,8 +146,8 @@
                         </tbody>
                     </table>
 
-                    <div class="grid grid-cols-2 mt-3">
-                        <div class="col-6">
+                    <div class="grid grid-cols-3 mt-3">
+                        <div>
                             <h3 class="text-xl text-base-content mt-4 dark:text-white">Metode Pembayaran</h3>
 
                             <div class="flex space-x-2 mt-2">
@@ -164,7 +165,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-span-2">
                             <h3 class="text-xl text-base-content text-right font-semibold mt-4 dark:text-white">Total:
                                 Rp
                                 {{ number_format($total_price, 0, ',', '.') }}
@@ -203,6 +204,10 @@
                                     <button type="button" wire:click="addNominal(100000)"
                                         class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
                                         Rp 100.000
+                                    </button>
+                                    <button type="button" wire:click="bayarPas"
+                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
+                                        Uang Pas
                                     </button>
 
                                 </div>

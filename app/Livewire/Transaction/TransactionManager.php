@@ -31,7 +31,7 @@ class TransactionManager extends Component
     #[On('uangPas')]
     public function uangPas()
     {
-        session()->flash('message', 'pembayaran uang pas');
+        $this->bayarPas();
     }
 
     #[On('simpanTransaksi')]
@@ -177,6 +177,12 @@ class TransactionManager extends Component
     public function addNominal($amount)
     {
         $this->totalPaid += $amount;
+        $this->updatedTotalPaid();
+    }
+
+    public function bayarPas()
+    {
+        $this->totalPaid = $this->total_price;
         $this->updatedTotalPaid();
     }
 
