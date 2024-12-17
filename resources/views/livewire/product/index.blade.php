@@ -65,7 +65,7 @@
                                             class="badge badge-accent py-3 px-4 my-0.5 text-base-content">{{ $unit->name }}</span>
                                     @endforeach
                                 </td>
-                                <td class="w-40">
+                                <td class="w-48">
                                     <a wire:navigate href="{{ route('barcode.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400">
                                         <x-icon name="m-qr-code" />
@@ -73,6 +73,10 @@
                                     <a wire:navigate href="{{ route('edit.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400 border-l border-neutral">
                                         <x-icon name="m-pencil-square" />
+                                    </a>
+                                    <a wire:navigate href="{{ route('duplikat.product', $product->id) }}"
+                                        class="px-2 text-sm text-neutral dark:text-blue-400 border-l border-neutral">
+                                        <x-icon name="m-document-duplicate" />
                                     </a>
                                     <button wire:click="delete({{ $product->id }})"
                                         class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
