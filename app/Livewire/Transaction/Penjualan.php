@@ -4,20 +4,16 @@ namespace App\Livewire\Transaction;
 
 use App\Models\Transaction;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Penjualan extends Component
 {
-    public $transactions;
+    use WithPagination;
 
     public function render()
     {
-        return view('livewire.transaction.penjualan');
-    }
+        $transactions = Transaction::with('customer')->paginate(10);
 
-    public function mount()
-    {
-        $transactions = Transaction::with('customer')->get();
-
-        $this->transactions = $transactions;
+        return view('livewire.transaction.penjualan', compact('transactions'));
     }
 }

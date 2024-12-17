@@ -53,7 +53,7 @@
                                         {{ number_format($transaction->change_due, 0, ',', '.') }}</td>
                                     <td>{{ $transaction->utang }}</td>
                                     <td>{{ $transaction->status }}</td>
-                                    <td>{{ $transaction->date }}</td>
+                                    <td>{{ $transaction->formatted_date }}</td>
                                     <td class="w-40">
                                         {{-- <a wire:navigate href="{{ route('edit.transaction', $transaction->id) }}"
                                             class="px-2 text-sm text-neutral dark:text-blue-400 border-l border-neutral">
@@ -79,9 +79,9 @@
 
 
                     <!-- Pagination Links -->
-                    {{-- <div class="mt-4">
+                    <div class="mt-4">
                         {{ $transactions->links() }}
-                    </div> --}}
+                    </div>
                 </div>
 
             </div>
