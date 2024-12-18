@@ -16,4 +16,10 @@ class Penjualan extends Component
 
         return view('livewire.transaction.penjualan', compact('transactions'));
     }
+
+    public function delete($id)
+    {
+        Transaction::find($id)->delete();
+        session()->flash('message', 'Transaction Deleted Successfully.');
+    }
 }

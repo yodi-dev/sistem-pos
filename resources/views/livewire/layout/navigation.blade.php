@@ -13,11 +13,11 @@
         @endif
 
         {{-- BRAND --}}
-        <div class="ml-5 text-neutral pt-5">Habiba Store</div>
+        <div class="ml-5 text-neutral text-xl pt-5 font-semibold">Habiba Store</div>
         <x-menu-separator />
 
         {{-- MENU --}}
-        <x-menu activate-by-route class="text-neutral">
+        <x-menu activate-by-route class="text-base-content">
             <x-menu-item title="Beranda" icon="s-home" :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate />
             <x-menu-item title="KASA" icon="s-shopping-cart" :href="route('transactions')" :active="request()->routeIs('transactions')" wire:navigate />
             <x-menu-item title="Penjualan" icon="s-presentation-chart-line" :href="route('selling')" :active="request()->routeIs('debts')"

@@ -20,6 +20,10 @@ class Transaction extends Model
         'status',
     ];
 
+    protected $casts = [
+        'date' => 'date'
+    ];
+
 
     public function items()
     {

@@ -12,6 +12,7 @@ use App\Livewire\Product\UpdateStok;
 use App\Livewire\Transaction\Penjualan;
 use App\Livewire\Transaction\PrintNota;
 use App\Livewire\Transaction\TransactionManager;
+use App\Livewire\Transaction\UpdateSell;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('transactions', TransactionManager::class)->name('transactions');
     Route::get('selling', Penjualan::class)->name('selling');
+    Route::get('selling/edit/{id}', UpdateSell::class)->name('edit.selling');
     Route::get('transactions/print', PrintNota::class)->name('print.transaction');
     Route::get('redirect-print', function () {
         return view('livewire.transaction.redirect-print');
