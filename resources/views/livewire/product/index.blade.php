@@ -1,44 +1,37 @@
 <div class="text-base-content dark:text-gray-100">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
-        @if (session('success'))
+        @if (session()->has('message'))
             <div role="alert" class="alert mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>{{ session('success') }}</span>
+                <span>{{ session('message') }}</span>
             </div>
         @endif
-        <div class="bg-base-200 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6">
-                @if (session()->has('message'))
-                    <div class="bg-green-500 text-white font-bold p-4 mb-4">
-                        {{ session('message') }}
-                    </div>
-                @endif
+        <x-card title="Data Barang" class="text-neutral bg-base-200" shadow separator>
+            <x-slot:menu>
+                <a wire:navigate href="{{ route('create.product') }}"
+                    class="btn btn-sm btn-neutral text-base-100 rounded-md">
+                    Tambah
+                </a>
+                <a title="Klik untuk memperbarui jumlah stok pada produk" wire:navigate
+                    href="{{ route('update.products') }}" class="btn btn-sm btn-neutral text-base-100 rounded-md">
+                    Perbarui Stok
+                </a>
+                <input type="text" wire:model.live="search" class="input input-bordered rounded-md"
+                    placeholder="Cari Produk..." />
+            </x-slot:menu>
 
-                <div class="flex justify-between items-center mb-4">
-                    <div class="flex space-x-4">
-                        <a wire:navigate href="{{ route('create.product') }}"
-                            class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
-                            Tambah
-                        </a>
-                        <a title="Klik untuk memperbarui jumlah stok pada produk" wire:navigate
-                            href="{{ route('update.products') }}" class="bg-neutral text-base-100 px-4 py-2 rounded-lg">
-                            Perbarui Stok
-                        </a>
-                    </div>
+            @if ($isModalOpen)
+                @include('livewire.product.show')
+            @endif
 
-                    <!-- Search Field di sebelah kanan -->
-                    <input type="text" wire:model.live="search" class="input input-bordered w-1/3 rounded-md"
-                        placeholder="Cari Produk..." />
-                </div>
 
-                @if ($isModalOpen)
-                    @include('livewire.product.show')
-                @endif
-
+            @if ($products->isEmpty())
+                <p class="text-center text-gray-500">Belum ada data barang.</p>
+            @else
                 <table class="table table-auto w-full border-1 border-neutral shadow">
                     <thead class="bg-neutral text-base-100 text-lg text-center">
                         <tr>
@@ -50,7 +43,7 @@
                             <th class="p-3 border-r">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-base-content">
                         @foreach ($products as $product)
                             <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                 <td wire:click="showDetails({{ $product->id }})">{{ $product->name }}</td>
@@ -65,7 +58,7 @@
                                             class="badge badge-accent py-3 px-4 my-0.5 text-base-content">{{ $unit->name }}</span>
                                     @endforeach
                                 </td>
-                                <td class="w-48">
+                                <td class="flex justify-center">
                                     <a wire:navigate href="{{ route('barcode.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400">
                                         <x-icon name="m-qr-code" />
@@ -88,14 +81,11 @@
                     </tbody>
                 </table>
 
-
-
                 <!-- Pagination Links -->
                 <div class="mt-4">
                     {{ $products->links() }}
                 </div>
-            </div>
-
-        </div>
+            @endif
+        </x-card>
     </div>
 </div>

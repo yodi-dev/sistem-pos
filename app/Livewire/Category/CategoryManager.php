@@ -51,7 +51,7 @@ class CategoryManager extends Component
             'description' => $this->description
         ]);
 
-        session()->flash('message', $this->category_id ? 'Category updated successfully.' : 'Category created successfully.');
+        session()->flash('message', $this->category_id ? 'Berhasil memperbarui data kategori.' : 'Berhasil membuat data kategori.');
 
         $this->closeModal();
         $this->resetInputFields();
@@ -70,6 +70,6 @@ class CategoryManager extends Component
     public function delete($id)
     {
         Category::find($id)->delete();
-        session()->flash('message', 'Category deleted successfully.');
+        session()->flash('message', 'Berhasil menghapus data kategori.');
     }
 }

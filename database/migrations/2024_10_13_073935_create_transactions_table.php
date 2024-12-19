@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained('customers')->nullable();
+            $table->foreignId('customer_id')->nullable()->constrained('customers')->onDelete('cascade');
             $table->string('payment_method', 255)->nullable();
             $table->decimal('total_price', 10, 2);
             $table->decimal('total_paid', 10, 2);

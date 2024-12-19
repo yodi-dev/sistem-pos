@@ -14,38 +14,38 @@
             <div class="col-12 ">
                 <x-card title="Kelola Unit - {{ $product->name }}" class="text-neutral bg-base-200" shadow separator>
                     <div class="grid grid-cols-2 gap-4 mt-3">
-                        <div class="border shadow p-3 flex flex-col h-full">
+                        <div class="border shadow p-3 flex flex-col h-full text-base-content">
                             <h3 class="text-lg font-semibold text-base-content dark:text-base-100 text-center mb-3">
                                 Tambah</h3>
 
                             <div class="mb-3">
                                 <label>Nama Satuan</label>
                                 <input type="text" wire:model.debounce.500ms="unit_name"
-                                    class="form-control w-full text-black p-2 border rounded">
+                                    class="form-control w-full p-2 border rounded">
                             </div>
 
                             <div class="mb-3">
                                 <label>Jumlah per Unit</label>
                                 <input type="number" wire:model.debounce.500ms="quantity_per_unit"
-                                    class="form-control w-full text-black p-2 border rounded">
+                                    class="form-control w-full p-2 border rounded">
                             </div>
 
                             <!-- Tombol untuk Otomatis Mengisi Field -->
                             <div class="flex mb-5 flex-grow">
                                 <button wire:click="fillDefaultValues('PCS', 1)"
-                                    class="btn btn-xs btn-accent mr-2">PCS</button>
+                                    class="btn btn-xs btn-neutral mr-2 rounded-md text-base-100">PCS</button>
                                 <button wire:click="fillDefaultValues('BKS', 1)"
-                                    class="btn btn-xs btn-accent mr-2">BKS</button>
+                                    class="btn btn-xs btn-neutral mr-2 rounded-md text-base-100">BKS</button>
                                 <button wire:click="fillDefaultValues('Renteng (10)', 10)"
-                                    class="btn btn-xs btn-accent mr-2">Renteng
+                                    class="btn btn-xs btn-neutral mr-2 rounded-md text-base-100">Renteng
                                     (10)</button>
                                 <button wire:click="fillDefaultValues('Renteng (12) ', 12)"
-                                    class="btn btn-xs btn-accent">Renteng
+                                    class="btn btn-xs btn-neutral rounded-md text-base-100">Renteng
                                     (12)</button>
                             </div>
+                            <a wire:navigate href="{{ route('products') }}"
+                                class="btn btn-sm btn-outline btn-error btn-block text-base-100 rounded-md">Tutup</a>
 
-                            <button wire:click="saveUnit"
-                                class="btn btn-sm btn-neutral btn-block text-base-100">Simpan</button>
                         </div>
 
                         <div class="border shadow p-3 flex flex-col h-full">
@@ -59,12 +59,12 @@
                                             <th class="border-r">Jumlah</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="text-base-content">
                                         @foreach ($units as $index => $item)
                                             <tr :key="$item - > id"
                                                 class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                                 <td>{{ $item->name }}</td>
-                                                <td>{{ $item->qty }}
+                                                <td class="flex justify-center">{{ $item->qty }}
                                                     <button wire:click="deleteUnit({{ $item->id }})">
                                                         <x-icon name="s-trash" class="text-error ml-5" />
                                                     </button>
@@ -75,8 +75,9 @@
 
                                 </table>
                             </div>
-                            <a wire:navigate href="{{ route('products') }}"
-                                class="btn btn-sm btn-error btn-block text-base-100">Tutup</a>
+                            <button wire:click="saveUnit"
+                                class="btn btn-sm btn-neutral btn-block text-base-100 rounded-md">Simpan</button>
+
                         </div>
                     </div>
                 </x-card>

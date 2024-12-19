@@ -17,10 +17,10 @@
                         <div class="w-full">
                             <!-- Input Search untuk Produk -->
                             <input type="text" wire:model.live="search" placeholder="Cari barang..."
-                                class="input input-bordered w-full rounded-md">
+                                class="input input-bordered text-base-content w-full rounded-md">
                             <!-- Dropdown Hasil Pencarian -->
                             @if (!empty($products))
-                                <ul class="">
+                                <ul class="text-base-content max-h-80 overflow-y-auto">
                                     @foreach ($products as $index => $product)
                                         <li wire:click="addToCart({{ $product->id }})"
                                             class="flex justify-between items-center py-2 border-b-2">
@@ -37,7 +37,7 @@
 
         <div class="bg-base-200 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
-                <div class="mt-8">
+                <div>
                     <table
                         class="table table-zebra table-auto text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
                         <thead class="bg-neutral text-lg text-base-100 dark:bg-gray-700">
@@ -57,23 +57,23 @@
                                     <td>
                                         <input type="number"
                                             wire:change="updateCartPurchase({{ $key }}, $event.target.value)"
-                                            class="input input-sm w-24 rounded-md"
+                                            class="input input-sm w-full rounded-md"
                                             value="{{ number_format($item['purchase_price'], 0, ',', '.') }}">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm w-24 rounded-md"
+                                        <input type="number" class="input input-sm w-full rounded-md"
                                             wire:change="updateCartRetail({{ $key }}, $event.target.value)"
                                             value="{{ number_format($item['retail_price'], 0, ',', '.') }}">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm w-24 rounded-md"
+                                        <input type="number" class="input input-sm w-full rounded-md"
                                             wire:change="updateCartDistributor({{ $key }}, $event.target.value)"
                                             value="{{ number_format($item['distributor_price'], 0, ',', '.') }}">
                                     </td>
                                     <td>
                                         <input type="number"
                                             wire:change="updateCartStock({{ $key }}, $event.target.value)"
-                                            class="input input-sm w-16 rounded-md" value="{{ $item['stock'] }}"
+                                            class="input input-sm w-full rounded-md" value="{{ $item['stock'] }}"
                                             min="0">
                                     </td>
                                     <td>
@@ -87,8 +87,14 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <button wire:click="save"
-                        class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">Simpan</button>
+
+                    <div class="flex space-x-2 mt-5">
+                        <button wire:navigate href="{{ route('products') }}"
+                            class="btn btn-outline btn-error w-1/2  hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
+                            Kembali</button>
+                        <button wire:click="save"
+                            class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">Simpan</button>
+                    </div>
                 </div>
             </div>
         </div>

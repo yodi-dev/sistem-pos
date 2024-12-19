@@ -143,7 +143,7 @@ class UpdateStok extends Component
 
         // Bersihkan keranjang dan berikan feedback
         $this->cart = [];
-        session()->flash('success', 'Proses selesai.');
+        session()->flash('success', 'Data berhasil diperbarui.');
 
         // Unduh file ZIP
         if ($barcodeGenerated) {

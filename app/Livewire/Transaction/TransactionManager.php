@@ -18,7 +18,7 @@ class TransactionManager extends Component
     public $products = [];
     public $customers = [];
     public $customer;
-    public $paymentMethod;
+    public $paymentMethod = 'tunai';
     public $cart = [];
     public $total_price;
     public $totalPaid;

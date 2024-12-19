@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
         <x-card title="Pencatatan Utang" class="text-neutral bg-base-200" shadow separator>
             @if ($transactions->isEmpty())
-                <p class="text-center text-gray-500">Tidak ada transaksi utang.</p>
+                <p class="text-center text-gray-500">Belum ada data utang.</p>
             @else
                 <table class="table table-auto w-full border-1 border-neutral shadow">
                     <thead class="bg-neutral text-base-100 text-lg text-center">
@@ -27,7 +27,7 @@
                                         wire:change="payDebt({{ $transaction->id }}, {{ $index }})"
                                         placeholder="Masukkan nominal">
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <span
                                         class="bg-red-200 text-red-700 px-2 py-1 rounded">{{ $transaction->status }}</span>
                                 </td>

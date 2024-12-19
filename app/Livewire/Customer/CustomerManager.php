@@ -55,7 +55,7 @@ class CustomerManager extends Component
             'address' => $this->address
         ]);
 
-        session()->flash('message', $this->customer_id ? 'Customer updated successfully.' : 'Customer created successfully.');
+        session()->flash('message', $this->customer_id ? 'Berhasil memperbarui data pembeli.' : 'Berhasil membuat data pembeli.');
 
         $this->closeModal();
         $this->resetInputFields();
@@ -75,6 +75,6 @@ class CustomerManager extends Component
     public function delete($id)
     {
         Customer::find($id)->delete();
-        session()->flash('message', 'Customer deleted successfully.');
+        session()->flash('message', 'Berhasil menghapus data pembeli.');
     }
 }

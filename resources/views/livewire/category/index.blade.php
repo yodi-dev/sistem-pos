@@ -1,20 +1,28 @@
 <div class="text-base-content dark:text-gray-100">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6">
+        @if (session()->has('message'))
+            <div role="alert" class="alert mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ session('message') }}</span>
+            </div>
+        @endif
 
-                @if (session()->has('message'))
-                    <div class="bg-green-500 text-white p-3 m-3 rounded shadow-sm">
-                        {{ session('message') }}
-                    </div>
-                @endif
+        <x-card title="Data Kategori" class="text-neutral bg-base-200" shadow separator>
+            <x-slot:menu>
+                <button wire:click="create()" class="btn btn-sm btn-neutral text-base-100 rounded-md">Baru</button>
+            </x-slot:menu>
 
-                <button wire:click="create()" class="bg-neutral text-base-100 px-4 py-2 mb-4 rounded">Baru</button>
+            @if ($isModalOpen)
+                @include('livewire.category.create-category')
+            @endif
 
-                @if ($isModalOpen)
-                    @include('livewire.category.create-category')
-                @endif
-
+            @if ($categories->isEmpty())
+                <p class="text-center text-gray-500">Belum ada data kategori.</p>
+            @else
                 <table class="table w-full border-1 border-neutral shadow">
                     <thead class="bg-neutral text-base-100 text-lg text-center">
                         <tr>
@@ -23,22 +31,27 @@
                             <th class="w-1/5 border-r">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-base-content">
                         @foreach ($categories as $category)
                             <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
-                                <td class=" px-4 py-2">{{ $category->name }}</td>
-                                <td class=" px-4 py-2">{{ $category->description }}</td>
-                                <td class=" px-4 py-2">
+                                <td>{{ $category->name }}</td>
+                                <td>{{ $category->description }}</td>
+                                <td class="flex justify-center">
                                     <button wire:click="edit({{ $category->id }})"
-                                        class="px-2 py-1 text-sm text-blue-500 dark:text-blue-400">Edit</button>
+                                        class="px-2 text-sm text-neutral dark:text-blue-400 border-neutral">
+                                        <x-icon name="m-pencil-square" />
+                                    </button>
                                     <button wire:click="delete({{ $category->id }})"
-                                        class="px-2 py-1 text-sm text-red-500 dark:text-red-400 border-l border-neutral">Hapus</button>
+                                        class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
+                                        <x-icon name="s-trash" />
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-        </div>
+
+            @endif
+        </x-card>
     </div>
 </div>

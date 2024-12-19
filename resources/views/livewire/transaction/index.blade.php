@@ -1,5 +1,6 @@
 <div class="text-gray-900 dark:text-gray-100">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
+
         <div class="row">
             <div class="col-12 ">
                 <x-card title="Produk" class="text-neutral bg-base-200" shadow separator>
@@ -16,7 +17,8 @@
 
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($products))
-                            <ul class="absolute bg-white border border-gray-300 top-40 w-full rounded-lg z-10">
+                            <ul
+                                class="absolute bg-white border border-gray-300 top-40 max-h-80 overflow-y-auto w-full rounded-lg z-10">
                                 @foreach ($products as $index => $product)
                                     <li wire:click="addToCart({{ $product->id }})"
                                         class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
@@ -33,8 +35,13 @@
         </div>
 
         @if (session()->has('message'))
-            <div class="mt-4 p-2 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-200 rounded">
-                {{ session('message') }}
+            <div role="alert" class="alert my-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{{ session('message') }}</span>
             </div>
         @endif
 
@@ -48,25 +55,26 @@
             <div class="col-12">
                 <x-card title="Keranjang" class="text-neutral bg-base-200" shadow separator>
                     <x-slot:menu>
-                        <label for="searchCustomer" class="font-medium">Pembeli</label>
+                        {{-- <label for="searchCustomer" class="font-medium">Pembeli</label> --}}
                         <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
                             wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
                             wire:keydown.enter="confirmCustomer"
-                            class="text-base-content input input-bordered w-full rounded-md"
-                            placeholder="ketik nama..." />
+                            class="text-base-content input input-bordered w-full rounded-md" placeholder="Pembeli" />
 
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))
-                            <ul class="absolute bg-white border border-gray-300 w-fit top-0 mt-20 rounded-lg z-10">
+                            <ul
+                                class="absolute bg-white border border-gray-300 w-fit max-h-80 overflow-y-auto top-0 mt-20 rounded-lg z-10">
                                 @foreach ($customers as $index => $customer)
                                     <li wire:click="addCustomer({{ $customer->id }})"
                                         class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
-                    {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
+                {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
                                         {{ $customer->name }} - {{ $customer->address }}
                                     </li>
                                 @endforeach
                             </ul>
                         @endif
+
                     </x-slot:menu>
                     <table
                         class="table table-zebra table-auto text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
@@ -152,15 +160,15 @@
 
                             <div class="flex space-x-2 mt-2">
                                 <button type="button" wire:click="addPayment('tunai')"
-                                    class="px-4 py-2 rounded {{ $paymentMethod === 'tunai' ? 'bg-accent text-primary-content' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
+                                    class="px-4 py-2 rounded {{ $paymentMethod === 'tunai' ? 'bg-neutral text-base-100' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
                                     Tunai
                                 </button>
                                 <button type="button" wire:click="addPayment('QRIS')"
-                                    class="px-4 py-2 rounded {{ $paymentMethod === 'QRIS' ? 'bg-accent text-primary-content' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
+                                    class="px-4 py-2 rounded {{ $paymentMethod === 'QRIS' ? 'bg-neutral text-base-100' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
                                     QRIS
                                 </button>
                                 <button type="button" wire:click="addPayment('utang')"
-                                    class="px-4 py-2 rounded {{ $paymentMethod === 'utang' ? 'bg-accent text-primary-content' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
+                                    class="px-4 py-2 rounded {{ $paymentMethod === 'utang' ? 'bg-neutral text-base-100' : 'bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100' }}">
                                     Utang
                                 </button>
                             </div>
@@ -183,7 +191,7 @@
                                     <input type="number" id="total_paid" wire:model.live="totalPaid"
                                         class="w-full p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white">
                                     <button type="button" icon="c-circle-stack" wire:click="clearTotalPaid"
-                                        class="px-4 py-2 bg-error text-base-100 rounded hover:bg-red-600">X
+                                        class="btn btn-sm btn-outline btn-error text-base-100 rounded-md hover:bg-red-600">X
                                     </button>
                                 </div>
 
@@ -213,13 +221,13 @@
                                 </div>
                             </div>
 
-                            <div class="flex space-x-2">
+                            <div class="flex space-x-2 mt-4">
                                 <button wire:click="store"
-                                    class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
+                                    class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
                                     Simpan
                                 </button>
                                 <button wire:click="andprint"
-                                    class="mt-4 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
+                                    class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
                                     Simpan & Cetak Nota
                                 </button>
                             </div>

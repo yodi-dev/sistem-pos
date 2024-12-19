@@ -13,7 +13,7 @@
                                 <input type="text" wire:model="code" class="w-full text-black p-2 border rounded">
                                 @error('code')
                                     <div class="label">
-                                        <span class="label-text-alt">{{ $message }}</span>
+                                        <span class="label-text-alt text-error">{{ $message }}</span>
                                     </div>
                                 @enderror
                             </div>
@@ -56,10 +56,6 @@
                                     class="w-full text-black p-2 border rounded">
                             </div>
 
-
-                        </div>
-
-                        <div class="w-1/2">
                             <div>
                                 <div class="label">
                                     <div class="label-text">Harga Reseller</div>
@@ -67,6 +63,11 @@
                                 <input type="text" wire:model="reseller_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
+
+                        </div>
+
+                        <div class="w-1/2">
+
 
                             <div>
                                 <div class="label">
@@ -109,15 +110,14 @@
                         </div>
                     </div>
                     <div class="row mt-5">
-                        <div class="flex">
-                            <button wire:click="save"
-                                class="mr-2 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">Simpan</button>
+                        <div class="flex space-x-2 w-full">
                             <button wire:navigate href="{{ route('products') }}"
-                                class="w-full bg-neutral text-center hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
+                                class="btn btn-outline btn-error w-1/2  hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">
                                 Kembali</button>
+                            <button wire:click="save"
+                                class="btn w-1/2 bg-neutral hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">Simpan</button>
                         </div>
                     </div>
-
                 </x-card>
 
             </div>

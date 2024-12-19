@@ -9,7 +9,7 @@
                     <h2 class="text-2xl leading-6 font-medium text-neutral" id="modal-title">
                         {{ $customer_id ? 'Edit Pembeli' : 'Tambah Pembeli' }}
                     </h2>
-                    <div class="mt-2">
+                    <div class="mt-2 text-base-content">
                         <form>
                             <div class="mt-4">
                                 <label for="code">Kode</label>
@@ -34,8 +34,13 @@
                         </form>
                     </div>
                 </div>
-                <button wire:click="store()" class="bg-green-500 text-white px-4 py-2 rounded">Simpan</button>
-                <button wire:click="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+                <div class="flex space-x-2 w-full">
+                    <button wire:click="closeModal()"
+                        class="btn btn-outline btn-error w-1/2  hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">
+                        Kembali</button>
+                    <button wire:click="store"
+                        class="btn w-1/2 bg-neutral hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">Simpan</button>
+                </div>
             </div>
         </div>
     </div>

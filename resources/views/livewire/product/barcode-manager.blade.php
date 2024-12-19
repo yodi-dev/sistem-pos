@@ -29,10 +29,10 @@
                                     <x-icon name="s-printer" />
                                 </button>
                             </div>
-                            <a wire:navigate href="{{ route('products') }}"
-                                class="btn btn-sm btn-neutral btn-block text-base-100">Kembali</a>
                         </div>
                     </div>
+                    <a wire:navigate href="{{ route('products') }}"
+                        class="btn btn-neutral btn-block text-base-100 rounded-md mt-5">Kembali</a>
                 </x-card>
             </div>
         </div>

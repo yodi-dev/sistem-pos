@@ -68,8 +68,8 @@
 
 
 
-                        </div>
 
+                        </div>
 
                         <div class="w-1/2">
 
@@ -122,19 +122,20 @@
                                 @enderror
                             </div>
 
-
                         </div>
                     </div>
-                    <div class="row mt-5">
-                        <div class="flex">
-                            <button wire:click="save"
-                                class="mr-2 w-full bg-neutral hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">Simpan</button>
-                            <button wire:navigate href="{{ route('transactions') }}"
-                                class="w-full bg-neutral text-center hover:bg-neutral text-base-100 font-bold py-2 px-4 rounded dark:bg-info dark:hover:bg-green-700">
+
+                    <div class="flex mt-5">
+                        <div class="w-1/2 mr-5">
+                            <button wire:navigate href="{{ route('selling') }}"
+                                class="btn btn-outline btn-error w-full text-center hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">
                                 Kembali</button>
                         </div>
+                        <div class="w-1/2">
+                            <button wire:click="save"
+                                class="btn w-full btn-neutral hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">Simpan</button>
+                        </div>
                     </div>
-
                 </x-card>
 
             </div>
