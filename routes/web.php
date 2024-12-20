@@ -3,6 +3,7 @@
 use App\Livewire\Product\ProductManager;
 use App\Livewire\Category\CategoryManager;
 use App\Livewire\Customer\CustomerManager;
+use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Debt\DebtTransactions;
 use App\Livewire\Product\BarcodeManager;
 use App\Livewire\Product\CreateProduct;
@@ -20,6 +21,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard', Dashboard::class)->name('dashboard');
+
     Route::get('products', ProductManager::class)->name('products');
     Route::get('products/update', UpdateStok::class)->name('update.products');
     Route::get('products/create', CreateProduct::class)->name('create.product');
@@ -42,11 +45,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('debts', DebtTransactions::class)->name('debts');
 });
-
-
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])

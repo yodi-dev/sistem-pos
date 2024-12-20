@@ -89,7 +89,7 @@
                     </table>
 
                     <div class="flex space-x-2 mt-5">
-                        <button wire:navigate href="{{ route('products') }}"
+                        <button wire:navigate href="{{ url()->previous() }}"
                             class="btn btn-outline btn-error w-1/2  hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
                             Kembali</button>
                         <button wire:click="save"
