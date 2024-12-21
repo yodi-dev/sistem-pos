@@ -14,8 +14,8 @@
             <x-slot:menu>
                 <button wire:click="create()" class="btn btn-sm btn-neutral text-base-100 rounded-md">Tambah</button>
                 <!-- Search Field di sebelah kanan -->
-                <input type="text" wire:model.live="search" class="input input-bordered rounded-md text-base-content"
-                    placeholder="Cari pembeli..." />
+                <input type="text" wire:model.live="search"
+                    class="input input-sm input-bordered rounded-md text-base-content" placeholder="Cari pembeli..." />
             </x-slot:menu>
 
             @if ($isModalOpen)

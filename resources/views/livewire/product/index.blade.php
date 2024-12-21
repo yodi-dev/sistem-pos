@@ -20,7 +20,7 @@
                     href="{{ route('update.products') }}" class="btn btn-sm btn-neutral text-base-100 rounded-md">
                     Perbarui Stok
                 </a>
-                <input type="text" wire:model.live="search" class="input input-bordered rounded-md"
+                <input type="text" wire:model.live="search" class="input input-sm input-bordered rounded-md"
                     placeholder="Cari Produk..." />
             </x-slot:menu>
 

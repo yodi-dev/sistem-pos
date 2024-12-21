@@ -37,4 +37,9 @@ class Product extends Model
     {
         return $this->hasMany(Unit::class);
     }
+
+    public function kulakans()
+    {
+        return $this->hasMany(Kulakan::class);
+    }
 }
