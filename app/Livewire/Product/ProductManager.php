@@ -6,6 +6,8 @@ use App\Models\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\On;
+
 
 #[Title('Halaman Produk | Yudis')]
 class ProductManager extends Component
@@ -24,6 +26,7 @@ class ProductManager extends Component
         return view('livewire.product.index', compact('products'));
     }
 
+
     public function showDetails($productId)
     {
         $this->Product = Product::with('category')->find($productId);
@@ -35,6 +38,7 @@ class ProductManager extends Component
         $this->resetPage();
     }
 
+    #[On('closeModal')]
     public function closeModal()
     {
         $this->isModalOpen = false;

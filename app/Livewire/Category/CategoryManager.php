@@ -4,6 +4,7 @@ namespace App\Livewire\Category;
 
 use Livewire\Component;
 use App\Models\Category;
+use Livewire\Attributes\On;
 
 class CategoryManager extends Component
 {
@@ -27,6 +28,7 @@ class CategoryManager extends Component
         $this->isModalOpen = true;
     }
 
+    #[On('closeModal')]
     public function closeModal()
     {
         $this->isModalOpen = false;

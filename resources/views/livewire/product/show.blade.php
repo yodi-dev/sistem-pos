@@ -1,4 +1,5 @@
-<div class="fixed inset-0 flex items-center justify-center z-50 overflow-auto h-full">
+<div class="fixed inset-0 flex items-center justify-center z-50 overflow-auto h-full" @click="$dispatch('closeModal')"
+    wire:ignore>
     <div class="absolute inset-0 bg-gray-800 opacity-75"></div>
     <div class="bg-white dark:bg-gray-800 w-2/3 p-5 rounded-lg shadow-lg relative z-10">
         <h2 class="text-2xl font-semibold text-neutral dark:text-base-100 text-center">
@@ -14,7 +15,7 @@
                 <span class="material-icons text-neutral dark:text-base-100 mr-4">category</span>
                 <div>
                     <p class="font-semibold text-base-content dark:text-base-100">Kategori</p>
-                    <p>{{ $Product->category ?? '-' }}</p>
+                    <p class="text-base-content">{{ $Product->category ?? '-' }}</p>
                 </div>
 
             </div>
@@ -24,23 +25,24 @@
                 <span class="material-icons text-neutral dark:text-base-100 mr-4">attach_money</span>
                 <div class="mx-2">
                     <p class=" px-4 font-semibold text-base-content dark:text-base-100">Harga Beli</p>
-                    <p>Rp {{ number_format($Product->purchase_price ?? 0, 0, ',', '.') }}</p>
+                    <p class="text-base-content">Rp {{ number_format($Product->purchase_price ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="mx-2">
                     <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Reseller</p>
-                    <p>Rp {{ number_format($Product->reseller_price ?? 0, 0, ',', '.') }}</p>
+                    <p class="text-base-content">Rp {{ number_format($Product->reseller_price ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="mx-2">
                     <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Agen</p>
-                    <p>Rp {{ number_format($Product->agent_price ?? 0, 0, ',', '.') }}</p>
+                    <p class="text-base-content">Rp {{ number_format($Product->agent_price ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="mx-2">
                     <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Ecer</p>
-                    <p>Rp {{ number_format($Product->retail_price ?? 0, 0, ',', '.') }}</p>
+                    <p class="text-base-content">Rp {{ number_format($Product->retail_price ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="mx-2">
                     <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Distributor</p>
-                    <p>Rp {{ number_format($Product->distributor_price ?? 0, 0, ',', '.') }}</p>
+                    <p class="text-base-content">Rp {{ number_format($Product->distributor_price ?? 0, 0, ',', '.') }}
+                    </p>
                 </div>
             </div>
 
@@ -49,7 +51,7 @@
                 <span class="material-icons text-neutral dark:text-base-100 mr-4">inventory_2</span>
                 <div>
                     <p class="font-semibold text-base-content dark:text-base-100">Stok</p>
-                    <p>{{ $Product->stock ?? 0 }}</p>
+                    <p class="text-base-content">{{ $Product->stock ?? 0 }}</p>
                 </div>
             </div>
 
@@ -60,7 +62,7 @@
                 </span>
                 <div>
                     <p class="font-semibold text-base-content dark:text-base-100">Supplier</p>
-                    <p>{{ $Product->supplier }}</p>
+                    <p class="text-base-content">{{ $Product->supplier }}</p>
                 </div>
             </div>
         </div>

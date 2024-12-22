@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Customer;
 
-use App\Models\Customer;
 use Livewire\Component;
+use App\Models\Customer;
+use Livewire\Attributes\On;
 
 class CustomerManager extends Component
 {
@@ -29,6 +30,7 @@ class CustomerManager extends Component
         $this->isModalOpen = true;
     }
 
+    #[On('closeModal')]
     public function closeModal()
     {
         $this->isModalOpen = false;
