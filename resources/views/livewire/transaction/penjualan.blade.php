@@ -40,7 +40,8 @@
                                     {{ number_format($transaction->total_paid, 0, ',', '.') }}</td>
                                 <td>Rp
                                     {{ number_format($transaction->change_due, 0, ',', '.') }}</td>
-                                <td>{{ $transaction->utang }}</td>
+                                <td>{{ $transaction->utang ? number_format($transaction->utang, 0, ',', '.') : '' }}
+                                </td>
                                 <td>{{ $transaction->status }}</td>
                                 <td>{{ $transaction->formatted_date }}</td>
                                 <td class="flex">

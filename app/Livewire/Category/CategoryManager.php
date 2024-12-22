@@ -13,7 +13,7 @@ class CategoryManager extends Component
 
     public function render()
     {
-        $this->categories = Category::all();
+        $this->categories = Category::orderBy('id', 'desc')->get();
         return view('livewire.category.index');
     }
 

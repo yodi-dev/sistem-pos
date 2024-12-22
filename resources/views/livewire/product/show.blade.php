@@ -28,21 +28,21 @@
                     <p class="text-base-content">Rp {{ number_format($Product->purchase_price ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="mx-2">
+                    <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Ecer</p>
+                    <p class="text-base-content">Rp {{ number_format($Product->retail_price ?? 0, 0, ',', '.') }}</p>
+                </div>
+                <div class="mx-2">
+                    <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Grosir</p>
+                    <p class="text-base-content">Rp {{ number_format($Product->distributor_price ?? 0, 0, ',', '.') }}
+                    </p>
+                </div>
+                <div class="mx-2">
                     <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Reseller</p>
                     <p class="text-base-content">Rp {{ number_format($Product->reseller_price ?? 0, 0, ',', '.') }}</p>
                 </div>
                 <div class="mx-2">
                     <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Agen</p>
                     <p class="text-base-content">Rp {{ number_format($Product->agent_price ?? 0, 0, ',', '.') }}</p>
-                </div>
-                <div class="mx-2">
-                    <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Ecer</p>
-                    <p class="text-base-content">Rp {{ number_format($Product->retail_price ?? 0, 0, ',', '.') }}</p>
-                </div>
-                <div class="mx-2">
-                    <p class="px-4 font-semibold text-base-content dark:text-base-100">Harga Distributor</p>
-                    <p class="text-base-content">Rp {{ number_format($Product->distributor_price ?? 0, 0, ',', '.') }}
-                    </p>
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
             <!-- Tab: Supplier -->
             <div class="flex items-center py-4">
                 <span class="material-icons text-neutral dark:text-base-100 mr-4">
-                    library_add
+                    group
                 </span>
                 <div>
                     <p class="font-semibold text-base-content dark:text-base-100">Supplier</p>

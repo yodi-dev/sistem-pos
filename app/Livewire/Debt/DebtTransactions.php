@@ -13,7 +13,7 @@ class DebtTransactions extends Component
     {
         $transactions = Transaction::where('payment_method', 'utang')
             ->with('customer')
-            ->orderBy('customer_id')
+            ->orderBy('id', 'desc')
             ->where('status', 'Belum Lunas')
             ->paginate(10);
         return view('livewire.debt.index', compact('transactions'));

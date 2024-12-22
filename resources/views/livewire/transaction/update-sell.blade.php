@@ -44,7 +44,7 @@
                                 <div class="label">
                                     <div class="label-text">Total Belanja</div>
                                 </div>
-                                <input type="text" wire:model="total_price"
+                                <input type="text" wire:model.change="total_price"
                                     class="w-full text-black p-2 border rounded">
                                 @error('total_price')
                                     <div class="label">
@@ -57,7 +57,7 @@
                                 <div class="label">
                                     <div class="label-text">Total Bayar</div>
                                 </div>
-                                <input type="text" wire:model="total_paid"
+                                <input type="text" wire:model.change="total_paid"
                                     class="w-full text-black p-2 border rounded">
                                 @error('total_paid')
                                     <div class="label">
@@ -77,7 +77,7 @@
                                 <div class="label">
                                     <div class="label-text">Kembalian</div>
                                 </div>
-                                <input type="text" wire:model="change_due"
+                                <input type="text" wire:model.change="change_due"
                                     class="w-full text-black p-2 border rounded">
                                 @error('change_due')
                                     <div class="label">
@@ -90,7 +90,8 @@
                                 <div class="label">
                                     <div class="label-text">Utang</div>
                                 </div>
-                                <input type="text" wire:model="utang" class="w-full text-black p-2 border rounded">
+                                <input type="text" wire:model.change="utang"
+                                    class="w-full text-black p-2 border rounded">
                                 @error('utang')
                                     <div class="label">
                                         <span class="label-text-alt">{{ $message }}</span>

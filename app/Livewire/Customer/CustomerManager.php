@@ -14,7 +14,7 @@ class CustomerManager extends Component
 
     public function render()
     {
-        $customers = Customer::where('name', 'like', '%' . $this->search . '%')->paginate(10);
+        $customers = Customer::where('name', 'like', '%' . $this->search . '%')->orderBy('id', 'desc')->paginate(10);
 
         return view('livewire.customer.index', compact('customers'));
     }

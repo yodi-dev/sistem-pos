@@ -222,9 +222,18 @@ class TransactionManager extends Component
         $this->customers = [];
     }
 
-    public function removeFromCart($index)
+    public function removeFromCart($id)
     {
-        unset($this->cart[$index]);
+        // $this->cart = session()->get('cart', []);
+
+        $index = collect($this->cart)->search(fn($item) => $item['id'] === $id);
+
+        if ($index !== false) {
+            unset($this->cart[$index]);
+            // Re-index array setelah penghapusan
+            $this->cart = array_values($this->cart);
+            session()->put('cart', $this->cart);
+        }
         $this->updateTotal();
     }
 
@@ -246,6 +255,8 @@ class TransactionManager extends Component
 
     public function addToCart($productId)
     {
+        // $this->cart = session()->get('cart', []);
+
         $product = Product::find($productId);
 
         $defaultUnit = $product->units->first() ? $product->units->first()->id : '1';
@@ -269,6 +280,9 @@ class TransactionManager extends Component
             }
 
             $this->calculateSubtotal($index ?? count($this->cart) - 1);
+
+            // session()->put('cart', $this->cart);
+
             $this->resetSearch();
         }
     }
@@ -282,7 +296,6 @@ class TransactionManager extends Component
             $this->resetCart();
         }
     }
-
 
     public function andprint()
     {

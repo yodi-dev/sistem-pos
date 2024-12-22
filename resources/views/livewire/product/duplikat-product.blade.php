@@ -58,16 +58,24 @@
 
                             <div>
                                 <div class="label">
+                                    <div class="label-text">Harga Grosir</div>
+                                </div>
+                                <input type="text" wire:model="distributor_price"
+                                    class="w-full text-black p-2 border rounded">
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="w-1/2">
+                            <div>
+                                <div class="label">
                                     <div class="label-text">Harga Reseller</div>
                                 </div>
                                 <input type="text" wire:model="reseller_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
-
-                        </div>
-
-                        <div class="w-1/2">
-
 
                             <div>
                                 <div class="label">
@@ -77,13 +85,7 @@
                                     class="w-full text-black p-2 border rounded">
                             </div>
 
-                            <div>
-                                <div class="label">
-                                    <div class="label-text">Harga Distributor</div>
-                                </div>
-                                <input type="text" wire:model="distributor_price"
-                                    class="w-full text-black p-2 border rounded">
-                            </div>
+
 
                             <div>
                                 <div class="label">

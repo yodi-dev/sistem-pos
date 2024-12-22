@@ -21,7 +21,7 @@ class ProductManager extends Component
 
     public function render()
     {
-        $products = Product::with('units')->where('name', 'like', '%' . $this->search . '%')->paginate(10);
+        $products = Product::with('units')->where('name', 'like', '%' . $this->search . '%')->orderBy('id', 'desc')->paginate(10);
 
         return view('livewire.product.index', compact('products'));
     }

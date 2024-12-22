@@ -41,7 +41,7 @@ class UnitManager extends Component
         $unit = Unit::find($unitId);
         if ($unit) {
             $unit->delete();
-            $this->units = $this->Product->units;
+            $this->units = $this->product->units;
         }
     }
 

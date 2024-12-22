@@ -43,8 +43,9 @@
                                     class="btn btn-xs btn-neutral rounded-md text-base-100">Renteng
                                     (12)</button>
                             </div>
-                            <a wire:navigate href="{{ route('products') }}"
-                                class="btn btn-sm btn-outline btn-error btn-block text-base-100 rounded-md">Tutup</a>
+                            <button wire:click="saveUnit"
+                                class="btn btn-sm btn-neutral btn-block text-base-100 rounded-md">Simpan</button>
+
 
                         </div>
 
@@ -75,9 +76,8 @@
 
                                 </table>
                             </div>
-                            <button wire:click="saveUnit"
-                                class="btn btn-sm btn-neutral btn-block text-base-100 rounded-md">Simpan</button>
-
+                            <a wire:navigate href="{{ route('products') }}"
+                                class="btn btn-sm btn-outline btn-error btn-block text-base-100 rounded-md">Tutup</a>
                         </div>
                     </div>
                 </x-card>
