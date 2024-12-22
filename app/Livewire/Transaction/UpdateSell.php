@@ -11,10 +11,12 @@ class UpdateSell extends Component
     public $customers;
     public $customer_id, $payment_method, $total_price, $total_paid, $change_due, $utang, $status, $date;
     public $transaction_id;
+    public $searchCustomer = '';
+
 
     public function render()
     {
-        $this->customers = Customer::all();
+        $this->customers = Customer::orderBy('name', 'asc')->get();
 
         return view('livewire.transaction.update-sell');
     }
@@ -25,6 +27,7 @@ class UpdateSell extends Component
 
         $this->transaction_id = $id;
         $this->customer_id = $transaction->customer_id;
+        $this->searchCustomer = $transaction->customer_id;
         $this->payment_method = $transaction->payment_method;
         $this->total_price = number_format($transaction->total_price, 0, ',', '.');
         $this->total_paid = number_format($transaction->total_paid, 0, ',', '.');
@@ -99,5 +102,14 @@ class UpdateSell extends Component
     public function updatedUtang()
     {
         $this->utang = number_format($this->utang, 0, ',', '.');
+    }
+
+    public function updatedSearchCustomer()
+    {
+        $this->customers = Customer::where('id', 'like', '%' . $this->searchCustomer . '%')->get();
+
+        if (empty($this->searchCustomer)) {
+            $this->customers = [];
+        }
     }
 }

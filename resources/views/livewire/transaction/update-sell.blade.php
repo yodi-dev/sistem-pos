@@ -31,8 +31,15 @@
                                 <div class="label">
                                     <div class="label-text">Metode Pembayaran</div>
                                 </div>
-                                <input type="text" wire:model="payment_method"
-                                    class="w-full text-black p-2 border rounded">
+                                <select class="w-full text-base-content p-2 border rounded" wire:model="payment_method">
+                                    <option {{ $payment_method == 'tunai' ? 'selected' : '' }} value="tunai">Tunai
+                                    </option>
+                                    <option {{ $payment_method == 'QRIS' ? 'selected' : '' }} value="QRIS">QRIS
+                                    </option>
+                                    <option {{ $payment_method == 'utang' ? 'selected' : '' }} value="utang">Utang
+                                    </option>
+                                </select>
+
                                 @error('payment_method')
                                     <div class="label">
                                         <span class="label-text-alt">{{ $message }}</span>
@@ -65,10 +72,6 @@
                                     </div>
                                 @enderror
                             </div>
-
-
-
-
                         </div>
 
                         <div class="w-1/2">
@@ -142,4 +145,13 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            $('#category').selectize({
+                placeholder: 'Pilih pembeli...',
+                allowEmptyOption: true,
+            });
+        });
+    </script>
+
 </div>

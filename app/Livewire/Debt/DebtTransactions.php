@@ -36,4 +36,16 @@ class DebtTransactions extends Component
 
         session()->flash('message', 'Pembayaran berhasil.');
     }
+
+    public function lunasi($transactionId)
+    {
+        // Temukan transaksi dan kurangi total price
+        $transaction = Transaction::find($transactionId);
+        $transaction->utang = 0;
+        $transaction->status = 'Lunas';
+
+        $transaction->save();
+
+        session()->flash('message', 'Pembayaran berhasil.');
+    }
 }
