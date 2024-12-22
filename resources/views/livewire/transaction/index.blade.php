@@ -119,9 +119,6 @@
                                         Rp {{ number_format($item['price'], 0, ',', '.') }}
                                         <select class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded"
                                             wire:change="updatePriceType({{ $index }}, $event.target.value)">
-                                            <option value="">
-                                                Ganti Harga
-                                            </option>
                                             <option value="retail_price">
                                                 Ecer
                                             </option>
@@ -154,7 +151,7 @@
                         </tbody>
                     </table>
 
-                    <div class="grid grid-cols-3 mt-3">
+                    <div class="grid grid-cols-2">
                         <div>
                             <h3 class="text-xl text-base-content mt-4 dark:text-white">Metode Pembayaran</h3>
 
@@ -173,69 +170,88 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col-span-2">
-                            <h3 class="text-xl text-base-content text-right font-semibold mt-4 dark:text-white">Total:
+                        <div class="mt-4 flex flex-col space-y-2 items-end">
+                            <h3
+                                class="bg-neutral px-4 py-2 text-md text-base-100 text-right font-semibold dark:text-white rounded-md w-fit h-fit">
+                                Total:
                                 Rp
                                 {{ number_format($total_price, 0, ',', '.') }}
                             </h3>
 
-                            <h3 class="text-lg text-base-content text-right mt-4 dark:text-white">
+                            <h3
+                                class="bg-neutral px-4 py-2 text-md text-base-100 text-right dark:text-white rounded-md w-fit h-fit">
                                 Kembalian: Rp
                                 {{ number_format($changeDue, 0, ',', '.') }}
                             </h3>
-
-                            <div class="mt-4">
+                            <div class="flex space-x-2 items-center">
                                 <label for="total_paid"
                                     class="block mb-2 text-base-content dark:text-white">Bayar</label>
-                                <div class="flex items-center space-x-2">
-                                    <input type="number" id="total_paid" wire:model.live="totalPaid"
-                                        class="w-full p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white">
-                                    <button type="button" icon="c-circle-stack" wire:click="clearTotalPaid"
-                                        class="btn btn-sm btn-outline btn-error text-base-100 rounded-md hover:bg-red-600">X
-                                    </button>
-                                </div>
-
-                                <!-- Tombol Nominal -->
-                                <div class="flex space-x-2 mt-2">
-                                    <button type="button" wire:click="addNominal(10000)"
-                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
-                                        Rp 10.000
-                                    </button>
-                                    <button type="button" wire:click="addNominal(20000)"
-                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
-                                        Rp 20.000
-                                    </button>
-                                    <button type="button" wire:click="addNominal(50000)"
-                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
-                                        Rp 50.000
-                                    </button>
-                                    <button type="button" wire:click="addNominal(100000)"
-                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
-                                        Rp 100.000
-                                    </button>
-                                    <button type="button" wire:click="bayarPas"
-                                        class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded">
-                                        Uang Pas
-                                    </button>
-
-                                </div>
-                            </div>
-
-                            <div class="flex space-x-2 mt-4">
-                                <button wire:click="store"
-                                    class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
-                                    Simpan
-                                </button>
-                                <button wire:click="andprint"
-                                    class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
-                                    Simpan & Cetak Nota
+                                <input type="number" id="total_paid" wire:model.live="totalPaid"
+                                    class="w-full p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white">
+                                <button type="button" icon="c-circle-stack" wire:click="clearTotalPaid"
+                                    class="btn btn-sm btn-outline btn-error text-base-100 rounded-md hover:bg-red-600">X
                                 </button>
                             </div>
 
-                            @error('customer')
-                                <span class="text-red-600 text-sm">{{ $message }}</span>
-                            @enderror
                         </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="grid">
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <button type="button" wire:click="addNominal(1000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 1.000
+                            </button>
+                            <button type="button" wire:click="addNominal(2000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 2.000
+                            </button>
+                            <button type="button" wire:click="addNominal(5000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 5.000
+                            </button>
+                            <button type="button" wire:click="addNominal(10000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 10.000
+                            </button>
+                            <button type="button" wire:click="addNominal(20000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 20.000
+                            </button>
+                            <button type="button" wire:click="addNominal(50000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 50.000
+                            </button>
+                            <button type="button" wire:click="addNominal(100000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 100.000
+                            </button>
+                            <button type="button" wire:click="bayarPas"
+                                class="col-start-1 col-end-2 btn btn-sm bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100 rounded-md">
+                                Uang Pas
+                            </button>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="flex space-x-2 ">
+                            <button wire:click="store"
+                                class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
+                                Simpan
+                            </button>
+                            <button wire:click="andprint"
+                                class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
+                                Simpan & Cetak Nota
+                            </button>
+                        </div>
+
+                        @error('customer')
+                            <span class="text-red-600 text-sm">{{ $message }}</span>
+                        @enderror
+
                     </div>
                 </x-card>
             </div>
