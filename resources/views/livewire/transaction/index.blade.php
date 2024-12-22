@@ -142,7 +142,7 @@
                                     </td>
                                     <td class="p-2">Rp {{ number_format($item['subtotal'], 0, ',', '.') }}</td>
                                     <td class="p-2">
-                                        <button wire:click="removeFromCart({{ $index }})">
+                                        <button wire:click="removeFromCart({{ $item['id'] }})">
                                             <x-icon name="s-trash" class=" text-error" />
                                         </button>
                                     </td>
@@ -172,14 +172,14 @@
                         </div>
                         <div class="mt-4 flex flex-col space-y-2 items-end">
                             <h3
-                                class="bg-neutral px-4 py-2 text-md text-base-100 text-right font-semibold dark:text-white rounded-md w-fit h-fit">
+                                class="bg-base-100 px-4 py-2 text-md text-base-content text-right font-semibold dark:text-white rounded-md w-fit h-fit border-2">
                                 Total:
                                 Rp
                                 {{ number_format($total_price, 0, ',', '.') }}
                             </h3>
 
                             <h3
-                                class="bg-neutral px-4 py-2 text-md text-base-100 text-right dark:text-white rounded-md w-fit h-fit">
+                                class="bg-base-100 px-4 py-2 text-md text-base-content text-right dark:text-white rounded-md w-fit h-fit border-2">
                                 Kembalian: Rp
                                 {{ number_format($changeDue, 0, ',', '.') }}
                             </h3>
@@ -200,39 +200,41 @@
 
                     <div class="grid">
 
-                        <div class="grid grid-cols-3 gap-2">
-                            <button type="button" wire:click="addNominal(1000)"
-                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                Rp 1.000
-                            </button>
-                            <button type="button" wire:click="addNominal(2000)"
-                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                Rp 2.000
-                            </button>
-                            <button type="button" wire:click="addNominal(5000)"
-                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                Rp 5.000
-                            </button>
-                            <button type="button" wire:click="addNominal(10000)"
-                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                Rp 10.000
-                            </button>
-                            <button type="button" wire:click="addNominal(20000)"
-                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                Rp 20.000
-                            </button>
-                            <button type="button" wire:click="addNominal(50000)"
-                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                Rp 50.000
-                            </button>
-                            <button type="button" wire:click="addNominal(100000)"
-                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                Rp 100.000
-                            </button>
-                            <button type="button" wire:click="bayarPas"
-                                class="col-start-1 col-end-2 btn btn-sm bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100 rounded-md">
-                                Uang Pas
-                            </button>
+                        <div class="flex justify-end">
+                            <div class="w-1/2 grid grid-cols-3 gap-2">
+                                <button type="button" wire:click="addNominal(1000)"
+                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                    Rp 1.000
+                                </button>
+                                <button type="button" wire:click="addNominal(2000)"
+                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                    Rp 2.000
+                                </button>
+                                <button type="button" wire:click="addNominal(5000)"
+                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                    Rp 5.000
+                                </button>
+                                <button type="button" wire:click="addNominal(10000)"
+                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                    Rp 10.000
+                                </button>
+                                <button type="button" wire:click="addNominal(20000)"
+                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                    Rp 20.000
+                                </button>
+                                <button type="button" wire:click="addNominal(50000)"
+                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                    Rp 50.000
+                                </button>
+                                <button type="button" wire:click="addNominal(100000)"
+                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                    Rp 100.000
+                                </button>
+                                <button type="button" wire:click="bayarPas"
+                                    class="col-start-1 col-end-2 btn btn-sm bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100 rounded-md">
+                                    Uang Pas
+                                </button>
+                            </div>
                         </div>
 
                         <div class="divider"></div>

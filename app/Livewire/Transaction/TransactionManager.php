@@ -27,6 +27,155 @@ class TransactionManager extends Component
     public $selectedCustomer = null;
     public $highlightIndex = 0;
 
+    public function mount()
+    {
+        $this->cart = session()->get('cart', []);
+        $this->updateTotal();
+    }
+
+    public function addToCart($productId)
+    {
+        $product = Product::find($productId);
+
+        if (!$product) {
+            return;
+        }
+
+        $defaultUnit = $product->units->first() ? $product->units->first()->id : '1';
+
+        $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
+
+        if ($index !== false) {
+            $this->cart[$index]['quantity'] += 1;
+        } else {
+            $this->cart[] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'sub_quantity' => 1,
+                'quantity' => 1,
+                'price' => $product->retail_price,
+                'subtotal' => $product->retail_price,
+                'units' => $product->units,
+                'unit' => $defaultUnit
+            ];
+        }
+
+        $this->calculateSubtotal($index ?? count($this->cart) - 1);
+        session()->put('cart', $this->cart);
+        $this->updateTotal();
+        $this->resetSearch();
+    }
+
+    public function removeFromCart($id)
+    {
+        $this->cart = session()->get('cart', []);
+        $index = collect($this->cart)->search(fn($item) => $item['id'] === $id);
+
+        // dd($id);
+        if ($index !== false) {
+            unset($this->cart[$index]);
+            $this->cart = array_values($this->cart);
+            session()->put('cart', $this->cart);
+        }
+
+        $this->updateTotal();
+    }
+
+
+    public function store()
+    {
+        $transaction = $this->saveTransaction();
+
+        if ($transaction) {
+            session()->flash('message', 'Transaksi berhasil disimpan.');
+            $this->resetCart();
+        }
+    }
+
+    public function andprint()
+    {
+        $transaction = $this->saveTransaction();
+
+        if ($transaction) {
+            session([
+                'cart' => $this->cart,
+                'total' => $this->total_price,
+            ]);
+            $this->resetCart(); // reset cart setelah transaksi berhasil
+            return redirect()->route('redirect.print');
+        }
+
+        // Jika gagal, tampilkan error
+        session()->flash('error', 'Gagal menyimpan transaksi. Nota tidak dicetak.');
+    }
+
+
+    private function resetCart()
+    {
+        $this->cart = [];
+        $this->total_price = 0;
+        $this->totalPaid = 0;
+        $this->changeDue = 0;
+        $this->paymentMethod = null;
+        $this->customer = null;
+        $this->totalPaid = null;
+
+        $this->resetSearch();
+    }
+
+    public function render()
+    {
+        return view('livewire.transaction.index');
+    }
+
+    private function saveTransaction()
+    {
+        // validasi customer jika pembayaran dengan utang
+        if ($this->paymentMethod === 'utang' && empty($this->customer)) {
+            $this->addError('customer', 'Data customer harus diisi jika metode pembayaran adalah utang.');
+            return false;
+        } else {
+            $status = $this->paymentMethod === 'utang' ? 'Belum Lunas' : null;
+            $utang = $this->paymentMethod === 'utang' ? $this->total_price - $this->totalPaid : null;
+
+            DB::beginTransaction();
+
+            try {
+                $transaction = Transaction::create([
+                    'customer_id' => $this->customer->id ?? null,
+                    'payment_method' => $this->paymentMethod,
+                    'total_price' => $this->total_price,
+                    'total_paid' => $this->totalPaid,
+                    'change_due' => $this->changeDue,
+                    'utang' => $utang,
+                    'status' => $status,
+                ]);
+
+                foreach ($this->cart as $item) {
+                    TransactionItem::create([
+                        'transaction_id' => $transaction->id,
+                        'product_id' => $item['id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'subtotal' => $item['subtotal'],
+                    ]);
+
+                    // mengurangi stok produk
+                    $product = Product::find($item['id']);
+                    $product->stock -= $item['quantity'];
+                    $product->save();
+                }
+
+                DB::commit();
+                return $transaction;
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $this->addError('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                return false;
+            }
+        }
+    }
+
     // shorcut
     #[On('uangPas')]
     public function uangPas()
@@ -222,20 +371,7 @@ class TransactionManager extends Component
         $this->customers = [];
     }
 
-    public function removeFromCart($id)
-    {
-        // $this->cart = session()->get('cart', []);
 
-        $index = collect($this->cart)->search(fn($item) => $item['id'] === $id);
-
-        if ($index !== false) {
-            unset($this->cart[$index]);
-            // Re-index array setelah penghapusan
-            $this->cart = array_values($this->cart);
-            session()->put('cart', $this->cart);
-        }
-        $this->updateTotal();
-    }
 
     public function updateTotal()
     {
@@ -250,134 +386,6 @@ class TransactionManager extends Component
             $this->changeDue = 0;
         } else {
             $this->changeDue = $this->totalPaid - $this->total_price;
-        }
-    }
-
-    public function addToCart($productId)
-    {
-        // $this->cart = session()->get('cart', []);
-
-        $product = Product::find($productId);
-
-        $defaultUnit = $product->units->first() ? $product->units->first()->id : '1';
-
-        if ($product) {
-            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
-
-            if ($index !== false) {
-                $this->cart[$index]['quantity'] += 1;
-            } else {
-                $this->cart[] = [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'sub_quantity' => 1,
-                    'quantity' => 1,
-                    'price' => $product->retail_price,
-                    'subtotal' => $product->retail_price,
-                    'units' => $product->units,
-                    'unit' => $defaultUnit
-                ];
-            }
-
-            $this->calculateSubtotal($index ?? count($this->cart) - 1);
-
-            // session()->put('cart', $this->cart);
-
-            $this->resetSearch();
-        }
-    }
-
-    public function store()
-    {
-        $transaction = $this->saveTransaction();
-
-        if ($transaction) {
-            session()->flash('message', 'Transaksi berhasil disimpan.');
-            $this->resetCart();
-        }
-    }
-
-    public function andprint()
-    {
-        $transaction = $this->saveTransaction();
-
-        if ($transaction) {
-            session([
-                'cart' => $this->cart,
-                'total' => $this->total_price,
-            ]);
-            $this->resetCart(); // reset cart setelah transaksi berhasil
-            return redirect()->route('redirect.print');
-        }
-
-        // Jika gagal, tampilkan error
-        session()->flash('error', 'Gagal menyimpan transaksi. Nota tidak dicetak.');
-    }
-
-
-    private function resetCart()
-    {
-        $this->cart = [];
-        $this->total_price = 0;
-        $this->totalPaid = 0;
-        $this->changeDue = 0;
-        $this->paymentMethod = null;
-        $this->customer = null;
-        $this->totalPaid = null;
-
-        $this->resetSearch();
-    }
-
-    public function render()
-    {
-        return view('livewire.transaction.index');
-    }
-
-    private function saveTransaction()
-    {
-        // validasi customer jika pembayaran dengan utang
-        if ($this->paymentMethod === 'utang' && empty($this->customer)) {
-            $this->addError('customer', 'Data customer harus diisi jika metode pembayaran adalah utang.');
-            return false;
-        } else {
-            $status = $this->paymentMethod === 'utang' ? 'Belum Lunas' : null;
-            $utang = $this->paymentMethod === 'utang' ? $this->total_price - $this->totalPaid : null;
-
-            DB::beginTransaction();
-
-            try {
-                $transaction = Transaction::create([
-                    'customer_id' => $this->customer->id ?? null,
-                    'payment_method' => $this->paymentMethod,
-                    'total_price' => $this->total_price,
-                    'total_paid' => $this->totalPaid,
-                    'change_due' => $this->changeDue,
-                    'utang' => $utang,
-                    'status' => $status,
-                ]);
-
-                foreach ($this->cart as $item) {
-                    TransactionItem::create([
-                        'transaction_id' => $transaction->id,
-                        'product_id' => $item['id'],
-                        'quantity' => $item['quantity'],
-                        'price' => $item['price'],
-                        'subtotal' => $item['subtotal'],
-                    ]);
-
-                    // mengurangi stok produk
-                    $product = Product::find($item['id']);
-                    $product->stock -= $item['quantity'];
-                    $product->save();
-                }
-
-                DB::commit();
-                return $transaction;
-            } catch (\Exception $e) {
-                DB::rollBack();
-                $this->addError('error', 'Terjadi kesalahan: ' . $e->getMessage());
-                return false;
-            }
         }
     }
 }
