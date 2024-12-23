@@ -46,7 +46,7 @@ class TransactionManager extends Component
         $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
 
         if ($index !== false) {
-            $this->cart[$index]['quantity'] += 1;
+            $this->cart[$index]['sub_quantity'] += 1;
         } else {
             $this->cart[] = [
                 'id' => $product->id,
@@ -61,8 +61,12 @@ class TransactionManager extends Component
         }
 
         $this->calculateSubtotal($index ?? count($this->cart) - 1);
-        session()->put('cart', $this->cart);
+        $this->updateQuantityOnUnitChange($index);
         $this->updateTotal();
+
+        $this->dispatch('focusQty', count($this->cart) - 1);
+
+        session()->put('cart', $this->cart);
         $this->resetSearch();
     }
 
@@ -108,7 +112,6 @@ class TransactionManager extends Component
         // Jika gagal, tampilkan error
         session()->flash('error', 'Gagal menyimpan transaksi. Nota tidak dicetak.');
     }
-
 
     private function resetCart()
     {
@@ -371,8 +374,6 @@ class TransactionManager extends Component
         $this->customers = [];
     }
 
-
-
     public function updateTotal()
     {
         $this->total_price = collect($this->cart)->sum('subtotal');
@@ -381,7 +382,6 @@ class TransactionManager extends Component
 
     public function updatedTotalPaid()
     {
-
         if (empty($this->totalPaid)) {
             $this->changeDue = 0;
         } else {

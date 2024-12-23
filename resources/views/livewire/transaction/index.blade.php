@@ -8,12 +8,16 @@
 
                     <div class="flex justify-center">
                         <!-- Input Search untuk Produk -->
-                        <div x-data x-init="$refs.searchInput.focus()" class="w-full">
+                        <div x-data="{
+                            focusSearch() { $refs.searchInput.focus(); }
+                        }" x-init="$refs.searchInput.focus()" @keydown.window.prevent.ctrl.k="focusSearch()"
+                            class="w-full">
                             <input type="text" wire:model.live="search" wire:keydown.arrow-down="selectNext"
                                 wire:keydown.arrow-up="selectPrevious" wire:keydown.enter="confirmSelection"
                                 x-ref="searchInput" class="text-base-content input input-bordered w-full rounded-md"
                                 placeholder="Cari Produk..." />
                         </div>
+
 
                         <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($products))
@@ -93,7 +97,8 @@
                                 <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-200' }}">
                                     <td class="p-2">{{ $item['name'] }}</td>
                                     <td class="p-2">
-                                        <input type="number" wire:model="cart.{{ $index }}.sub_quantity"
+                                        <input type="number" id="quantity-{{ $index }}"
+                                            wire:model.live="cart.{{ $index }}.sub_quantity"
                                             value="{{ $item['sub_quantity'] }}"
                                             wire:change="updateQuantity({{ $index }}, $event.target.value)"
                                             class="w-16 p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
@@ -187,7 +192,7 @@
                                 <label for="total_paid"
                                     class="block mb-2 text-base-content dark:text-white">Bayar</label>
                                 <input type="number" id="total_paid" wire:model.live="totalPaid"
-                                    class="w-full p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white">
+                                    class="w-full p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white border-2">
                                 <button type="button" icon="c-circle-stack" wire:click="clearTotalPaid"
                                     class="btn btn-sm btn-outline btn-error text-base-100 rounded-md hover:bg-red-600">X
                                 </button>
@@ -262,6 +267,15 @@
 
     @script
         <script>
+            $wire.on('focusQty', (index) => {
+                const input = document.getElementById(`quantity-${index}`);
+                if (input) {
+                    input.focus();
+                    input.select(); // Opsional: Menyorot teks di dalam input
+                }
+            });
+
+
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'F9') {
                     event.preventDefault();
