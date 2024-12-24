@@ -7,12 +7,8 @@
         </div>
         <x-card title="Stok" class="text-neutral bg-base-200 mt-3" shadow separator>
             <x-slot:menu>
-                <a title="Klik untuk memperbarui jumlah stok pada produk" wire:navigate
-                    href="{{ route('update.products') }}" class="btn btn-sm btn-neutral text-base-100 rounded-md">
-                    Perbarui Stok
-                </a>
                 <div class="dropdown dropdown-end text-base-content">
-                    <div tabindex="0" role="button" class="btn btn-sm m-1 rounded-md"><x-icon
+                    <div tabindex="0" role="button" class="btn btn-sm btn-neutral text-base-100 m-1 rounded-md"><x-icon
                             name="o-shopping-cart" />
                     </div>
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-md z-[1] w-80 p-2 shadow p-3">
@@ -37,6 +33,7 @@
                         @endif
                     </ul>
                 </div>
+                <label class="text-base-content">Minimum:</label>
                 <input wire:model.live="minimum" type="number"
                     class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />
             </x-slot:menu>

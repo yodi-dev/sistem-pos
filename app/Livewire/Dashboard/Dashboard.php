@@ -5,16 +5,22 @@ namespace App\Livewire\Dashboard;
 use App\Models\Kulakan;
 use App\Models\Product;
 use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Component
 {
-    public $minimum = 0;
+    public $minimum = null;
     public $cart = [];
 
     public function render()
     {
-        $products = Product::where('stock', '<=', $this->minimum)->paginate(50);
+        $products = Product::query();
+
+        if ($this->minimum) {
+            $products->where('stock', '<=', $this->minimum);
+        }
+
+        $products = $products->paginate(20);
+
         return view('livewire.dashboard.dashboard', compact('products'));
     }
 
