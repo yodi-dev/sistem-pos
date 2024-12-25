@@ -6,8 +6,8 @@
             </div>
         </div>
         <x-card title="Stok" class="text-neutral bg-base-200 mt-3" shadow separator>
-            <x-slot:menu>
-                <div class="dropdown dropdown-end text-base-content">
+            <x-slot:menu class="flex justify-end w-full">
+                <div class="dropdown dropdown-end text-base-content justify-self-start w-full ml-5">
                     <div tabindex="0" role="button" class="btn btn-sm btn-neutral text-base-100 m-1 rounded-md"><x-icon
                             name="o-shopping-cart" />
                     </div>
@@ -33,6 +33,22 @@
                         @endif
                     </ul>
                 </div>
+                <label class="text-base-content">Filter:</label>
+                <select wire:model.live="category"
+                    class="select select-bordered select-sm w-fit text-base-content rounded-md">
+                    <option selected value="">Kategori</option>
+                    @foreach ($categories as $item)
+                        <option>{{ $item->name }}</option>
+                    @endforeach
+                    {{-- <option>Semua Kategori</option> --}}
+                </select>
+                <select wire:model.live="supplier"
+                    class="select select-bordered select-sm w-fit text-base-content rounded-md">
+                    <option selected value="">Supplier</option>
+                    @foreach ($suppliers as $item)
+                        <option>{{ $item->name }}</option>
+                    @endforeach
+                </select>
                 <label class="text-base-content">Minimum:</label>
                 <input wire:model.live="minimum" type="number"
                     class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />

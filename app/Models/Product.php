@@ -38,8 +38,13 @@ class Product extends Model
         return $this->hasMany(Unit::class);
     }
 
-    public function kulakans()
+    public function suppliers()
     {
-        return $this->hasMany(Kulakan::class);
+        return $this->belongsToMany(Supplier::class);
+    }
+
+    public function wholesale()
+    {
+        return $this->belongsTo(Wholesale::class);
     }
 }

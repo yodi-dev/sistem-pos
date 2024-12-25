@@ -52,11 +52,6 @@
 <body>
     {{ $slot }}
     @livewireScripts
-    <script>
-        window.onload = function() {
-            window.print();
-        };
-    </script>
 </body>
 
 </html>

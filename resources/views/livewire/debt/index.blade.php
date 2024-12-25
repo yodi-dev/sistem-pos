@@ -28,7 +28,7 @@
                         @foreach ($transactions as $index => $transaction)
                             <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                 <td>{{ $transaction->customer->name }}</td>
-                                <td>Rp {{ number_format($transaction->utang, 0, ',', '.') }}
+                                <td>Rp {{ number_format($transaction->debt, 0, ',', '.') }}
                                 </td>
                                 <td>{{ $transaction->created_at->format('d-m-Y') }}</td>
                                 <td class="flex space-x-2">
@@ -43,7 +43,7 @@
                                 </td>
                                 <td class="text-center">
                                     <span
-                                        class="bg-red-200 text-red-700 px-2 py-1 rounded">{{ $transaction->status }}</span>
+                                        class="bg-red-200 text-red-700 px-2 py-1 rounded">{{ $transaction->debt_status }}</span>
                                 </td>
                             </tr>
                         @endforeach

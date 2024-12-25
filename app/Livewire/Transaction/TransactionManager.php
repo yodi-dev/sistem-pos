@@ -6,10 +6,14 @@ use App\Models\Unit;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Customer;
+use Mike42\Escpos\Printer;
 use App\Models\Transaction;
 use Livewire\Attributes\On;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 class TransactionManager extends Component
 {
@@ -91,6 +95,7 @@ class TransactionManager extends Component
         $transaction = $this->saveTransaction();
 
         if ($transaction) {
+            session()->forget('cart');
             session()->flash('message', 'Transaksi berhasil disimpan.');
             $this->resetCart();
         }
@@ -101,16 +106,35 @@ class TransactionManager extends Component
         $transaction = $this->saveTransaction();
 
         if ($transaction) {
-            session([
-                'cart' => $this->cart,
-                'total' => $this->total_price,
-            ]);
-            $this->resetCart(); // reset cart setelah transaksi berhasil
-            return redirect()->route('redirect.print');
+            $this->resetCart();
+            $this->printNota();
         }
+    }
 
-        // Jika gagal, tampilkan error
-        session()->flash('error', 'Gagal menyimpan transaksi. Nota tidak dicetak.');
+    public function printNota()
+    {
+        $cart = session()->get('cart', []);
+        $total = $this->total_price;
+
+        $connector = new WindowsPrintConnector("thermal");
+        $printer = new Printer($connector);
+
+        // header
+        $printer->setJustification(Printer::JUSTIFY_CENTER);
+        $printer->text("Habiba Store \n");
+        $printer->text("Alamat: jalan kh a \n");
+        $printer->feed(2);
+
+        $printer->setJustification(Printer::JUSTIFY_LEFT);
+        // items
+        foreach ($cart as $item) {
+            $printer->text($item['name'] . " - " . $item['quantity'] . " X " . number_format($item['price'], 0, ',', '.') . "\n");
+        }
+        // total
+        $printer->text("total: " . number_format($total, 0, ',', '.'));
+
+        $printer->cut();
+        $printer->close();
     }
 
     private function resetCart()
@@ -119,7 +143,6 @@ class TransactionManager extends Component
         $this->total_price = 0;
         $this->totalPaid = 0;
         $this->changeDue = 0;
-        $this->paymentMethod = null;
         $this->customer = null;
         $this->totalPaid = null;
 

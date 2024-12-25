@@ -20,6 +20,6 @@ class Penjualan extends Component
     public function delete($id)
     {
         Transaction::find($id)->delete();
-        session()->flash('message', 'Transaction Deleted Successfully.');
+        session()->flash('message', 'Berhasil menghapus data jual.');
     }
 }
