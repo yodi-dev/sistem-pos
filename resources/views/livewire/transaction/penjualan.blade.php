@@ -40,9 +40,9 @@
                                     {{ number_format($transaction->total_paid, 0, ',', '.') }}</td>
                                 <td>Rp
                                     {{ number_format($transaction->change_due, 0, ',', '.') }}</td>
-                                <td>{{ $transaction->utang ? number_format($transaction->utang, 0, ',', '.') : '' }}
+                                <td>{{ $transaction->debt ? number_format($transaction->debt, 0, ',', '.') : '' }}
                                 </td>
-                                <td>{{ $transaction->status }}</td>
+                                <td>{{ $transaction->debt_status }}</td>
                                 <td>{{ $transaction->formatted_date }}</td>
                                 <td class="flex">
                                     <a wire:navigate href="{{ route('edit.selling', $transaction->id) }}"

@@ -14,7 +14,7 @@ class DebtTransactions extends Component
         $transactions = Transaction::where('payment_method', 'utang')
             ->with('customer')
             ->orderBy('id', 'desc')
-            ->where('debt_status', 'unpaid')
+            ->where('debt_status', 'Belum Lunas')
             ->paginate(10);
         return view('livewire.debt.index', compact('transactions'));
     }
@@ -28,7 +28,7 @@ class DebtTransactions extends Component
         // Update status jika debt sudah lunas
         if ($transaction->debt <= 0) {
             $transaction->debt = 0;
-            $transaction->status = 'Lunas';
+            $transaction->debt_status = 'Lunas';
         }
         $transaction->save();
 
@@ -42,7 +42,7 @@ class DebtTransactions extends Component
         // Temukan transaksi dan kurangi total price
         $transaction = Transaction::find($transactionId);
         $transaction->debt = 0;
-        $transaction->status = 'Lunas';
+        $transaction->debt_status = 'Lunas';
 
         $transaction->save();
 

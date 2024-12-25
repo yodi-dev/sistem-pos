@@ -173,8 +173,8 @@ class TransactionManager extends Component
                     'total_price' => $this->total_price,
                     'total_paid' => $this->totalPaid,
                     'change_due' => $this->changeDue,
-                    'utang' => $utang,
-                    'status' => $status,
+                    'debt' => $utang,
+                    'debt_status' => $status,
                 ]);
 
                 foreach ($this->cart as $item) {

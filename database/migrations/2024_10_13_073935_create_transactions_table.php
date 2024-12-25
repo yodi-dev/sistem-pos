@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('total_paid', 10, 2);
             $table->decimal('change_due', 10, 2)->nullable();
             $table->decimal('debt', 10, 2)->nullable();
-            $table->enum('debt_status', ['paid', 'unpaid'])->nullable()->default(null);
+            $table->enum('debt_status', ['Lunas', 'Belum Lunas'])->nullable()->default(null);
             $table->dateTime('date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
         });
