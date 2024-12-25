@@ -7,32 +7,47 @@
         </div>
         <x-card title="Stok" class="text-neutral bg-base-200 mt-3" shadow separator>
             <x-slot:menu class="flex justify-end w-full">
-                <div class="dropdown dropdown-end text-base-content justify-self-start w-full ml-5">
-                    <div tabindex="0" role="button" class="btn btn-sm btn-neutral text-base-100 m-1 rounded-md"><x-icon
-                            name="o-shopping-cart" />
-                    </div>
-                    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-md z-[1] w-80 p-2 shadow p-3">
-                        @if (empty($cart))
+                <!-- Modal Cart-->
+                <x-button class="indicator btn btn-sm btn-neutral text-base-100 rounded-md mr-5"
+                    onclick="modalCart.showModal()">
+                    <x-icon name="o-shopping-cart" />
+                    <x-badge value="{{ count($cart) }}" class="badge-accent text-base-content indicator-item" />
+                </x-button>
+                <dialog id="modalCart" class="modal">
+                    <div class="modal-box text-base-content bg-base-300 py-3">
+                        @if (empty($groupedCart))
                             <p class="text-center text-gray-500">Belum ada data kulakan.</p>
                         @else
-                            <table>
-                                <tbody>
-                                    @foreach ($cart as $index => $item)
-                                        <tr class="border-b-2 border-neutral">
-                                            <td class="p-1">{{ $item['name'] }}</td>
-                                            <td class="p-1"><input type="number" value="{{ $item['quantity'] }}"
-                                                    class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <div class="flex justify-end mt-3">
-                                <button class="btn btn-sm btn-neutral rounded-md w-fit text-base-100">Simpan</button>
-                            </div>
+                            @foreach ($groupedCart as $supplier => $items)
+                                <div class="border-1 bg-base-200 p-3 rounded-md my-3">
+                                    <h3 class="bg-base-300 w-fit px-2 py-1 rounded-md">{{ $supplier }}</h3>
+                                    <table class="w-full">
+                                        <tbody>
+                                            @foreach ($items as $index => $item)
+                                                <tr class="border-b-2 border-neutral">
+                                                    <td class="p-1">{{ $item['name'] }}</td>
+                                                    <td class="p-1 text-end"><input type="number"
+                                                            value="{{ $item['quantity'] }}"
+                                                            class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div class="flex justify-end mt-3">
+                                        <button
+                                            class="btn btn-sm btn-neutral rounded-md w-fit text-base-100">Simpan</button>
+                                    </div>
+                                </div>
+                            @endforeach
                         @endif
-                    </ul>
-                </div>
+                    </div>
+                    <form method="dialog" class="modal-backdrop">
+                        <button>close</button>
+                    </form>
+                </dialog>
+
+                {{-- filter --}}
                 <label class="text-base-content">Filter:</label>
                 <select wire:model.live="category"
                     class="select select-bordered select-sm w-fit text-base-content rounded-md">
@@ -40,8 +55,9 @@
                     @foreach ($categories as $item)
                         <option>{{ $item->name }}</option>
                     @endforeach
-                    {{-- <option>Semua Kategori</option> --}}
                 </select>
+
+                {{-- filter supplier --}}
                 <select wire:model.live="supplier"
                     class="select select-bordered select-sm w-fit text-base-content rounded-md">
                     <option selected value="">Supplier</option>
@@ -49,6 +65,8 @@
                         <option>{{ $item->name }}</option>
                     @endforeach
                 </select>
+
+                {{-- filter minimum --}}
                 <label class="text-base-content">Minimum:</label>
                 <input wire:model.live="minimum" type="number"
                     class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />

@@ -12,6 +12,7 @@ class Dashboard extends Component
 {
     public $minimum = null;
     public $cart = [];
+    public $groupedCart;
     public $categories;
     public $suppliers;
     public $category = '';
@@ -48,10 +49,12 @@ class Dashboard extends Component
 
     public function addToCart($productId)
     {
-        $product = Product::find($productId);
+        $product = Product::with('suppliers')->find($productId);
 
         if ($product) {
-            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
+            $supplier = $product->suppliers()->first();
+
+            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
 
             if ($index !== false) {
                 $this->cart[$index]['quantity'] += 1;
@@ -60,9 +63,18 @@ class Dashboard extends Component
                     'id' => $product->id,
                     'name' => $product->name,
                     'quantity' => 1,
+                    'supplier_id' => $supplier->id,
+                    'supplier_name' => $supplier->name,
                 ];
             }
+
+            $this->updateGroupedCart();
         }
+    }
+
+    public function updateGroupedCart()
+    {
+        $this->groupedCart = collect($this->cart)->groupBy('supplier_name');
     }
 
     public function store()
