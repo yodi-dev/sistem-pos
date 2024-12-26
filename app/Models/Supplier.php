@@ -9,7 +9,7 @@ class Supplier extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id', 'name'];
+    protected $fillable = ['name'];
 
     public function products()
     {
@@ -18,6 +18,6 @@ class Supplier extends Model
 
     public function wholesale()
     {
-        return $this->belongsTo(Wholesale::class);
+        return $this->hasMany(Wholesale::class);
     }
 }

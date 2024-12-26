@@ -12,15 +12,14 @@ class Product extends Model
     protected $fillable = [
         'code',
         'name',
-        'category',
+        'category_id',
         'purchase_price',
-        'reseller_price',
-        'agent_price',
         'retail_price',
-        'distributor_price',
+        'wholesale_price',
+        'agent_price',
+        'reseller_price',
         'stock',
         'location',
-        'supplier',
     ];
 
     public function category()
@@ -31,6 +30,11 @@ class Product extends Model
     public function transactionItems()
     {
         return $this->hasMany(TransactionItem::class);
+    }
+
+    public function wholesaleItems()
+    {
+        return $this->hasMany(WholesaleItem::class);
     }
 
     public function units()

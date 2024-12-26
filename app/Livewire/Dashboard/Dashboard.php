@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Kulakan;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\Wholesale;
 use Livewire\Component;
 
 class Dashboard extends Component
@@ -17,6 +18,8 @@ class Dashboard extends Component
     public $suppliers;
     public $category = '';
     public $supplier = '';
+    public $units;
+
 
     public function render()
     {
@@ -49,9 +52,12 @@ class Dashboard extends Component
 
     public function addToCart($productId)
     {
-        $product = Product::with('suppliers')->find($productId);
+        $product = Product::with(['suppliers', 'units'])->find($productId);
 
         if ($product) {
+            $unit = $product->units->first();
+            $defaultUnit = $unit ? $unit->id : '1';
+
             $supplier = $product->suppliers()->first();
 
             $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
@@ -65,6 +71,10 @@ class Dashboard extends Component
                     'quantity' => 1,
                     'supplier_id' => $supplier->id,
                     'supplier_name' => $supplier->name,
+                    'units' => $product->units,
+                    'unit' => $defaultUnit,
+                    'unit_name' => $unit->name,
+                    'multiplier' => $unit->multiplier,
                 ];
             }
 
@@ -79,10 +89,27 @@ class Dashboard extends Component
 
     public function store()
     {
+        foreach ($this->groupedCart as $supplierId => $items) {
+            // Simpan wholesale
+            $wholesale = Wholesale::create([
+                'supplier_id' => $supplierId,
+                'date' => now(),
+            ]);
+
+            foreach ($items as $item) {
+                $wholesale->items()->create([
+                    'product_id' => $item['id'],
+                    'unit_id' => $item['unit_id'],
+                    'quantity' => $item['quantity'],
+                    'unit' => $item['unit_name'],
+                    'total_stock' => $item['quantity'] * $item['multiplier'], // Hitung stok total
+                ]);
+            }
+        }
+
         foreach ($this->cart as $item) {
-            Kulakan::create([
+            Wholesale::create([
                 'product_id' => $item['id'],
-                'quantity' => $item['quantity'],
                 'supplier' => $item['supplier'],
             ]);
 
@@ -93,5 +120,13 @@ class Dashboard extends Component
         }
 
         $this->addError('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    }
+
+    public function saveWholesale()
+    {
+
+
+
+        $this->cart = [];
     }
 }

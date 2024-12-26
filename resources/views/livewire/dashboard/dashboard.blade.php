@@ -26,9 +26,21 @@
                                             @foreach ($items as $index => $item)
                                                 <tr class="border-b-2 border-neutral">
                                                     <td class="p-1">{{ $item['name'] }}</td>
-                                                    <td class="p-1 text-end"><input type="number"
-                                                            value="{{ $item['quantity'] }}"
+                                                    <td class="p-1 text-end">
+                                                        <input type="number" value="{{ $item['quantity'] }}"
                                                             class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />
+                                                        <select wire:model="cart.{{ $index }}.unit"
+                                                            wire:change="updateQuantityOnUnitChange({{ $index }})"
+                                                            class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
+                                                            @if (empty($item['units']))
+                                                                <option value="1">PCS</option>
+                                                            @else
+                                                                @foreach ($item['units'] as $unit)
+                                                                    <option value="{{ $unit->id }}">
+                                                                        {{ $unit->name }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
                                                     </td>
                                                 </tr>
                                             @endforeach
