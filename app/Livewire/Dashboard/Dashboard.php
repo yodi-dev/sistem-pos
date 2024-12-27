@@ -18,7 +18,10 @@ class Dashboard extends Component
     public $suppliers;
     public $category = '';
     public $supplier = '';
+    public $chooseSupplier;
+    public $selectedSupplier;
     public $units;
+    public $modalSupplier = false;
 
 
     public function render()
@@ -53,38 +56,60 @@ class Dashboard extends Component
     public function addToCart($productId)
     {
         $product = Product::with(['suppliers', 'units'])->find($productId);
+        $this->modalSupplier = true;
 
-        if ($product) {
-            $unit = $product->units->first();
-            $defaultUnit = $unit ? $unit->id : '1';
 
-            $supplier = $product->suppliers()->first();
+        // while ($this->modalSupplier = true) {
+        //     //
+        // }
 
-            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
+        // $supplier = $product->suppliers()->first();
+        // $supplierId = $supplier->id;
+        // $supplierName = $supplier->name;
 
-            if ($index !== false) {
-                $this->cart[$index]['quantity'] += 1;
-            } else {
-                $this->cart[] = [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'quantity' => 1,
-                    'supplier_id' => $supplier->id,
-                    'supplier_name' => $supplier->name,
-                    'units' => $product->units,
-                    'unit' => $defaultUnit,
-                    'unit_name' => $unit->name,
-                    'multiplier' => $unit->multiplier,
-                ];
-            }
+        // if ($product && $supplier) {
+        //     $unit = $product->units->first();
 
-            $this->updateGroupedCart();
-        }
+        //     if ($unit) {
+        //         $unitId = $unit->id;
+        //         $unitName = $unit->name;
+        //         $unitMultiplier = $unit->multiplier;
+        //     } else {
+        //         $unitId = '';
+        //         $unitName = '';
+        //         $unitMultiplier = '';
+        //     }
+
+        //     $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
+
+        //     if ($index !== false) {
+        //         $this->cart[$index]['quantity'] += 1;
+        //     } else {
+        //         $this->cart[] = [
+        //             'id' => $product->id,
+        //             'name' => $product->name,
+        //             'quantity' => 1,
+        //             'supplier_id' => $supplierId,
+        //             'supplier_name' => $supplierName,
+        //             'units' => $product->units,
+        //             'unit' => $unitId,
+        //             'unit_name' => $unitName,
+        //             'multiplier' => $unitMultiplier,
+        //         ];
+        //     }
+
+        //     $this->updateGroupedCart();
+        // }
     }
 
     public function updateGroupedCart()
     {
         $this->groupedCart = collect($this->cart)->groupBy('supplier_name');
+    }
+
+    public function updatetchooseSupplier()
+    {
+        $this->selectedSupplier = collect($this->cart)->groupBy('supplier_name');
     }
 
     public function store()
@@ -122,11 +147,8 @@ class Dashboard extends Component
         $this->addError('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
 
-    public function saveWholesale()
+    public function closeModal()
     {
-
-
-
-        $this->cart = [];
+        $this->modalSupplier = false;
     }
 }

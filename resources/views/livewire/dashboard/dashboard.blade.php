@@ -7,6 +7,9 @@
         </div>
         <x-card title="Stok" class="text-neutral bg-base-200 mt-3" shadow separator>
             <x-slot:menu class="flex justify-end w-full">
+                @if ($modalSupplier)
+                    @include('livewire.dashboard.choose-supplier')
+                @endif
                 <!-- Modal Cart-->
                 <x-button class="indicator btn btn-sm btn-neutral text-base-100 rounded-md mr-5"
                     onclick="modalCart.showModal()">
@@ -15,6 +18,7 @@
                 </x-button>
                 <dialog id="modalCart" class="modal">
                     <div class="modal-box text-base-content bg-base-300 py-3">
+
                         @if (empty($groupedCart))
                             <p class="text-center text-gray-500">Belum ada data kulakan.</p>
                         @else

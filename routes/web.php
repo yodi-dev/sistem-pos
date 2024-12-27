@@ -10,6 +10,7 @@ use App\Livewire\Product\CreateProduct;
 use App\Livewire\Product\DuplikatProduct;
 use App\Livewire\Product\UnitManager;
 use App\Livewire\Product\UpdateStok;
+use App\Livewire\Supplier\SupplierManager;
 use App\Livewire\Transaction\Penjualan;
 use App\Livewire\Transaction\PrintNota;
 use App\Livewire\Transaction\TransactionManager;
@@ -42,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('redirect.print');
 
     Route::get('customers', CustomerManager::class)->name('customers');
+
+    Route::get('suppliers', SupplierManager::class)->name('suppliers');
 
     Route::get('debts', DebtTransactions::class)->name('debts');
 });
