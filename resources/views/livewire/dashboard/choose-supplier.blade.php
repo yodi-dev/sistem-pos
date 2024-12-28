@@ -13,27 +13,20 @@
                     <div class="mt-2 text-base-content">
                         <form>
                             <div class="mt-4">
-                                <label for="chooseSupplier">Supplier</label>
-                                <select wire:model.live="chooseSupplier"
+                                <label for="selectedSupplier">Supplier</label>
+                                <select wire:change="updateSelectedSupplier" wire:model="selectedSupplier"
                                     class="select select-bordered select-sm w-fit text-base-content rounded-md">
                                     <option selected value="">Supplier</option>
                                     @foreach ($suppliers as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>
-                                @error('chooseSupplier')
+                                @error('selectedSupplier')
                                     <span class="text-red-500">{{ $message }}</span>
                                 @enderror
                             </div>
                         </form>
                     </div>
-                </div>
-                <div class="flex space-x-2 w-full">
-                    <button wire:click="closeModal()"
-                        class="btn btn-outline btn-error w-1/2  hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">
-                        Kembali</button>
-                    <button wire:click="addSupplier"
-                        class="btn w-1/2 bg-neutral hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">Simpan</button>
                 </div>
             </div>
         </div>

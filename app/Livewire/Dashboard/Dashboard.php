@@ -2,12 +2,13 @@
 
 namespace App\Livewire\Dashboard;
 
-use App\Models\Category;
 use App\Models\Kulakan;
 use App\Models\Product;
+use Livewire\Component;
+use App\Models\Category;
 use App\Models\Supplier;
 use App\Models\Wholesale;
-use Livewire\Component;
+use Livewire\Attributes\On;
 
 class Dashboard extends Component
 {
@@ -18,10 +19,14 @@ class Dashboard extends Component
     public $suppliers;
     public $category = '';
     public $supplier = '';
-    public $chooseSupplier;
+    public $supplierId;
+    public $supplierName;
+    public $selectedProduct;
     public $selectedSupplier;
     public $units;
     public $modalSupplier = false;
+
+
 
 
     public function render()
@@ -53,53 +58,57 @@ class Dashboard extends Component
         $this->suppliers = Supplier::all();
     }
 
+    public function selectProduct($productId)
+    {
+        $product = Product::with('suppliers')->find($productId);
+
+        if ($product->suppliers->isEmpty()) {
+            // Jika tidak ada supplier, tampilkan modal
+            $this->selectedProduct = $productId;
+            $this->modalSupplier = true;
+        } else {
+            // Langsung masukkan ke cart
+            $this->addToCart($productId);
+        }
+    }
+
     public function addToCart($productId)
     {
         $product = Product::with(['suppliers', 'units'])->find($productId);
-        $this->modalSupplier = true;
 
+        if ($product) {
+            $unit = $product->units->first();
 
-        // while ($this->modalSupplier = true) {
-        //     //
-        // }
+            if ($unit) {
+                $unitId = $unit->id;
+                $unitName = $unit->name;
+                $unitMultiplier = $unit->multiplier;
+            } else {
+                $unitId = '';
+                $unitName = '';
+                $unitMultiplier = '';
+            }
 
-        // $supplier = $product->suppliers()->first();
-        // $supplierId = $supplier->id;
-        // $supplierName = $supplier->name;
+            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $this->supplierId);
 
-        // if ($product && $supplier) {
-        //     $unit = $product->units->first();
+            if ($index !== false) {
+                $this->cart[$index]['quantity'] += 1;
+            } else {
+                $this->cart[] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'quantity' => 1,
+                    'supplier_id' => $product->suppliers()->first()->id ?? "Tidak ada supplier",
+                    'supplier_name' => $product->suppliers()->first()->name ?? "Tidak ada supplier",
+                    'units' => $product->units,
+                    'unit' => $unitId,
+                    'unit_name' => $unitName,
+                    'multiplier' => $unitMultiplier,
+                ];
+            }
 
-        //     if ($unit) {
-        //         $unitId = $unit->id;
-        //         $unitName = $unit->name;
-        //         $unitMultiplier = $unit->multiplier;
-        //     } else {
-        //         $unitId = '';
-        //         $unitName = '';
-        //         $unitMultiplier = '';
-        //     }
-
-        //     $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
-
-        //     if ($index !== false) {
-        //         $this->cart[$index]['quantity'] += 1;
-        //     } else {
-        //         $this->cart[] = [
-        //             'id' => $product->id,
-        //             'name' => $product->name,
-        //             'quantity' => 1,
-        //             'supplier_id' => $supplierId,
-        //             'supplier_name' => $supplierName,
-        //             'units' => $product->units,
-        //             'unit' => $unitId,
-        //             'unit_name' => $unitName,
-        //             'multiplier' => $unitMultiplier,
-        //         ];
-        //     }
-
-        //     $this->updateGroupedCart();
-        // }
+            $this->updateGroupedCart();
+        }
     }
 
     public function updateGroupedCart()
@@ -107,10 +116,40 @@ class Dashboard extends Component
         $this->groupedCart = collect($this->cart)->groupBy('supplier_name');
     }
 
-    public function updatetchooseSupplier()
+    // public function updateSelectedSupplier()
+    // {
+    //     $supplier = Supplier::find($this->selectedSupplier);
+    //     $this->supplierId = $supplier->id;
+    //     $this->supplierName = $supplier->name;
+
+    //     $this->addToCart($this->selectedProduct);
+
+    //     $this->closeModal();
+    // }
+
+    public function updateSelectedSupplier()
     {
-        $this->selectedSupplier = collect($this->cart)->groupBy('supplier_name');
+        // Pastikan supplier dipilih
+        if (!$this->selectedSupplier) {
+            return; // Berhenti jika tidak ada supplier yang dipilih
+        }
+
+        $supplier = Supplier::find($this->selectedSupplier);
+        $product = Product::find($this->selectedProduct);
+
+        // Cek apakah supplier sudah terhubung
+        if (!$product->suppliers->contains($supplier->id)) {
+            $product->suppliers()->attach($supplier->id);
+        }
+
+        // Tambahkan ke cart
+        $this->addToCart($this->selectedProduct);
+
+        // Reset data dan tutup modal
+        $this->reset(['selectedProduct', 'selectedSupplier']);
+        $this->closeModal();
     }
+
 
     public function store()
     {
@@ -147,6 +186,7 @@ class Dashboard extends Component
         $this->addError('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
 
+    #[On('closeModal')]
     public function closeModal()
     {
         $this->modalSupplier = false;

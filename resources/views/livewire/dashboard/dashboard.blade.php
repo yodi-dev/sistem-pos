@@ -90,7 +90,7 @@
 
             <div class="grid grid-cols-4 gap-3 max-h-96 overflow-y-auto mb-5 p-2">
                 @foreach ($products as $product)
-                    <div wire:click="addToCart({{ $product->id }})"
+                    <div wire:click="selectProduct({{ $product->id }})"
                         class="card bg-base-100 shadow-xl text-base-content">
                         <div class="card-body items-center justify-center p-5">
                             <p class="text-lg font-medium">{{ $product->name }}</p>
