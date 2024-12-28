@@ -14,7 +14,8 @@
                 <x-button class="indicator btn btn-sm btn-neutral text-base-100 rounded-md mr-5"
                     onclick="modalCart.showModal()">
                     <x-icon name="o-shopping-cart" />
-                    <x-badge value="{{ count($cart) }}" class="badge-accent text-base-content indicator-item" />
+                    <x-badge value="{{ array_sum(array_column($cart, 'quantity')) }}"
+                        class="badge-accent text-base-content indicator-item" />
                 </x-button>
                 <dialog id="modalCart" class="modal">
                     <div class="modal-box text-base-content bg-base-300 py-3">
