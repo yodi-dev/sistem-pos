@@ -17,7 +17,7 @@
                                 <select wire:change="updateSelectedSupplier" wire:model="selectedSupplier"
                                     class="select select-bordered select-sm w-fit text-base-content rounded-md">
                                     <option selected value="">Supplier</option>
-                                    @foreach ($suppliers as $item)
+                                    @foreach ($chooseSuppliers as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
                                 </select>

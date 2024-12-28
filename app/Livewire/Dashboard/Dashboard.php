@@ -17,17 +17,14 @@ class Dashboard extends Component
     public $groupedCart;
     public $categories;
     public $suppliers;
+    public $chooseSuppliers;
     public $category = '';
     public $supplier = '';
     public $supplierId;
-    public $supplierName;
     public $selectedProduct;
     public $selectedSupplier;
     public $units;
     public $modalSupplier = false;
-
-
-
 
     public function render()
     {
@@ -61,9 +58,16 @@ class Dashboard extends Component
     public function selectProduct($productId)
     {
         $product = Product::with('suppliers')->find($productId);
+        // dd($product->suppliers->count());
 
         if ($product->suppliers->isEmpty()) {
             // Jika tidak ada supplier, tampilkan modal
+            $this->chooseSuppliers = Supplier::all();
+            $this->selectedProduct = $productId;
+            $this->modalSupplier = true;
+        } else if ($product->suppliers->count() > 1) {
+            // Jika tidak ada supplier, tampilkan modal
+            $this->chooseSuppliers = $product->suppliers;
             $this->selectedProduct = $productId;
             $this->modalSupplier = true;
         } else {
@@ -78,6 +82,7 @@ class Dashboard extends Component
 
         if ($product) {
             $unit = $product->units->first();
+            $supplier = $product->suppliers->first();
 
             if ($unit) {
                 $unitId = $unit->id;
@@ -89,7 +94,7 @@ class Dashboard extends Component
                 $unitMultiplier = '';
             }
 
-            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $this->supplierId);
+            $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
 
             if ($index !== false) {
                 $this->cart[$index]['quantity'] += 1;
@@ -98,8 +103,8 @@ class Dashboard extends Component
                     'id' => $product->id,
                     'name' => $product->name,
                     'quantity' => 1,
-                    'supplier_id' => $product->suppliers()->first()->id ?? "Tidak ada supplier",
-                    'supplier_name' => $product->suppliers()->first()->name ?? "Tidak ada supplier",
+                    'supplier_id' => $supplier->id ?? "Tidak ada supplier",
+                    'supplier_name' => $supplier->name ?? "Tidak ada supplier",
                     'units' => $product->units,
                     'unit' => $unitId,
                     'unit_name' => $unitName,
@@ -115,17 +120,6 @@ class Dashboard extends Component
     {
         $this->groupedCart = collect($this->cart)->groupBy('supplier_name');
     }
-
-    // public function updateSelectedSupplier()
-    // {
-    //     $supplier = Supplier::find($this->selectedSupplier);
-    //     $this->supplierId = $supplier->id;
-    //     $this->supplierName = $supplier->name;
-
-    //     $this->addToCart($this->selectedProduct);
-
-    //     $this->closeModal();
-    // }
 
     public function updateSelectedSupplier()
     {
