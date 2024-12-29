@@ -1,10 +1,12 @@
 <div>
+    <div wire:loading.delay>Loading...</div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
         <div class="bg-base-200 dark:bg-base-100 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-primary-content dark:text-base-content">
                 {{ __('Selamat Datang!') }}
             </div>
         </div>
+
         <x-card title="Stok" class="text-neutral bg-base-200 mt-3" shadow separator>
             <x-slot:menu class="flex justify-end w-full">
                 @if ($modalSupplier)
@@ -24,12 +26,14 @@
                             <p class="text-center text-gray-500">Belum ada data kulakan.</p>
                         @else
                             @foreach ($groupedCart as $supplier => $items)
-                                <div class="border-1 bg-base-200 p-3 rounded-md my-3">
+                                <div wire:key="grouped-cart-{{ $supplier }}"
+                                    class="border-1 bg-base-200 p-3 rounded-md my-3">
                                     <h3 class="bg-base-300 w-fit px-2 py-1 rounded-md">{{ $supplier }}</h3>
                                     <table class="w-full">
                                         <tbody>
                                             @foreach ($items as $index => $item)
-                                                <tr class="border-b-2 border-neutral">
+                                                <tr wire:key="cart-item-{{ $index }}"
+                                                    class="border-b-2 border-neutral">
                                                     <td class="p-1">{{ $item['name'] }}</td>
                                                     <td class="p-1 text-end">
                                                         <input type="number" value="{{ $item['quantity'] }}"
@@ -47,8 +51,14 @@
                                                             @endif
                                                         </select>
                                                     </td>
+                                                    <td class="p-2">
+                                                        <button wire:click="removeFromCart({{ $item['id'] }})">
+                                                            <x-icon name="s-trash" class="text-error" />
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             @endforeach
+
                                         </tbody>
                                     </table>
                                     <div class="flex justify-end mt-3">
@@ -112,4 +122,9 @@
             </div>
         </x-card>
     </div>
+    <script>
+        window.addEventListener('close-modal', () => {
+            document.getElementById('modalCart').close();
+        });
+    </script>
 </div>

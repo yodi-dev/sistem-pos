@@ -17,6 +17,8 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+
 </head>
 
 <body class="min-h-screen font-sans antialiased bg-base-300 dark:bg-base-200">

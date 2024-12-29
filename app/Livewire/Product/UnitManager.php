@@ -9,7 +9,7 @@ use Livewire\Component;
 class UnitManager extends Component
 {
     public $product, $productId;
-    public $unitId, $unit_name, $quantity_per_unit;
+    public $unitId, $unit_name, $multiplier;
     public $units = [];
 
     public function render()
@@ -27,13 +27,13 @@ class UnitManager extends Component
 
     protected $rules = [
         'unit_name' => 'required|string|max:50',
-        'quantity_per_unit' => 'required|integer|min:1',
+        'multiplier' => 'required|integer|min:1',
     ];
 
     public function fillDefaultValues($name, $quantity)
     {
         $this->unit_name = $name;
-        $this->quantity_per_unit = $quantity;
+        $this->multiplier = $quantity;
     }
 
     public function deleteUnit($unitId)
@@ -49,7 +49,7 @@ class UnitManager extends Component
     {
         $this->unitId = null;
         $this->unit_name = '';
-        $this->quantity_per_unit = '';
+        $this->multiplier = '';
     }
 
     public function saveUnit()
@@ -61,7 +61,7 @@ class UnitManager extends Component
             [
                 'product_id' => $this->productId,
                 'name' => $this->unit_name,
-                'qty' => $this->quantity_per_unit,
+                'multiplier' => $this->multiplier,
             ]
         );
 

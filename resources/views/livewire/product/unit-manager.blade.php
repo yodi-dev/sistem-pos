@@ -26,7 +26,7 @@
 
                             <div class="mb-3">
                                 <label>Jumlah per Unit</label>
-                                <input type="number" wire:model.debounce.500ms="quantity_per_unit"
+                                <input type="number" wire:model.debounce.500ms="multiplier"
                                     class="form-control w-full p-2 border rounded">
                             </div>
 
@@ -65,7 +65,7 @@
                                             <tr :key="$item - > id"
                                                 class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                                 <td>{{ $item->name }}</td>
-                                                <td class="flex justify-center">{{ $item->qty }}
+                                                <td class="flex justify-center">{{ $item->multiplier }}
                                                     <button wire:click="deleteUnit({{ $item->id }})">
                                                         <x-icon name="s-trash" class="text-error ml-5" />
                                                     </button>

@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Dashboard;
 
-use App\Models\Kulakan;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
@@ -142,6 +141,26 @@ class Dashboard extends Component
         // Reset data dan tutup modal
         $this->reset(['selectedProduct', 'selectedSupplier']);
         $this->closeModal();
+    }
+
+    public function removeFromCart($id)
+    {
+        // $this->cart = session()->get('cart', []);
+        $index = collect($this->cart)->search(fn($item) => $item['id'] === $id);
+
+        // dd($id);
+        if ($index !== false) {
+            unset($this->cart[$index]);
+            $this->cart = array_values($this->cart);
+            // session()->put('cart', $this->cart);
+        }
+
+        if (empty($this->cart)) {
+            $this->dispatch('close-modal');
+        }
+
+        // Perbarui groupedCart
+        $this->updateGroupedCart();
     }
 
 
