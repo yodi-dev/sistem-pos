@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\Supplier;
 use App\Models\Wholesale;
 use Livewire\Attributes\On;
+use App\Models\WholesaleItem;
+use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Component
 {
@@ -105,7 +107,7 @@ class Dashboard extends Component
                     'supplier_id' => $supplier->id ?? "Tidak ada supplier",
                     'supplier_name' => $supplier->name ?? "Tidak ada supplier",
                     'units' => $product->units,
-                    'unit' => $unitId,
+                    'unit_id' => $unitId,
                     'unit_name' => $unitName,
                     'multiplier' => $unitMultiplier,
                 ];
@@ -163,40 +165,53 @@ class Dashboard extends Component
         $this->updateGroupedCart();
     }
 
-
     public function store()
     {
-        foreach ($this->groupedCart as $supplierId => $items) {
-            // Simpan wholesale
-            $wholesale = Wholesale::create([
-                'supplier_id' => $supplierId,
-                'date' => now(),
-            ]);
+        DB::beginTransaction();
 
-            foreach ($items as $item) {
-                $wholesale->items()->create([
-                    'product_id' => $item['id'],
-                    'unit_id' => $item['unit_id'],
-                    'quantity' => $item['quantity'],
-                    'unit' => $item['unit_name'],
-                    'total_stock' => $item['quantity'] * $item['multiplier'], // Hitung stok total
+        try {
+            foreach ($this->groupedCart as $supplierName => $items) {
+                $supplier = Supplier::where('name', $supplierName)->first();
+
+                if (!$supplier) {
+                    throw new \Exception("Supplier $supplierName tidak ditemukan.");
+                }
+
+                $supplierId = $supplier->id;
+                // Simpan wholesale
+                $wholesale = Wholesale::create([
+                    'supplier_id' => $supplierId,
+                    'date' => now(),
                 ]);
+
+                $itemsData = [];
+                foreach ($items as $item) {
+                    $itemsData[] = [
+                        'wholesale_id' => $wholesale->id,
+                        'product_id' => $item['id'],
+                        'quantity' => $item['quantity'],
+                        'unit' => $item['unit_name'],
+                        'total_stock' => $item['quantity'] * $item['multiplier'], // Hitung stok total
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+                WholesaleItem::insert($itemsData);
             }
+
+            DB::commit();
+            $this->resetCart();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
+    }
 
-        foreach ($this->cart as $item) {
-            Wholesale::create([
-                'product_id' => $item['id'],
-                'supplier' => $item['supplier'],
-            ]);
-
-            // mengurangi stok produk
-            $product = Product::find($item['id']);
-            $product->stock += $item['quantity'];
-            $product->save();
-        }
-
-        $this->addError('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    private function resetCart()
+    {
+        $this->cart = [];
+        $this->groupedCart = [];
     }
 
     #[On('closeModal')]

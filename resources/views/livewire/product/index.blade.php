@@ -53,10 +53,14 @@
                                     {{ number_format($product->retail_price, 0, ',', '.') }}</td>
                                 <td wire:click="showDetails({{ $product->id }})">{{ $product->stock }}</td>
                                 <td wire:navigate href="{{ route('unit.product', $product->id) }}">
-                                    @foreach ($product->units as $unit)
-                                        <span
-                                            class="badge badge-accent py-3 px-4 my-0.5 text-base-content">{{ $unit->name }}</span>
-                                    @endforeach
+                                    @if ($product->units->isEmpty())
+                                        <p class="text-xs text-gray-500">Klik untuk menambahkan satuan.</p>
+                                    @else
+                                        @foreach ($product->units as $unit)
+                                            <span
+                                                class="badge badge-accent py-3 px-4 my-0.5 text-base-content">{{ $unit->name }}</span>
+                                        @endforeach
+                                    @endif
                                 </td>
                                 <td class="flex justify-center">
                                     <a wire:navigate href="{{ route('barcode.product', $product->id) }}"

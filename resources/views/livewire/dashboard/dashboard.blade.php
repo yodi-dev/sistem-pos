@@ -1,5 +1,4 @@
 <div>
-    <div wire:loading.delay>Loading...</div>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
         <div class="bg-base-200 dark:bg-base-100 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-primary-content dark:text-base-content">
@@ -20,8 +19,7 @@
                         class="badge-accent text-base-content indicator-item" />
                 </x-button>
                 <dialog id="modalCart" class="modal">
-                    <div class="modal-box text-base-content bg-base-300 py-3">
-
+                    <div class="modal-box text-base-content bg-base-300 py-3 max-w-2xl">
                         @if (empty($groupedCart))
                             <p class="text-center text-gray-500">Belum ada data kulakan.</p>
                         @else
@@ -38,8 +36,7 @@
                                                     <td class="p-1 text-end">
                                                         <input type="number" value="{{ $item['quantity'] }}"
                                                             class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />
-                                                        <select wire:model="cart.{{ $index }}.unit"
-                                                            wire:change="updateQuantityOnUnitChange({{ $index }})"
+                                                        <select wire:model="{{ $item['unit_id'] }}"
                                                             class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
                                                             @if (empty($item['units']))
                                                                 <option value="1">PCS</option>
@@ -61,12 +58,12 @@
 
                                         </tbody>
                                     </table>
-                                    <div class="flex justify-end mt-3">
-                                        <button
-                                            class="btn btn-sm btn-neutral rounded-md w-fit text-base-100">Simpan</button>
-                                    </div>
                                 </div>
                             @endforeach
+                            <div class="flex justify-end mt-3">
+                                <button wire:click="store"
+                                    class="btn btn-sm btn-neutral rounded-md w-full text-base-100">Simpan</button>
+                            </div>
                         @endif
                     </div>
                     <form method="dialog" class="modal-backdrop">
@@ -78,7 +75,7 @@
                 <label class="text-base-content">Filter:</label>
                 <select wire:model.live="category"
                     class="select select-bordered select-sm w-fit text-base-content rounded-md">
-                    <option selected value="">Kategori</option>
+                    <option selected value="">Semua Kategori</option>
                     @foreach ($categories as $item)
                         <option>{{ $item->name }}</option>
                     @endforeach
@@ -87,31 +84,32 @@
                 {{-- filter supplier --}}
                 <select wire:model.live="supplier"
                     class="select select-bordered select-sm w-fit text-base-content rounded-md">
-                    <option selected value="">Supplier</option>
+                    <option selected value="">Semua Supplier</option>
                     @foreach ($suppliers as $item)
                         <option>{{ $item->name }}</option>
                     @endforeach
                 </select>
 
                 {{-- filter minimum --}}
-                <label class="text-base-content">Minimum:</label>
+                <label class="text-base-content">Stok Minimum:</label>
                 <input wire:model.live="minimum" type="number"
                     class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />
             </x-slot:menu>
 
-            <div class="grid grid-cols-4 gap-3 max-h-96 overflow-y-auto mb-5 p-2">
+            <div class="grid grid-cols-5 gap-3 max-h-96 overflow-y-auto mb-5 p-2">
                 @foreach ($products as $product)
                     <div wire:click="selectProduct({{ $product->id }})"
-                        class="card bg-base-100 shadow-xl text-base-content">
-                        <div class="card-body p-5">
-                            <div class="card-actions justify-end">
+                        class="card bg-base-100 hover:bg-base-300 shadow-xl text-base-content ">
+                        <div class="card-body p-4 items-center justify-center">
+                            <div class="card-actions">
                                 @if (collect($cart)->contains(fn($item) => $item['id'] === $product->id))
                                     <x-heroicon-o-check-circle class="w-9 h-9 text-neutral" />
                                 @endif
                             </div>
-
-                            <p class="text-lg font-medium">{{ $product->name }}</p>
-                            <p class="text-sm">Stok saat ini : {{ $product->stock }}</p>
+                            <ul class="text-center">
+                                <li class="text-md font-medium ">{{ $product->name }}</li>
+                                <li class="text-sm ">Stok saat ini : {{ $product->stock }}</li>
+                            </ul>
                         </div>
                     </div>
                 @endforeach
