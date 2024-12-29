@@ -14,7 +14,7 @@ class Dashboard extends Component
 {
     public $minimum = null;
     public $cart = [];
-    public $groupedCart;
+    public $groupedCart = [];
     public $categories;
     public $suppliers;
     public $chooseSuppliers;

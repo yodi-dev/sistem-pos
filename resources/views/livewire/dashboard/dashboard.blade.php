@@ -93,7 +93,13 @@
                 @foreach ($products as $product)
                     <div wire:click="selectProduct({{ $product->id }})"
                         class="card bg-base-100 shadow-xl text-base-content">
-                        <div class="card-body items-center justify-center p-5">
+                        <div class="card-body p-5">
+                            <div class="card-actions justify-end">
+                                @if (collect($cart)->contains(fn($item) => $item['id'] === $product->id))
+                                    <x-heroicon-o-check-circle class="w-9 h-9 text-neutral" />
+                                @endif
+                            </div>
+
                             <p class="text-lg font-medium">{{ $product->name }}</p>
                             <p class="text-sm">Stok saat ini : {{ $product->stock }}</p>
                         </div>
