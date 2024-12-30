@@ -116,7 +116,8 @@
                                         </select>
                                     </td>
                                     <td class="p-2">
-                                        <input type="number" value="{{ $item['quantity'] }}"
+                                        <input type="number" wire:model.live="cart.{{ $index }}.quantity"
+                                            value="{{ $item['quantity'] }}"
                                             class="w-16 p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
                                             min="1" disabled>
                                     </td>

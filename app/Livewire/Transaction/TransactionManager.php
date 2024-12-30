@@ -64,14 +64,40 @@ class TransactionManager extends Component
             ];
         }
 
-        $this->calculateSubtotal($index ?? count($this->cart) - 1);
         $this->updateQuantityOnUnitChange($index);
         $this->updateTotal();
+        $this->calculateSubtotal($index ?? count($this->cart) - 1);
 
         $this->dispatch('focusQty', count($this->cart) - 1);
 
         session()->put('cart', $this->cart);
         $this->resetSearch();
+    }
+
+    public function updateQuantityOnUnitChange($index)
+    {
+        $selectedUnitId = $this->cart[$index]['unit'];
+        $subQuantity = $this->cart[$index]['sub_quantity'];
+        $unit = Unit::find($selectedUnitId);
+
+        if ($unit) {
+            $this->cart[$index]['quantity'] = $subQuantity * $unit->multiplier;
+            // $this->calculateSubtotal($index);
+            $this->updateQuantity($index, $subQuantity);
+        }
+    }
+
+    public function updateQuantity($index, $quantity)
+    {
+        $selectedUnitId = $this->cart[$index]['unit'];
+        $unit = Unit::find($selectedUnitId);
+
+        if (empty($unit)) {
+            $this->cart[$index]['quantity'] = $quantity * $selectedUnitId;
+        } else {
+            $this->cart[$index]['quantity'] = $quantity * $unit->multiplier;
+        }
+        $this->calculateSubtotal($index);
     }
 
     public function removeFromCart($id)
@@ -222,31 +248,7 @@ class TransactionManager extends Component
     }
     // endshorcut
 
-    public function updateQuantityOnUnitChange($index)
-    {
-        $selectedUnitId = $this->cart[$index]['unit'];
-        $subQuantity = $this->cart[$index]['sub_quantity'];
-        $unit = Unit::find($selectedUnitId);
 
-        if ($unit) {
-            $this->cart[$index]['quantity'] = $subQuantity * $unit->qty;
-            // $this->calculateSubtotal($index);
-            $this->updateQuantity($index, $subQuantity);
-        }
-    }
-
-    public function updateQuantity($index, $quantity)
-    {
-        $selectedUnitId = $this->cart[$index]['unit'];
-        $unit = Unit::find($selectedUnitId);
-
-        if (empty($unit)) {
-            $this->cart[$index]['quantity'] = $quantity * $selectedUnitId;
-        } else {
-            $this->cart[$index]['quantity'] = $quantity * $unit->qty;
-        }
-        $this->calculateSubtotal($index);
-    }
 
     private function calculateSubtotal($index)
     {

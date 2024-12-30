@@ -21,6 +21,7 @@
                             <th class="p-3 border-r">Total Utang</th>
                             <th class="p-3 border-r">Tanggal</th>
                             <th class="p-3 border-r">Bayar</th>
+                            <th class="p-3 border-r">Lunasi</th>
                             <th class="p-3 border-r">Status</th>
                         </tr>
                     </thead>
@@ -36,6 +37,9 @@
                                         class="w-full p-1 text-black dark:text-white bg-base-200 dark:bg-gray-700 border rounded"
                                         wire:change="payDebt({{ $transaction->id }}, {{ $index }})"
                                         placeholder="Masukkan nominal">
+
+                                </td>
+                                <td>
                                     <button wire:click="lunasi({{ $transaction->id }})"
                                         class="btn btn-sm btn-success text-base-100 rounded-md">
                                         <x-icon name="c-check" />

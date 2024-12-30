@@ -52,11 +52,11 @@ class UpdateStok extends Component
         }
     }
 
-    public function updateCartDistributor($productId, $distributor_price)
+    public function updateCartWholesale($productId, $wholesale_price)
     {
-        $distributor_price = str_replace('.', '', $distributor_price);
+        $wholesale_price = str_replace('.', '', $wholesale_price);
         if (isset($this->cart[$productId])) {
-            $this->cart[$productId]['distributor_price'] = $distributor_price;
+            $this->cart[$productId]['wholesale_price'] = $wholesale_price;
         }
     }
 
@@ -77,7 +77,7 @@ class UpdateStok extends Component
                 'name' => $product->name,
                 'purchase_price' => $product->purchase_price,
                 'retail_price' => $product->retail_price,
-                'distributor_price' => $product->distributor_price,
+                'wholesale_price' => $product->wholesale_price,
                 'stock' => 0,
                 'checked' => false,
                 'print_barcode' => false,
@@ -107,13 +107,19 @@ class UpdateStok extends Component
             $product->stock += $item['stock'];
             $product->purchase_price = $item['purchase_price'];
             $product->retail_price = $item['retail_price'];
-            $product->distributor_price = $item['distributor_price'];
+            $product->wholesale_price = $item['wholesale_price'];
             $product->save();
 
             // Proses cetak barcode jika "print_barcode"
             if ($item['print_barcode']) {
                 $barcodes = [];
                 $barcodeGenerated = true;
+
+                // Pastikan $product->code tidak kosong
+                if (empty($product->code)) {
+                    // Berikan pesan error atau abaikan produk
+                    return session()->flash('error', 'Gagal mencetak barcode, kode produk belum ada.');
+                }
 
                 // Generate barcode sebanyak stok
                 for ($i = 0; $i < $item['stock']; $i++) {

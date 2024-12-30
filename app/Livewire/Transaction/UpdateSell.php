@@ -9,7 +9,7 @@ use App\Models\Transaction;
 class UpdateSell extends Component
 {
     public $customers;
-    public $customer_id, $payment_method, $total_price, $total_paid, $change_due, $utang, $status, $date;
+    public $customer_id, $payment_method, $total_price, $total_paid, $change_due, $debt, $debt_status, $date;
     public $transaction_id;
     public $searchCustomer = '';
 
@@ -32,8 +32,8 @@ class UpdateSell extends Component
         $this->total_price = number_format($transaction->total_price, 0, ',', '.');
         $this->total_paid = number_format($transaction->total_paid, 0, ',', '.');
         $this->change_due = number_format($transaction->change_due, 0, ',', '.');
-        $this->utang = number_format($transaction->utang, 0, ',', '.');
-        $this->status = $transaction->status;
+        $this->debt = number_format($transaction->debt, 0, ',', '.');
+        $this->debt_status = $transaction->debt_status;
         $this->date = $transaction->date->format('Y-m-d');
     }
 
@@ -48,7 +48,7 @@ class UpdateSell extends Component
         $this->total_price = str_replace('.', '', $this->total_price);
         $this->total_paid = str_replace('.', '', $this->total_paid);
         $this->change_due = str_replace('.', '', $this->change_due);
-        $this->utang = str_replace('.', '', $this->utang);
+        $this->debt = str_replace('.', '', $this->debt);
 
 
         Transaction::where('id', $this->transaction_id)->update([
@@ -57,8 +57,8 @@ class UpdateSell extends Component
             'total_price' => $this->total_price,
             'total_paid' => $this->total_paid,
             'change_due' => $this->change_due,
-            'utang' => $this->utang,
-            'status' => $this->status,
+            'debt' => $this->debt,
+            'debt_status' => $this->debt_status,
             'date' => $this->date,
         ]);
 
@@ -77,8 +77,8 @@ class UpdateSell extends Component
         $this->total_price = '';
         $this->total_paid = '';
         $this->change_due = '';
-        $this->utang = '';
-        $this->status = '';
+        $this->debt = '';
+        $this->debt_status = '';
         $this->date = '';
     }
 
@@ -99,9 +99,9 @@ class UpdateSell extends Component
         $this->change_due = number_format($this->change_due, 0, ',', '.');
     }
 
-    public function updatedUtang()
+    public function updatedDebt()
     {
-        $this->utang = number_format($this->utang, 0, ',', '.');
+        $this->debt = number_format($this->debt, 0, ',', '.');
     }
 
     public function updatedSearchCustomer()

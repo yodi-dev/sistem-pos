@@ -93,9 +93,9 @@
                                 <div class="label">
                                     <div class="label-text">Utang</div>
                                 </div>
-                                <input type="text" wire:model.change="utang"
+                                <input type="text" wire:model.change="debt"
                                     class="w-full text-black p-2 border rounded">
-                                @error('utang')
+                                @error('debt')
                                     <div class="label">
                                         <span class="label-text-alt">{{ $message }}</span>
                                     </div>
@@ -106,8 +106,14 @@
                                 <div class="label">
                                     <div class="label-text">Status Utang</div>
                                 </div>
-                                <input type="text" wire:model="status" class="w-full text-black p-2 border rounded">
-                                @error('status')
+                                <select class="w-full text-base-content p-2 border rounded" wire:model="debt_status">
+                                    <option {{ $payment_method == 'Lunas' ? 'selected' : '' }} value="Lunas">Lunas
+                                    </option>
+                                    <option {{ $payment_method == 'Belum Lunas' ? 'selected' : '' }}
+                                        value="Belum Lunas">Belum Lunas
+                                    </option>
+                                </select>
+                                @error('debt_status')
                                     <div class="label">
                                         <span class="label-text-alt">{{ $message }}</span>
                                     </div>

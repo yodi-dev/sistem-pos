@@ -31,11 +31,11 @@
                                     <div class="label-text">Kategori</div>
                                 </div>
                                 <select id="category" class="w-full text-black p-2 border rounded"
-                                    wire:model="category_name">
+                                    wire:model="category_id">
                                     <option>Pilih kategori</option>
                                     @foreach ($categories as $category)
-                                        <option {{ $category->name == $category_name ? 'selected' : '' }}
-                                            value="{{ $category->name }}">{{ $category->name }}
+                                        <option {{ $category->id == $category_id ? 'selected' : '' }}
+                                            value="{{ $category->id }}">{{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -56,17 +56,17 @@
                                 <input type="text" wire:model.change="retail_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
+                        </div>
+
+                        <div class="w-1/2">
                             <div>
                                 <div class="label">
                                     <div class="label-text">Harga Grosir</div>
                                 </div>
-                                <input type="text" wire:model.change="distributor_price"
+                                <input type="text" wire:model.change="wholesale_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
 
-                        </div>
-
-                        <div class="w-1/2">
                             <div>
                                 <div class="label">
                                     <div class="label-text">Harga Reseller</div>
@@ -93,14 +93,6 @@
                                     <div class="label-text">Lokasi</div>
                                 </div>
                                 <input type="text" wire:model="location"
-                                    class="w-full text-black p-2 border rounded">
-                            </div>
-
-                            <div>
-                                <div class="label">
-                                    <div class="label-text">Supplier</div>
-                                </div>
-                                <input type="text" wire:model="supplier"
                                     class="w-full text-black p-2 border rounded">
                             </div>
                         </div>
