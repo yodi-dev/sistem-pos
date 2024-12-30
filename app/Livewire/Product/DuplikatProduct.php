@@ -27,11 +27,11 @@ class DuplikatProduct extends Component
         $this->name = $product->name;
         $this->name .= " - copy";
         $this->category_id = $product->category->id;
-        $this->purchase_price = $product->purchase_price;
-        $this->retail_price = $product->retail_price;
-        $this->reseller_price = $product->reseller_price;
-        $this->agent_price = $product->agent_price;
-        $this->wholesale_price = $product->wholesale_price;
+        $this->purchase_price = number_format($product->purchase_price, 0, ',', '.');
+        $this->retail_price = number_format($product->retail_price, 0, ',', '.');
+        $this->wholesale_price = number_format($product->wholesale_price, 0, ',', '.');
+        $this->agent_price = number_format($product->agent_price, 0, ',', '.');
+        $this->reseller_price = number_format($product->reseller_price, 0, ',', '.');
         $this->stock = $product->stock;
         $this->location = $product->location;
     }
@@ -46,10 +46,16 @@ class DuplikatProduct extends Component
             'code.unique' => 'kode sudah ada',
         ]);
 
+        $this->purchase_price ? $this->purchase_price = str_replace('.', '', $this->purchase_price) : 0;
+        $this->retail_price ? $this->retail_price = str_replace('.', '', $this->retail_price) : 0;
+        $this->wholesale_price ? $this->wholesale_price = str_replace('.', '', $this->wholesale_price) : 0;
+        $this->agent_price ? $this->agent_price = str_replace('.', '', $this->agent_price) : 0;
+        $this->reseller_price ? $this->reseller_price = str_replace('.', '', $this->reseller_price) : 0;
+
         Product::Create([
             'code' => $this->code,
             'name' => $this->name,
-            'category' => $this->category_name,
+            'category_id' => $this->category_id,
             'purchase_price' => $this->purchase_price,
             'retail_price' => $this->retail_price,
             'reseller_price' => $this->reseller_price,

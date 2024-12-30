@@ -44,7 +44,7 @@
                                 <div class="label">
                                     <div class="label-text">Harga Beli</div>
                                 </div>
-                                <input type="text" wire:model="purchase_price"
+                                <input type="text" wire:model.change="purchase_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
 
@@ -52,7 +52,7 @@
                                 <div class="label">
                                     <div class="label-text">Harga Ecer</div>
                                 </div>
-                                <input type="text" wire:model="retail_price"
+                                <input type="text" wire:model.change="retail_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                                 <div class="label">
                                     <div class="label-text">Harga Grosir</div>
                                 </div>
-                                <input type="text" wire:model="distributor_price"
+                                <input type="text" wire:model.change="wholesale_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
 
@@ -70,7 +70,7 @@
                                 <div class="label">
                                     <div class="label-text">Harga Reseller</div>
                                 </div>
-                                <input type="text" wire:model="reseller_price"
+                                <input type="text" wire:model.change="reseller_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
 
@@ -78,7 +78,7 @@
                                 <div class="label">
                                     <div class="label-text">Harga Agen</div>
                                 </div>
-                                <input type="text" wire:model="agent_price"
+                                <input type="text" wire:model.change="agent_price"
                                     class="w-full text-black p-2 border rounded">
                             </div>
 
