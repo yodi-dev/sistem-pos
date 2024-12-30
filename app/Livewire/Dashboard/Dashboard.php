@@ -212,6 +212,7 @@ class Dashboard extends Component
     {
         $this->cart = [];
         $this->groupedCart = [];
+        $this->dispatch('close-modal');
     }
 
     #[On('closeModal')]

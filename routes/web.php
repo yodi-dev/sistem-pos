@@ -15,6 +15,7 @@ use App\Livewire\Transaction\Penjualan;
 use App\Livewire\Transaction\PrintNota;
 use App\Livewire\Transaction\TransactionManager;
 use App\Livewire\Transaction\UpdateSell;
+use App\Livewire\Wholesale\WholesaleManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -41,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('redirect-print', function () {
         return view('livewire.transaction.redirect-print');
     })->name('redirect.print');
+
+    Route::get('wholesales', WholesaleManager::class)->name('wholesales');
 
     Route::get('customers', CustomerManager::class)->name('customers');
 
