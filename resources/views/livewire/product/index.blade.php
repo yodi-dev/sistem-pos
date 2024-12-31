@@ -10,6 +10,19 @@
                 <span>{{ session('message') }}</span>
             </div>
         @endif
+
+        @if (session('success'))
+            <div class="alert alert-success mb-3">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger mb-3">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <x-card title="Data Barang" class="text-neutral bg-base-200" shadow separator>
             <x-slot:menu>
                 <a wire:navigate href="{{ route('create.product') }}"
@@ -24,14 +37,22 @@
                     class="btn btn-sm btn-neutral text-base-100 rounded-md">
                     Export
                 </a>
+                <a wire:click="import" title="Klik untuk mengimpor data produk"
+                    class="btn btn-sm btn-neutral text-base-100 rounded-md">
+                    Import
+                </a>
                 <input type="text" wire:model.live="search" class="input input-sm input-bordered rounded-md"
                     placeholder="Cari Produk..." />
             </x-slot:menu>
+            @if ($modalImport)
+                <div class="flex justify-center w-full">
+                    @include('livewire.product.import')
+                </div>
+            @endif
 
             @if ($isModalOpen)
                 @include('livewire.product.show')
             @endif
-
 
             @if ($products->isEmpty())
                 <p class="text-center text-gray-500">Belum ada data barang.</p>

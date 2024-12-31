@@ -12,6 +12,6 @@ class ProductsExport implements FromCollection
      */
     public function collection()
     {
-        return Product::all()->makeHidden(['created_at', 'updated_at']);
+        return Product::all()->makeHidden(['id', 'created_at', 'updated_at']);
     }
 }

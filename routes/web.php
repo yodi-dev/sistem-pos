@@ -37,10 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('products/barcode/{id}', BarcodeManager::class)->name('barcode.product');
     Route::get('products/export/', [ProductController::class, 'export'])->name('export.products');
 
-    Route::post('/import-products', function (\Illuminate\Http\Request $request) {
-        Excel::import(new ProductsImport, $request->file('file'));
-        return back()->with('success', 'Data berhasil diimport!');
-    })->name('import.products');
+    Route::post('/import-products', [ProductController::class, 'import'])->name('import.products');
 
     Route::get('categories', CategoryManager::class)->name('categories');
 

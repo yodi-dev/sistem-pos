@@ -9,13 +9,14 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\On;
 
 
-#[Title('Halaman Produk | Yudis')]
+#[Title('Halaman Produk | Habiba Store')]
 class ProductManager extends Component
 {
     use WithPagination;
 
     public $search = '';
     public $isModalOpen = false;
+    public $modalImport = false;
     public $Product;
     public $productId;
 
@@ -31,6 +32,11 @@ class ProductManager extends Component
     {
         $this->Product = Product::with('category')->find($productId);
         $this->isModalOpen = true;
+    }
+
+    public function import()
+    {
+        $this->modalImport = true;
     }
 
     public function updatingSearch()
