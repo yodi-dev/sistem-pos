@@ -31,7 +31,7 @@
                     <tbody class="text-base-content">
                         @foreach ($transactions as $transaction)
                             <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
-                                <td>{{ $transaction->customer ? $transaction->customer->name : '' }}
+                                <td>{{ $transaction->customer ? $transaction->customer->name : '-' }}
                                 </td>
                                 <td>{{ $transaction->payment_method }}</td>
                                 <td>Rp

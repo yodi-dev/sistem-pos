@@ -45,6 +45,7 @@ class Dashboard extends Component
             });
         }
 
+        $products = $products->orderBy('id', 'desc');
         $products = $products->paginate(20);
 
         return view('livewire.dashboard.dashboard', compact('products'));
@@ -92,7 +93,7 @@ class Dashboard extends Component
             } else {
                 $unitId = '';
                 $unitName = '';
-                $unitMultiplier = '';
+                $unitMultiplier = 1;
             }
 
             $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
@@ -202,6 +203,7 @@ class Dashboard extends Component
 
             DB::commit();
             $this->resetCart();
+            session()->flash('message', 'Berhasil menyimpan data kulakan.');
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;

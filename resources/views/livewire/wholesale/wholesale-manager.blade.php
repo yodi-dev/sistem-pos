@@ -18,7 +18,7 @@
                     <thead class="bg-neutral text-base-100 text-lg text-center">
                         <tr>
                             <th class="p-3 border-r">Supplier</th>
-                            <th class="p-3 border-r">Total Belanja</th>
+                            <th class="p-3 border-r">Total Barang</th>
                             <th class="p-3 border-r">Tanggal</th>
                             <th class="p-3 border-r">Aksi</th>
                         </tr>
@@ -27,23 +27,20 @@
                         @foreach ($wholesales as $wholesale)
                             <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                 <td>{{ $wholesale->supplier->name }}</td>
-                                <td>{{ $wholesale->total }}</td>
+                                <td class="text-center">{{ $wholesale->total_barang }}</td>
                                 <td>{{ $wholesale->formatted_date }}</td>
-                                <td class="flex">
+                                <td class="flex justify-center">
                                     <a class="px-2 text-sm text-neutral dark:text-blue-400 border-neutral">
                                         <x-icon name="m-pencil-square" />
                                     </a>
-                                    <button class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
-                                        <x-icon name="s-trash" />
-                                    </button>
                                     {{-- <a wire:navigate href="{{ route('edit.selling', $wholesale->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400 border-neutral">
                                         <x-icon name="m-pencil-square" />
-                                    </a>
+                                    </a> --}}
                                     <button wire:click="delete({{ $wholesale->id }})"
                                         class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
                                         <x-icon name="s-trash" />
-                                    </button> --}}
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
