@@ -26,10 +26,11 @@
                 <x-button class="indicator btn btn-sm btn-neutral text-base-100 rounded-md mr-5"
                     onclick="modalCart.showModal()">
                     <x-icon name="o-shopping-cart" />
-                    <x-badge value="{{ array_sum(array_column($cart, 'quantity')) }}"
+                    <x-badge
+                        value="{{ collect($groupedCart)->map(fn($items) => collect($items)->sum('quantity'))->sum() }}"
                         class="badge-accent text-base-content indicator-item" />
                 </x-button>
-                <dialog id="modalCart" class="modal">
+                <dialog id="modalCart" class="modal" wire:ignore.self>
                     <div class="modal-box text-base-content bg-base-300 py-3 max-w-2xl">
                         @if (empty($groupedCart))
                             <p class="text-center text-gray-500">Belum ada data kulakan.</p>
@@ -41,13 +42,17 @@
                                     <table class="w-full">
                                         <tbody>
                                             @foreach ($items as $index => $item)
-                                                <tr wire:key="cart-item-{{ $index }}"
+                                                <tr wire:key="cart-item-{{ $supplier }}-{{ $index }}"
                                                     class="border-b-2 border-neutral">
                                                     <td class="p-1">{{ $item['name'] }}</td>
                                                     <td class="p-1 text-end">
-                                                        <input type="number" value="{{ $item['quantity'] }}"
-                                                            class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />
-                                                        <select wire:model="{{ $item['unit_id'] }}"
+                                                        <input type="number"
+                                                            wire:model.lazy="groupedCart.{{ $supplier }}.{{ $index }}.quantity"
+                                                            wire:change="updateCartQuantity({{ $supplier }}, {{ $index }}, $event.target.value)"
+                                                            class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md"
+                                                            min="1" />
+                                                        <select
+                                                            wire:model="groupedCart.{{ $supplier }}.{{ $index }}.unit_id"
                                                             class="select select-sm select-ghost ml-3 w-fit bg-base-200 rounded">
                                                             @if (empty($item['units']))
                                                                 <option value="1">PCS</option>
@@ -66,11 +71,11 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-
                                         </tbody>
                                     </table>
                                 </div>
                             @endforeach
+
                             <div class="flex justify-end mt-3">
                                 <button wire:click="store"
                                     class="btn btn-sm btn-neutral rounded-md w-full text-base-100">Simpan</button>
@@ -107,7 +112,7 @@
                     class="input input-sm input-bordered text-base-content w-16 max-w-xs rounded-md" />
             </x-slot:menu>
 
-            <div class="grid grid-cols-5 gap-3 max-h-96 overflow-y-auto mb-5 p-2">
+            <div class="grid grid-cols-4 gap-3 max-h-96 overflow-y-auto mb-5 p-2">
                 @foreach ($products as $product)
                     <div wire:click="selectProduct({{ $product->id }})"
                         class="card bg-base-100 hover:bg-base-300 shadow-xl text-base-content ">

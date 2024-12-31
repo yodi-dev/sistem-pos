@@ -123,6 +123,12 @@ class Dashboard extends Component
         $this->groupedCart = collect($this->cart)->groupBy('supplier_name');
     }
 
+    public function updateCartQuantity($supplier, $index, $quantity)
+    {
+        $this->groupedCart[$supplier][$index]['quantity'] = $quantity;
+        $this->updateGroupedCart();
+    }
+
     public function updateSelectedSupplier()
     {
         // Pastikan supplier dipilih
@@ -172,6 +178,8 @@ class Dashboard extends Component
 
         try {
             foreach ($this->groupedCart as $supplierName => $items) {
+                // dd($items);
+
                 $supplier = Supplier::where('name', $supplierName)->first();
 
                 if (!$supplier) {
@@ -185,6 +193,7 @@ class Dashboard extends Component
                     'date' => now(),
                 ]);
 
+
                 $itemsData = [];
                 foreach ($items as $item) {
                     $itemsData[] = [
@@ -196,8 +205,15 @@ class Dashboard extends Component
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
-                }
 
+                    // Update stok produk
+                    $product = Product::find($item['id']);
+                    if ($product) {
+                        // Misalkan stok diupdate berdasarkan total_stock dari wholesale item
+                        $product->stock += $item['quantity'] * $item['multiplier']; // Update stok produk
+                        $product->save();
+                    }
+                }
                 WholesaleItem::insert($itemsData);
             }
 
