@@ -20,6 +20,10 @@
                     href="{{ route('update.products') }}" class="btn btn-sm btn-neutral text-base-100 rounded-md">
                     Perbarui Stok
                 </a>
+                <a title="Klik untuk mengekspor data produk" href="{{ route('export.products') }}"
+                    class="btn btn-sm btn-neutral text-base-100 rounded-md">
+                    Export
+                </a>
                 <input type="text" wire:model.live="search" class="input input-sm input-bordered rounded-md"
                     placeholder="Cari Produk..." />
             </x-slot:menu>

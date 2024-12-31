@@ -1,22 +1,25 @@
 <?php
 
-use App\Livewire\Product\ProductManager;
-use App\Livewire\Category\CategoryManager;
-use App\Livewire\Customer\CustomerManager;
-use App\Livewire\Dashboard\Dashboard;
-use App\Livewire\Debt\DebtTransactions;
-use App\Livewire\Product\BarcodeManager;
-use App\Livewire\Product\CreateProduct;
-use App\Livewire\Product\DuplikatProduct;
-use App\Livewire\Product\UnitManager;
+use App\Http\Controllers\ProductController;
+use App\Imports\ProductsImport;
 use App\Livewire\Product\UpdateStok;
-use App\Livewire\Supplier\SupplierManager;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Livewire\Dashboard\Dashboard;
+use App\Livewire\Product\UnitManager;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\Debt\DebtTransactions;
+use App\Livewire\Product\CreateProduct;
 use App\Livewire\Transaction\Penjualan;
 use App\Livewire\Transaction\PrintNota;
-use App\Livewire\Transaction\TransactionManager;
+use App\Livewire\Product\BarcodeManager;
+use App\Livewire\Product\ProductManager;
 use App\Livewire\Transaction\UpdateSell;
+use App\Livewire\Product\DuplikatProduct;
+use App\Livewire\Category\CategoryManager;
+use App\Livewire\Customer\CustomerManager;
+use App\Livewire\Supplier\SupplierManager;
 use App\Livewire\Wholesale\WholesaleManager;
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Transaction\TransactionManager;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -32,6 +35,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('products/duplikat/{id}', DuplikatProduct::class)->name('duplikat.product');
     Route::get('products/unit/{id}', UnitManager::class)->name('unit.product');
     Route::get('products/barcode/{id}', BarcodeManager::class)->name('barcode.product');
+    Route::get('products/export/', [ProductController::class, 'export'])->name('export.products');
+
+    Route::post('/import-products', function (\Illuminate\Http\Request $request) {
+        Excel::import(new ProductsImport, $request->file('file'));
+        return back()->with('success', 'Data berhasil diimport!');
+    })->name('import.products');
 
     Route::get('categories', CategoryManager::class)->name('categories');
 
