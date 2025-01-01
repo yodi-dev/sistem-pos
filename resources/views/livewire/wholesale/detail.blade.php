@@ -36,8 +36,10 @@
                     <button wire:click="closeModal()"
                         class="btn btn-outline btn-error w-1/2  hover:bg-neutral text-base-100 rounded dark:bg-info dark:hover:bg-green-700">
                         Kembali</button>
-                    <button
-                        class="btn w-1/2 bg-neutral hover:bg-base-100 text-base-100 hover:text-neutral rounded dark:bg-info dark:hover:bg-green-700">Cetak</button>
+                    <button wire:click="printWholesale({{ $selectedWholesale->id }})"
+                        class="btn w-1/2 bg-neutral hover:bg-base-100 text-base-100 hover:text-neutral rounded dark:bg-info dark:hover:bg-green-700">
+                        Cetak
+                    </button>
                 </div>
             </div>
         </div>

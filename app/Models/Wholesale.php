@@ -30,6 +30,6 @@ class Wholesale extends Model
 
     public function getFormattedDateAttribute()
     {
-        return Carbon::parse($this->date)->translatedFormat('d F y');
+        return Carbon::parse($this->date)->translatedFormat('d F Y');
     }
 }

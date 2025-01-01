@@ -5,6 +5,7 @@ namespace App\Livewire\Wholesale;
 use Livewire\Component;
 use App\Models\Wholesale;
 use Livewire\Attributes\On;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class WholesaleManager extends Component
 {
@@ -32,6 +33,29 @@ class WholesaleManager extends Component
         $this->selectedWholesale = Wholesale::with('supplier', 'wholesaleItems.product')->find($id);
         $this->showDetailModal = true;
     }
+
+    public function printWholesale($id)
+    {
+        return redirect()->route('wholesale.print', $id);
+    }
+
+    public function print($id)
+    {
+        // Ambil data wholesale berdasarkan ID
+        $selectedWholesale = Wholesale::with(['supplier', 'wholesaleItems.product'])->findOrFail($id);
+
+        // Siapkan data untuk view
+        $data = [
+            'selectedWholesale' => $selectedWholesale,
+        ];
+
+        // Generate PDF
+        $pdf = Pdf::loadView('wholesale.print', $data);
+
+        // Unduh atau tampilkan PDF
+        return $pdf->download('detail_kulakan.pdf');
+    }
+
 
     public function delete($id)
     {

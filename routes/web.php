@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('redirect.print');
 
     Route::get('wholesales', WholesaleManager::class)->name('wholesales');
+    Route::get('wholesale/print/{id}', [WholesaleManager::class, 'print'])->name('wholesale.print');
 
     Route::get('customers', CustomerManager::class)->name('customers');
 
