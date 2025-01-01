@@ -4,8 +4,6 @@
         <div class="row">
             <div class="col-12 ">
                 <x-card title="Produk" class="text-neutral bg-base-200" shadow separator>
-
-
                     <div class="flex justify-center">
                         <!-- Input Search untuk Produk -->
                         <div x-data="{
@@ -32,7 +30,6 @@
                                 @endforeach
                             </ul>
                         @endif
-
                     </div>
                 </x-card>
             </div>

@@ -14,16 +14,21 @@
             <div class="col-12 ">
                 <x-card title="Perbarui Stok Produk" class="text-neutral bg-base-200" shadow separator>
                     <div class="flex justify-center">
-                        <div class="w-full">
+                        <div class="w-full relative">
                             <!-- Input Search untuk Produk -->
                             <input type="text" wire:model.live="search" placeholder="Cari barang..."
-                                class="input input-bordered text-base-content w-full rounded-md">
+                                class="input input-bordered text-base-content w-full rounded-md"
+                                wire:keydown.arrow-down="selectNext" wire:keydown.arrow-up="selectPrevious"
+                                wire:keydown.enter="confirmSelection" />
+
                             <!-- Dropdown Hasil Pencarian -->
                             @if (!empty($products))
-                                <ul class="text-base-content max-h-80 overflow-y-auto">
+                                <ul
+                                    class="absolute bg-white text-base-content max-h-80 overflow-y-scroll w-full rounded-md shadow-md z-10">
                                     @foreach ($products as $index => $product)
                                         <li wire:click="addToCart({{ $product->id }})"
-                                            class="flex justify-between items-center py-2 border-b-2">
+                                            class="flex justify-between items-center py-2 px-4 cursor-pointer hover:bg-gray-200
+                    {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
                                             <span>{{ $product->name }}</span>
                                         </li>
                                     @endforeach

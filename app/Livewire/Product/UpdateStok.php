@@ -11,6 +11,7 @@ class UpdateStok extends Component
     public $search = '';
     public $products = [];
     public $cart = [];
+    public $highlightIndex = 0;
 
     public function updatedSearch()
     {
@@ -27,6 +28,27 @@ class UpdateStok extends Component
     {
         $this->search = '';
         $this->products = [];
+    }
+
+    public function selectNext()
+    {
+        if ($this->highlightIndex < count($this->products) - 1) {
+            $this->highlightIndex++;
+        }
+    }
+
+    public function selectPrevious()
+    {
+        if ($this->highlightIndex > 0) {
+            $this->highlightIndex--;
+        }
+    }
+
+    public function confirmSelection()
+    {
+        if (!empty($this->products) && isset($this->products[$this->highlightIndex])) {
+            $this->addToCart($this->products[$this->highlightIndex]['id']);
+        }
     }
 
     public function updateCartStock($productId, $stock)
