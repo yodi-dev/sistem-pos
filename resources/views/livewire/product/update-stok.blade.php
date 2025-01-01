@@ -15,12 +15,16 @@
                 <x-card title="Perbarui Stok Produk" class="text-neutral bg-base-200" shadow separator>
                     <div class="flex justify-center">
                         <div class="w-full relative">
-                            <!-- Input Search untuk Produk -->
-                            <input type="text" wire:model.live="search" placeholder="Cari barang..."
-                                class="input input-bordered text-base-content w-full rounded-md"
-                                wire:keydown.arrow-down="selectNext" wire:keydown.arrow-up="selectPrevious"
-                                wire:keydown.enter="confirmSelection" />
-
+                            <div x-data="{
+                                focusSearch() { $refs.searchInput.focus(); }
+                            }" x-init="$refs.searchInput.focus()"
+                                @keydown.window.prevent.ctrl.k="focusSearch()" class="w-full">
+                                <!-- Input Search untuk Produk -->
+                                <input type="text" wire:model.live="search" placeholder="Cari barang..."
+                                    class="input input-bordered text-base-content w-full rounded-md"
+                                    wire:keydown.arrow-down="selectNext" wire:keydown.arrow-up="selectPrevious"
+                                    wire:keydown.enter="confirmSelection" x-ref="searchInput" />
+                            </div>
                             <!-- Dropdown Hasil Pencarian -->
                             @if (!empty($products))
                                 <ul
@@ -62,7 +66,7 @@
                                 <th class="p-2 border-r">Harga Beli</th>
                                 <th class="p-2 border-r">Harga Jual</th>
                                 <th class="p-2 border-r">Harga Grosir</th>
-                                <th class="p-2 border-r">Stok</th>
+                                <th class="p-2 border-r">Tambah Stok</th>
                                 <th class="p-2 border-r">Cetak Barcode</th>
                             </tr>
                         </thead>
@@ -73,23 +77,24 @@
                                     <td>
                                         <input type="number"
                                             wire:change="updateCartPurchase({{ $key }}, $event.target.value)"
-                                            class="input input-sm w-full rounded-md"
+                                            class="input input-sm w-24 rounded-md"
                                             value="{{ number_format($item['purchase_price'], 0, ',', '.') }}">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm w-full rounded-md"
+                                        <input type="number" class="input input-sm w-24 rounded-md"
                                             wire:change="updateCartRetail({{ $key }}, $event.target.value)"
                                             value="{{ number_format($item['retail_price'], 0, ',', '.') }}">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm w-full rounded-md"
+                                        <input type="number" class="input input-sm w-24 rounded-md"
                                             wire:change="updateCartWholesale({{ $key }}, $event.target.value)"
                                             value="{{ number_format($item['wholesale_price'], 0, ',', '.') }}">
                                     </td>
-                                    <td>
+                                    <td class="flex items-center space-x-2">
+                                        <span title="Stok sekarang"> {{ $item['current_stock'] }} + </span>
                                         <input type="number"
                                             wire:change="updateCartStock({{ $key }}, $event.target.value)"
-                                            class="input input-sm w-full rounded-md" value="{{ $item['stock'] }}"
+                                            class="input input-sm w-16 rounded-md" value="{{ $item['stock'] }}"
                                             min="0">
                                     </td>
                                     <td>

@@ -100,6 +100,7 @@ class UpdateStok extends Component
                 'purchase_price' => $product->purchase_price,
                 'retail_price' => $product->retail_price,
                 'wholesale_price' => $product->wholesale_price,
+                'current_stock' => $product->stock,
                 'stock' => 0,
                 'checked' => false,
                 'print_barcode' => false,
