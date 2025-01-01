@@ -6,6 +6,7 @@ use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Supplier;
+use App\Models\Unit;
 use App\Models\Wholesale;
 use Livewire\Attributes\On;
 use App\Models\WholesaleItem;
@@ -196,11 +197,13 @@ class Dashboard extends Component
 
                 $itemsData = [];
                 foreach ($items as $item) {
+                    $unit = Unit::where('id', $item['unit_id'])->first();
+
                     $itemsData[] = [
                         'wholesale_id' => $wholesale->id,
                         'product_id' => $item['id'],
                         'quantity' => $item['quantity'],
-                        'unit' => $item['unit_name'],
+                        'unit' => $unit->name,
                         'total_stock' => $item['quantity'] * $item['multiplier'], // Hitung stok total
                         'created_at' => now(),
                         'updated_at' => now(),
