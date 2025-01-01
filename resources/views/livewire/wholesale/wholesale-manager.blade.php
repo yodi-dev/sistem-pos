@@ -10,6 +10,9 @@
                 <span>{{ session('message') }}</span>
             </div>
         @endif
+        @if ($showDetailModal)
+            @include('livewire.wholesale.detail')
+        @endif
         <x-card title="Data Kulakan" class="text-neutral bg-base-200" shadow separator>
             @if ($wholesales->isEmpty())
                 <p class="text-center text-gray-500">Data kulakan belum ada.</p>
@@ -25,7 +28,8 @@
                     </thead>
                     <tbody class="text-base-content">
                         @foreach ($wholesales as $wholesale)
-                            <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
+                            <tr wire:click="show({{ $wholesale->id }})"
+                                class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                                 <td>{{ $wholesale->supplier->name }}</td>
                                 <td class="text-center">{{ $wholesale->total_barang }}</td>
                                 <td>{{ $wholesale->formatted_date }}</td>

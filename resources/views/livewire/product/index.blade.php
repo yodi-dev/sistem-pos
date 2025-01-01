@@ -54,6 +54,10 @@
                 @include('livewire.product.show')
             @endif
 
+            @if ($isModalSupplier)
+                @include('livewire.product.supplier')
+            @endif
+
             @if ($products->isEmpty())
                 <p class="text-center text-gray-500">Belum ada data barang.</p>
             @else
@@ -88,6 +92,11 @@
                                     @endif
                                 </td>
                                 <td class="flex justify-center">
+                                    <a title="Klik untuk menambahkan supplier" wire:navigate
+                                        wire:click="openSupplierModal({{ $product->id }})"
+                                        class="px-2 text-sm text-neutral dark:text-blue-400">
+                                        <x-icon name="m-users" />
+                                    </a>
                                     <a wire:navigate href="{{ route('barcode.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400">
                                         <x-icon name="m-qr-code" />

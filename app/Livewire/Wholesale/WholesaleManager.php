@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Wholesale;
 
-use App\Models\Wholesale;
 use Livewire\Component;
+use App\Models\Wholesale;
+use Livewire\Attributes\On;
 
 class WholesaleManager extends Component
 {
     public $wholesales;
+    public $selectedWholesale;
+    public $showDetailModal = false;
 
     public function render()
     {
@@ -24,11 +27,21 @@ class WholesaleManager extends Component
         return view('livewire.wholesale.wholesale-manager');
     }
 
-    // public function mount() {}
+    public function show($id)
+    {
+        $this->selectedWholesale = Wholesale::with('supplier', 'wholesaleItems.product')->find($id);
+        $this->showDetailModal = true;
+    }
 
     public function delete($id)
     {
         Wholesale::find($id)->delete();
         session()->flash('message', 'Produk berhasil dihapus.');
+    }
+
+    #[On('closeModal')]
+    public function closeModal()
+    {
+        $this->showDetailModal = false;
     }
 }
