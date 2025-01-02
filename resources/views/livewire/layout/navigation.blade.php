@@ -22,6 +22,8 @@
             <x-menu-item title="KASA" icon="s-shopping-cart" :href="route('transactions')" :active="request()->routeIs('transactions')" wire:navigate />
             <x-menu-item title="Data Jual" icon="s-presentation-chart-line" :href="route('selling')" :active="request()->routeIs('selling')"
                 wire:navigate />
+            <x-menu-item title="Pengeluaran" icon="s-presentation-chart-bar" :href="route('expenses')" :active="request()->routeIs('expenses')"
+                wire:navigate />
             <x-menu-item title="Data Kulakan" icon="s-building-storefront" :href="route('wholesales')" :active="request()->routeIs('wholesales')"
                 wire:navigate />
             <x-menu-item title="Utang" icon="m-credit-card" :href="route('debts')" :active="request()->routeIs('debts')" wire:navigate />

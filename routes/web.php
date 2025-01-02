@@ -15,6 +15,7 @@ use App\Livewire\Transaction\UpdateSell;
 use App\Livewire\Product\DuplikatProduct;
 use App\Livewire\Category\CategoryManager;
 use App\Livewire\Customer\CustomerManager;
+use App\Livewire\Expense\ExpenseManajer;
 use App\Livewire\Supplier\SupplierManager;
 use App\Livewire\Wholesale\WholesaleManager;
 use App\Livewire\Transaction\TransactionManager;
@@ -46,6 +47,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('redirect-print', function () {
         return view('livewire.transaction.redirect-print');
     })->name('redirect.print');
+
+    Route::get('expenses', ExpenseManajer::class)->name('expenses');
 
     Route::get('wholesales', WholesaleManager::class)->name('wholesales');
     Route::get('wholesale/print/{id}', [WholesaleManager::class, 'print'])->name('wholesale.print');
