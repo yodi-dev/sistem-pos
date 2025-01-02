@@ -16,8 +16,8 @@
                 <button wire:click="create" class="btn btn-sm btn-neutral text-base-100 rounded-md">Baru</button>
             </x-slot:menu>
 
-            @if ($showCreateForm)
-                <livewire:expense.expense-form />
+            @if ($showForm)
+                <livewire:expense.expense-form :expenseId="$selectedExpenseId" />
             @endif
 
             @include('livewire.expense.expense-table')

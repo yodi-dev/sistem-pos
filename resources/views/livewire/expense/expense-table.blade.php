@@ -17,7 +17,7 @@
                     <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-100' }}">
                         <td>{{ $expense->date }}</td>
                         <td>{{ $expense->expense }}</td>
-                        <td>{{ $expense->amount }}</td>
+                        <td>Rp. {{ number_format($expense->amount, 0, ',', '.') }}</td>
                         <td>{{ $expense->note }}</td>
                         <td class="flex justify-center">
                             <button wire:click="edit({{ $expense->id }})"

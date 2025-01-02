@@ -8,7 +8,8 @@ use Livewire\Attributes\On;
 
 class ExpenseManajer extends Component
 {
-    public $showCreateForm;
+    public $showForm;
+    public $selectedExpenseId = null;
 
     public function render()
     {
@@ -17,15 +18,35 @@ class ExpenseManajer extends Component
         return view('livewire.expense.expense-manajer', compact('expenses'));
     }
 
-    #[On('hideForm')]
+    #[On('saveExpense')]
     public function hideCreateForm()
     {
-        session()->flash('message', 'Pengeluaran berhasil disimpan!');
-        $this->showCreateForm = false;
+        session()->flash('message', 'Berhasil menyimpan pengeluaran!');
+        $this->showForm = false;
+    }
+
+    #[On('closeForm')]
+    public function resetForm()
+    {
+        $this->showForm = false;
+        $this->selectedExpenseId = null;
     }
 
     public function create()
     {
-        $this->showCreateForm = true;
+        $this->selectedExpenseId = null;
+        $this->showForm = true;
+    }
+
+    public function edit($id)
+    {
+        $this->selectedExpenseId = $id;
+        $this->showForm = true;
+    }
+
+    public function delete($id)
+    {
+        Expense::find($id)->delete();
+        session()->flash('message', 'Berhasil menghapus data pengeluaran.');
     }
 }

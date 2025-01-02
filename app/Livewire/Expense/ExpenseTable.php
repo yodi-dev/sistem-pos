@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Expense;
 
+use App\Models\Expense;
 use Livewire\Component;
 
 class ExpenseTable extends Component
