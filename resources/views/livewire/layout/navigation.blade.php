@@ -44,6 +44,10 @@
 
                 <x-list-item :item="$user" value="name" sub-value="email" no-separator no-hover
                     class="-mx-2 !-my-2 rounded">
+                    <x-slot:avatar>
+                        <x-button icon="o-user" class="btn-sm btn-circle btn-outline text-base-content"
+                            link="{{ route('profile') }}" spinner />
+                    </x-slot:avatar>
                     <x-slot:actions>
                         {{-- <label class="swap swap-rotate mr-3">
                             <!-- this hidden checkbox controls the state -->
