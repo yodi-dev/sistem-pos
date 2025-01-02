@@ -9,10 +9,9 @@ use App\Models\Customer;
 use Mike42\Escpos\Printer;
 use App\Models\Transaction;
 use Livewire\Attributes\On;
+use Mike42\Escpos\EscposImage;
 use App\Models\TransactionItem;
 use Illuminate\Support\Facades\DB;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 class TransactionManager extends Component
@@ -39,13 +38,14 @@ class TransactionManager extends Component
 
     public function addToCart($productId)
     {
-        $product = Product::find($productId);
+        $product = Product::with('units')->find($productId);
+
 
         if (!$product) {
             return;
         }
 
-        $defaultUnit = $product->units->first() ? $product->units->first()->id : '1';
+        $defaultUnit = $product->units->first() ? $product->units->first()->id : '';
 
         $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
 
@@ -64,7 +64,8 @@ class TransactionManager extends Component
             ];
         }
 
-        $this->updateQuantityOnUnitChange($index);
+
+        // $this->updateQuantityOnUnitChange($index);
         $this->updateTotal();
         $this->calculateSubtotal($index ?? count($this->cart) - 1);
 
@@ -72,6 +73,14 @@ class TransactionManager extends Component
 
         session()->put('cart', $this->cart);
         $this->resetSearch();
+    }
+
+
+    public function updateTotal()
+    {
+        $this->total_price = collect($this->cart)->sum('subtotal');
+        session()->put('total', $this->total_price);
+        $this->updatedTotalPaid();
     }
 
     public function updateQuantityOnUnitChange($index)
@@ -82,7 +91,9 @@ class TransactionManager extends Component
 
         if ($unit) {
             $this->cart[$index]['quantity'] = $subQuantity * $unit->multiplier;
-            // $this->calculateSubtotal($index);
+            $this->updateQuantity($index, $subQuantity);
+        } else {
+            $this->cart[$index]['quantity'] = $subQuantity;
             $this->updateQuantity($index, $subQuantity);
         }
     }
@@ -91,9 +102,10 @@ class TransactionManager extends Component
     {
         $selectedUnitId = $this->cart[$index]['unit'];
         $unit = Unit::find($selectedUnitId);
+        // dd($unit);
 
         if (empty($unit)) {
-            $this->cart[$index]['quantity'] = $quantity * $selectedUnitId;
+            $this->cart[$index]['quantity'] = $quantity;
         } else {
             $this->cart[$index]['quantity'] = $quantity * $unit->multiplier;
         }
@@ -115,7 +127,6 @@ class TransactionManager extends Component
         $this->updateTotal();
     }
 
-
     public function store()
     {
         $transaction = $this->saveTransaction();
@@ -134,33 +145,69 @@ class TransactionManager extends Component
         if ($transaction) {
             $this->resetCart();
             $this->printNota();
+            session()->forget('cart');
         }
     }
 
     public function printNota()
     {
         $cart = session()->get('cart', []);
-        $total = $this->total_price;
+        $total = session()->get('total', '');
+        $date = now()->format('H:i:s d-m-Y');
 
         $connector = new WindowsPrintConnector("thermal");
+
+        /* Start the printer */
+        $logo = EscposImage::load(public_path("images/logo_habiba.png"), true);
         $printer = new Printer($connector);
 
-        // header
-        $printer->setJustification(Printer::JUSTIFY_CENTER);
-        $printer->text("Habiba Store \n");
-        $printer->text("Alamat: jalan kh a \n");
-        $printer->feed(2);
+        try {
+            // Operasi mencetak
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->bitImage($logo);
 
-        $printer->setJustification(Printer::JUSTIFY_LEFT);
-        // items
-        foreach ($cart as $item) {
-            $printer->text($item['name'] . " - " . $item['quantity'] . " X " . number_format($item['price'], 0, ',', '.') . "\n");
+            /* Name of shop */
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+            $printer->text("Habiba Store\n");
+            $printer->selectPrintMode();
+            $printer->text("Melayani dengan sepenuh hati\n");
+            $printer->text("Jl. Benteng Portugis, RT 02,\n RW 02, Ujungwatu\n");
+            $printer->text("0853 2646 4699\n");
+            $printer->text("================================\n");
+            $printer->feed();
+
+            // items
+            foreach ($cart as $item) {
+                $printer->setJustification(Printer::JUSTIFY_LEFT);
+                $printer->text($item['name'] . "\n");
+                $printer->setJustification(Printer::JUSTIFY_RIGHT);
+                $printer->text(number_format($item['price'], 0, ',', '.') . " X " . $item['quantity'] . "              " . number_format($item['subtotal'], 0, ',', '.') .  "\n");
+            }
+            $printer->feed();
+
+            // total
+            $printer->setEmphasis(true);
+            $printer->setJustification(Printer::JUSTIFY_RIGHT);
+            $printer->text("total: " . number_format($total, 0, ',', '.'));
+            $printer->setEmphasis(false);
+
+            /* Footer */
+            $printer->feed(2);
+            $printer->setJustification(Printer::JUSTIFY_CENTER);
+            $printer->setTextSize(1, 8);
+            $printer->text("TERIMA KASIH\n");
+            $printer->text("Semoga berkah selalu :)\n");
+            $printer->feed();
+            $printer->text($date . "\n");
+
+            $printer->cut();
+        } catch (Exception $e) {
+            /* Images not supported on your PHP, or image file not found */
+            $printer->text($e->getMessage() . "\n");
+        } finally {
+            $printer->close(); // Menutup koneksi selalu dilakukan
         }
-        // total
-        $printer->text("total: " . number_format($total, 0, ',', '.'));
-
-        $printer->cut();
-        $printer->close();
     }
 
     private function resetCart()
@@ -247,8 +294,6 @@ class TransactionManager extends Component
         $this->andprint();
     }
     // endshorcut
-
-
 
     private function calculateSubtotal($index)
     {
@@ -397,12 +442,6 @@ class TransactionManager extends Component
         $this->search = '';
         $this->searchCustomer = '';
         $this->customers = [];
-    }
-
-    public function updateTotal()
-    {
-        $this->total_price = collect($this->cart)->sum('subtotal');
-        $this->updatedTotalPaid();
     }
 
     public function updatedTotalPaid()
