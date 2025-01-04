@@ -16,6 +16,7 @@ use App\Livewire\Product\DuplikatProduct;
 use App\Livewire\Category\CategoryManager;
 use App\Livewire\Customer\CustomerManager;
 use App\Livewire\Expense\ExpenseManajer;
+use App\Livewire\Report\ReportManager;
 use App\Livewire\Supplier\SupplierManager;
 use App\Livewire\Wholesale\WholesaleManager;
 use App\Livewire\Transaction\TransactionManager;
@@ -58,6 +59,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('suppliers', SupplierManager::class)->name('suppliers');
 
     Route::get('debts', DebtTransactions::class)->name('debts');
+
+    Route::get('reports', ReportManager::class)->name('reports');
 });
 
 Route::view('profile', 'profile')

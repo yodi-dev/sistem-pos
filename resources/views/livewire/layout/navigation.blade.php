@@ -32,6 +32,7 @@
                 request()->routeIs('duplikat.product') ||
                 request()->routeIs('update.products')"
                 wire:navigate />
+            <x-menu-item title="Laporan" icon="s-document-text" :href="route('reports')" :active="request()->routeIs('reports')" wire:navigate />
 
             <x-menu-sub title="Data Master" icon="s-square-3-stack-3d">
                 <x-menu-item title="Pembeli" icon="s-user-group" :href="route('customers')" :active="request()->routeIs('customers')" wire:navigate />
