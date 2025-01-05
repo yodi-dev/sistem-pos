@@ -5,6 +5,8 @@ namespace App\Livewire\Product;
 use App\Models\Product;
 use Livewire\Component;
 use Milon\Barcode\DNS1D;
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 
 class BarcodeManager extends Component
@@ -46,23 +48,45 @@ class BarcodeManager extends Component
 
     public function printBarcode($productId)
     {
+        // Ambil data produk
         $product = Product::findOrFail($productId);
-        $barcodes = [];
-        $generator = new DNS1D();
+
+        // Cek jumlah barcode yang akan dicetak
+        $barcodeQuantity = $this->barcodeQuantity ?? 1;
+
+        try {
+            // Hubungkan ke printer (ganti "Nama_Printer" sesuai dengan printer thermal Anda)
+            $connector = new WindowsPrintConnector("thermal");
+            $printer = new Printer($connector);
 
 
-        for ($i = 0; $i < $this->barcodeQuantity; $i++) {
-            $barcodes[] = $generator->getBarcodePNG($product->code, 'C39', 3, 33);
+            // Loop untuk mencetak beberapa barcode
+            for ($i = 0; $i < $barcodeQuantity; $i++) {
+                // Header (opsional)
+                $printer->setJustification(Printer::JUSTIFY_RIGHT);
+                $printer->setTextSize(1, 1); // Ukuran teks normal
+                $printer->text($product->name . "\n"); // Nama produk
+
+                // Barcode
+                $printer->setBarcodeHeight(70); // Tinggi barcode (disesuaikan)
+                $printer->setBarcodeWidth(1);  // Ketebalan garis barcode
+                $printer->setBarcodeTextPosition(Printer::BARCODE_TEXT_BELOW);
+                $printer->barcode($product->code, Printer::BARCODE_CODE93);
+
+                // Jarak antar label
+                // $printer->feed(4);
+            }
+
+            // Potong kertas
+            $printer->cut();
+
+            // Tutup koneksi printer
+            $printer->close();
+
+            return response()->json(['success' => true, 'message' => 'Barcode berhasil dicetak.']);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
-
-        $pdf = \PDF::loadView('livewire.barcode.print', [
-            'product' => $product,
-            'barcodes' => $barcodes,
-        ])->setPaper([0, 0, 226, 567], 'portrait'); // Kertas 58mm x panjang dinamis
-
-        return response()->streamDownload(function () use ($pdf) {
-            echo $pdf->output();
-        }, "barcode_{$product->name}.pdf");
     }
 
     private function generateBarcodeImage($code)
