@@ -63,18 +63,28 @@ class BarcodeManager extends Component
             // Loop untuk mencetak beberapa barcode
             for ($i = 0; $i < $barcodeQuantity; $i++) {
                 // Header (opsional)
+                // $printer->setPrintLeftMargin(16);
                 $printer->setJustification(Printer::JUSTIFY_RIGHT);
                 $printer->setTextSize(1, 1); // Ukuran teks normal
-                $printer->text($product->name . "\n"); // Nama produk
+                // $printer->text($product->name . "\n"); // Nama produk
+                $printer->text(number_format($product->retail_price, 0, ',', '.') . "\n");
 
                 // Barcode
-                $printer->setBarcodeHeight(70); // Tinggi barcode (disesuaikan)
+                $printer->setBarcodeHeight(60); // Tinggi barcode (disesuaikan)
                 $printer->setBarcodeWidth(1);  // Ketebalan garis barcode
                 $printer->setBarcodeTextPosition(Printer::BARCODE_TEXT_BELOW);
-                $printer->barcode($product->code, Printer::BARCODE_CODE93);
+                // if (strlen($product->code) < 10) {
+                //     $printer->barcode($product->code, Printer::BARCODE_CODE93);
+                // }
+                // if (strlen($product->code) < 15) {
+                //     $printer->barcode($product->code, Printer::BARCODE_JAN13);
+                // }
+                $printer->barcode($product->code, Printer::BARCODE_JAN13);
 
+                if ($barcodeQuantity > 1) {
+                    $printer->feed(2);
+                }
                 // Jarak antar label
-                // $printer->feed(4);
             }
 
             // Potong kertas
