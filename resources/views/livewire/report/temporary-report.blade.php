@@ -4,7 +4,8 @@
     <div class="grid grid-cols-2 gap-4">
         <div>
             <h4>Total Pemasukkan</h4>
-            <input type="number" wire:model="totalIncome" class="input input-bordered w-full max-w-32 rounded-md" />
+            <input type="number" wire:model.change="totalIncome"
+                class="input input-bordered w-full max-w-32 rounded-md" />
         </div>
 
         <div>
@@ -14,12 +15,13 @@
 
         <div>
             <h4>Total Pengeluaran</h4>
-            <input type="number" wire:model="totalOutcome" class="input input-bordered w-full max-w-32 rounded-md" />
+            <input type="number" wire:model.change="totalOutcome"
+                class="input input-bordered w-full max-w-32 rounded-md" />
         </div>
 
         <div>
             <h4>Saldo</h4>
-            <p class="text-base-content font-bold">Rp {{ number_format($balance, 0, ',', '.') }}</p>
+            <p class="text-base-content font-bold">Rp {{ $balance }}</p>
         </div>
 
         <div>

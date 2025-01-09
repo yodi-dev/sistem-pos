@@ -16,33 +16,7 @@ class TemporaryReport extends Component
 
     public function render()
     {
-        // $reportDate = now()->format('Y-m-d');
-
-        // Data pemasukan
-        // $totalIncome = Transaction::whereDate('created_at', $reportDate)->sum('total_price');
-
-        // Data pengeluaran
-        // $totalExpense = Expense::whereDate('created_at', $reportDate)->sum('amount');
-
-        // Total outcome
-        // $totalOutcome = $totalExpense + $this->savings;
-
-        // Balance sementara
-        // $previousBalance = DailyReport::where('report_date', '<', $reportDate)
-        //     ->orderBy('report_date', 'desc')
-        //     ->value('balance') ?? 0;
-
-        // $balance = $previousBalance - $totalOutcome + $totalIncome;
-
-        return view(
-            'livewire.report.temporary-report'
-            // , [
-            //     'totalIncome' => $totalIncome,
-            //     'totalOutcome' => $totalOutcome,
-            //     'savings' => $this->savings,
-            //     'balance' => $balance,
-            // ]
-        );
+        return view('livewire.report.temporary-report');
     }
 
     public function mount()
@@ -61,15 +35,36 @@ class TemporaryReport extends Component
     {
         $reportDate = now()->format('Y-m-d');
 
+        $this->totalIncome = str_replace('.', '', $this->totalIncome);
+        $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
+
         $previousBalance = DailyReport::where('report_date', '<', $reportDate)
             ->orderBy('report_date', 'desc')
             ->value('balance') ?? 0;
-        $this->balance = $previousBalance - $this->totalOutcome - $this->savings + $this->totalIncome;
+
+        $this->balance = number_format($previousBalance - $this->totalOutcome - $this->savings + $this->totalIncome, 0, ',', '.');
+
+        $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
+        $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
     }
 
     public function generateReport()
     {
         // Panggil fungsi generate laporan
         // Tambahkan logika dari sebelumnya
+    }
+
+    public function updatedTotalIncome()
+    {
+        $this->totalIncome = str_replace('.', '', $this->totalIncome);
+        $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
+        $this->updateBalance();
+    }
+
+    public function updatedTotalOutcome()
+    {
+        $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
+        $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
+        $this->updateBalance();
     }
 }
