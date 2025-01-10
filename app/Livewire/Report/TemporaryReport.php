@@ -13,6 +13,7 @@ class TemporaryReport extends Component
     public $totalOutcome = 0;
     public $savings = 0;
     public $balance = 0;
+    public $openingBalance;
 
     public function render()
     {
@@ -28,6 +29,22 @@ class TemporaryReport extends Component
         $this->totalOutcome = number_format(Expense::whereDate('created_at', $reportDate)->sum('amount'), 0, ',', '.');
         $this->savings = 0; // Default savings 0
         $this->updateBalance();
+    }
+
+    public function setOpeningBalance()
+    {
+        DailyReport::updateOrCreate(
+            ['report_date' => now()->toDateString()],
+            [
+                'opening_balance' => $this->openingBalance,
+                'total_income' => 0,
+                'total_outcome' => 0,
+                'savings' => 0,
+                'balance' => 0,
+            ]
+        );
+
+        session()->flash('message', 'Saldo awal berhasil disimpan.');
     }
 
 

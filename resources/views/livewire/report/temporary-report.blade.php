@@ -1,4 +1,15 @@
 <div class="bg-base-200 card p-5 shadow rounded-md">
+    @if (session()->has('message'))
+        <div role="alert" class="alert mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ session('message') }}</span>
+        </div>
+    @endif
+
     <h3 class="text-2xl text-neutral font-bold mb-4">Laporan Sementara Hari Ini</h3>
 
     <div class="grid grid-cols-2 gap-4">
@@ -34,7 +45,13 @@
         </div>
 
         <div>
-            <button class="btn btn-sm btn-neutral rounded-md text-base-100">Set Saldo Awal</button>
+            <label class="form-control w-full max-w-xs">
+                <div class="label">
+                    <span class="label-text">Saldo Awal</span>
+                </div>
+                <input type="number" min="1" id="opening_balance" wire:model="opening_balance"
+                    wire:change="setOpeningBalance" class="input input-bordered w-full max-w-32 rounded-md">
+            </label>
         </div>
 
     </div>
