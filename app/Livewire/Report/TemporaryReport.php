@@ -13,7 +13,7 @@ class TemporaryReport extends Component
     public $totalOutcome = 0;
     public $savings = 0;
     public $balance = 0;
-    public $openingBalance;
+    public $openingBalance = 0;
 
     public function render()
     {
@@ -24,17 +24,46 @@ class TemporaryReport extends Component
     {
         $reportDate = now()->format('Y-m-d');
 
-        // Ambil data awal
-        $this->totalIncome = number_format(Transaction::whereDate('created_at', $reportDate)->sum('total_price'), 0, ',', '.');
-        $this->totalOutcome = number_format(Expense::whereDate('created_at', $reportDate)->sum('amount'), 0, ',', '.');
-        $this->savings = 0; // Default savings 0
+        // Ambil data saldo awal dari daily_reports
+        $this->openingBalance = DailyReport::where('report_date', $reportDate)->value('opening_balance') ?? 0;
+
+        // Ambil data income dan outcome
+        $this->totalIncome = Transaction::whereDate('created_at', $reportDate)->sum('total_price');
+        $this->totalOutcome = Expense::whereDate('created_at', $reportDate)->sum('amount');
+
+        // Default savings (opsional jika ingin editable di UI)
+        $this->savings = 0;
+
+        // Perbarui balance dengan memperhitungkan saldo awal
         $this->updateBalance();
+    }
+
+    private function updateBalance()
+    {
+        $reportDate = now()->format('Y-m-d');
+
+        // Ambil saldo sebelumnya (jika ada)
+        $previousBalance = DailyReport::where('report_date', '<', $reportDate)
+            ->orderBy('report_date', 'desc')
+            ->value('balance') ?? 0;
+
+        // Hitung balance
+        $currentBalance = $this->openingBalance + $previousBalance - $this->totalOutcome - $this->savings + $this->totalIncome;
+
+        $this->balance = number_format($currentBalance, 0, ',', '.');
+        $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
+        $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
+        $this->openingBalance = number_format($this->openingBalance, 0, ',', '.');
     }
 
     public function setOpeningBalance()
     {
+        $reportDate = now()->format('Y-m-d');
+
+        $this->openingBalance ? $this->openingBalance = str_replace('.', '', $this->openingBalance) : 0;
+
         DailyReport::updateOrCreate(
-            ['report_date' => now()->toDateString()],
+            ['report_date' => $reportDate],
             [
                 'opening_balance' => $this->openingBalance,
                 'total_income' => 0,
@@ -45,31 +74,27 @@ class TemporaryReport extends Component
         );
 
         session()->flash('message', 'Saldo awal berhasil disimpan.');
-    }
-
-
-    private function updateBalance()
-    {
-        $reportDate = now()->format('Y-m-d');
-
-        $this->totalIncome = str_replace('.', '', $this->totalIncome);
-        $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
-
-        $previousBalance = DailyReport::where('report_date', '<', $reportDate)
-            ->orderBy('report_date', 'desc')
-            ->value('balance') ?? 0;
-
-        $this->balance = number_format($previousBalance - $this->totalOutcome - $this->savings + $this->totalIncome, 0, ',', '.');
-
-        $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
-        $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
+        $this->reset('openingBalance'); // Reset properti saldo awal
+        $this->mount();
     }
 
     public function generateReport()
     {
-        // Panggil fungsi generate laporan
-        // Tambahkan logika dari sebelumnya
+        $dailyReport = DailyReport::where('report_date', now()->toDateString())->first();
+
+        if (!$dailyReport) {
+            return 'Laporan untuk hari ini belum ada.';
+        }
+
+        return [
+            'report_date' => $dailyReport->report_date,
+            'opening_balance' => $dailyReport->opening_balance,
+            'total_income' => $dailyReport->total_income,
+            'total_outcome' => $dailyReport->total_outcome,
+            'balance' => $dailyReport->balance,
+        ];
     }
+
 
     public function updatedTotalIncome()
     {

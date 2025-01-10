@@ -9,5 +9,5 @@ class DailyReport extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['report_date', 'total_income', 'total_outcome', 'savings', 'balance', 'notes'];
+    protected $fillable = ['report_date', 'total_income', 'total_outcome', 'savings', 'balance', 'opening_balance', 'notes'];
 }

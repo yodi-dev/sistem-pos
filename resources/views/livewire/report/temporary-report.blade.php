@@ -49,7 +49,7 @@
                 <div class="label">
                     <span class="label-text">Saldo Awal</span>
                 </div>
-                <input type="number" min="1" id="opening_balance" wire:model="opening_balance"
+                <input type="number" min="1" id="opening_balance" wire:model="openingBalance"
                     wire:change="setOpeningBalance" class="input input-bordered w-full max-w-32 rounded-md">
             </label>
         </div>
