@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Component
 {
-    public $minimum = null;
+    public $minimum = 1;
     public $cart = [];
     public $groupedCart = [];
     public $categories;

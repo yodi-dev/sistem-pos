@@ -37,6 +37,6 @@ class Transaction extends Model
 
     public function getFormattedDateAttribute()
     {
-        return Carbon::parse($this->date)->translatedFormat('d/m/y');
+        return Carbon::parse($this->date)->translatedFormat('d M y');
     }
 }
