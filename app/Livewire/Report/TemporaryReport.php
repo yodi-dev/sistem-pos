@@ -14,6 +14,7 @@ class TemporaryReport extends Component
     public $savings = 0;
     public $balance = 0;
     public $openingBalance = 0;
+    public $openingSavings = 0;
 
     public function render()
     {
@@ -26,16 +27,16 @@ class TemporaryReport extends Component
 
         // Ambil data saldo awal dari daily_reports
         $this->openingBalance = DailyReport::where('report_date', $reportDate)->value('opening_balance') ?? 0;
+        $this->openingSavings = DailyReport::where('report_date', $reportDate)->value('opening_savings') ?? 0;
 
         // Ambil data income dan outcome
         $this->totalIncome = Transaction::whereDate('created_at', $reportDate)->sum('total_price');
         $this->totalOutcome = Expense::whereDate('created_at', $reportDate)->sum('amount');
 
-        // Default savings (opsional jika ingin editable di UI)
-        $this->savings = 0;
-
         // Perbarui balance dengan memperhitungkan saldo awal
         $this->updateBalance();
+
+        $this->updateSavings();
     }
 
     private function updateBalance()
@@ -54,6 +55,22 @@ class TemporaryReport extends Component
         $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
         $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
         $this->openingBalance = number_format($this->openingBalance, 0, ',', '.');
+    }
+
+    private function updateSavings()
+    {
+        $reportDate = now()->format('Y-m-d');
+
+        // Ambil saldo sebelumnya (jika ada)
+        $previousSavings = DailyReport::where('report_date', '<', $reportDate)
+            ->orderBy('report_date', 'desc')
+            ->value('savings') ?? 0;
+
+        // Hitung balance
+        $currentSavings = $this->openingSavings + $previousSavings;
+
+        $this->savings = number_format($currentSavings, 0, ',', '.');
+        $this->openingSavings = number_format($this->openingSavings, 0, ',', '.');
     }
 
     public function setOpeningBalance()
@@ -75,6 +92,28 @@ class TemporaryReport extends Component
 
         session()->flash('message', 'Saldo awal berhasil disimpan.');
         $this->reset('openingBalance'); // Reset properti saldo awal
+        $this->mount();
+    }
+
+    public function setOpeningSavings()
+    {
+        $reportDate = now()->format('Y-m-d');
+
+        $this->openingSavings ? $this->openingSavings = str_replace('.', '', $this->openingSavings) : 0;
+
+        DailyReport::updateOrCreate(
+            ['report_date' => $reportDate],
+            [
+                'opening_savings' => $this->openingSavings,
+                'total_income' => 0,
+                'total_outcome' => 0,
+                'savings' => 0,
+                'balance' => 0,
+            ]
+        );
+
+        session()->flash('message', 'Tabungan awal berhasil disimpan.');
+        $this->reset('openingSavings'); // Reset properti saldo awal
         $this->mount();
     }
 

@@ -50,7 +50,7 @@
 
         <div>
             <h4>Tabungan</h4>
-            <p class="text-base-content font-bold">Rp {{ number_format($savings, 0, ',', '.') }}</p>
+            <p class="text-base-content font-bold">Rp {{ $savings }}</p>
         </div>
 
         <label class="form-control w-full max-w-xs">
