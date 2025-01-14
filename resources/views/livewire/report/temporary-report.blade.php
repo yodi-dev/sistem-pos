@@ -44,8 +44,8 @@
             <div class="label">
                 <span class="label-text">Set Tabungan Awal</span>
             </div>
-            <input type="number" min="1" wire:model="openingSavings" wire:change="setOpeningSavings"
-                class="input input-bordered w-full max-w-32 rounded-md">
+            <input type="number" min="1" id="opening_savings" wire:model="openingSavings"
+                wire:change="setOpeningSavings" class="input input-bordered w-full max-w-32 rounded-md">
         </label>
 
         <div>
@@ -57,7 +57,7 @@
             <div class="label">
                 <span class="label-text">Tambah Tabungan</span>
             </div>
-            <input type="number" wire:model="savings" class="input input-bordered w-full max-w-32 rounded-md" />
+            <input type="number" wire:model="addSavings" class="input input-bordered w-full max-w-32 rounded-md" />
         </label>
 
     </div>

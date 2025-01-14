@@ -15,6 +15,8 @@ class TemporaryReport extends Component
     public $balance = 0;
     public $openingBalance = 0;
     public $openingSavings = 0;
+    public $addSavings = 0;
+    public $tes;
 
     public function render()
     {
@@ -48,9 +50,13 @@ class TemporaryReport extends Component
             ->orderBy('report_date', 'desc')
             ->value('balance') ?? 0;
 
+
+        if ($this->tes) {
+            dd($this->totalIncome);
+        }
+
         // Hitung balance
         $currentBalance = $this->openingBalance + $previousBalance - $this->totalOutcome - $this->savings + $this->totalIncome;
-
         $this->balance = number_format($currentBalance, 0, ',', '.');
         $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
         $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
@@ -113,7 +119,7 @@ class TemporaryReport extends Component
         );
 
         session()->flash('message', 'Tabungan awal berhasil disimpan.');
-        $this->reset('openingSavings'); // Reset properti saldo awal
+        $this->reset('openingSavings');
         $this->mount();
     }
 
@@ -134,18 +140,20 @@ class TemporaryReport extends Component
         ];
     }
 
-
     public function updatedTotalIncome()
     {
+        // $this->tes = true;
         $this->totalIncome = str_replace('.', '', $this->totalIncome);
-        $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
+        $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
+        $this->savings = str_replace('.', '', $this->savings);
+        $this->openingBalance = str_replace('.', '', $this->openingBalance);
         $this->updateBalance();
     }
 
     public function updatedTotalOutcome()
     {
         $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
-        $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
+        // $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
         $this->updateBalance();
     }
 }
