@@ -147,7 +147,9 @@ class TemporaryReport extends Component
         $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
         $this->savings = str_replace('.', '', $this->savings);
         $this->openingBalance = str_replace('.', '', $this->openingBalance);
+        $this->openingSavings = str_replace('.', '', $this->openingSavings);
         $this->updateBalance();
+        $this->setFormat();
         session()->flash('message', 'Total pemasukkan berhasil diubah.');
     }
 
@@ -157,7 +159,9 @@ class TemporaryReport extends Component
         $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
         $this->savings = str_replace('.', '', $this->savings);
         $this->openingBalance = str_replace('.', '', $this->openingBalance);
+        $this->openingSavings = str_replace('.', '', $this->openingSavings);
         $this->updateBalance();
+        $this->setFormat();
         session()->flash('message', 'Total pengeluaran berhasil diubah.');
     }
 }
