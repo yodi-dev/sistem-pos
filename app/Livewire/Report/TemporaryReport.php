@@ -50,11 +50,6 @@ class TemporaryReport extends Component
             ->orderBy('report_date', 'desc')
             ->value('balance') ?? 0;
 
-
-        if ($this->tes) {
-            dd($this->totalIncome);
-        }
-
         // Hitung balance
         $currentBalance = $this->openingBalance + $previousBalance - $this->totalOutcome - $this->savings + $this->totalIncome;
         $this->balance = number_format($currentBalance, 0, ',', '.');
@@ -142,18 +137,21 @@ class TemporaryReport extends Component
 
     public function updatedTotalIncome()
     {
-        // $this->tes = true;
         $this->totalIncome = str_replace('.', '', $this->totalIncome);
         $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
         $this->savings = str_replace('.', '', $this->savings);
         $this->openingBalance = str_replace('.', '', $this->openingBalance);
         $this->updateBalance();
+        session()->flash('message', 'Total pemasukkan berhasil diubah.');
     }
 
     public function updatedTotalOutcome()
     {
+        $this->totalIncome = str_replace('.', '', $this->totalIncome);
         $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
-        // $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
+        $this->savings = str_replace('.', '', $this->savings);
+        $this->openingBalance = str_replace('.', '', $this->openingBalance);
         $this->updateBalance();
+        session()->flash('message', 'Total pengeluaran berhasil diubah.');
     }
 }
