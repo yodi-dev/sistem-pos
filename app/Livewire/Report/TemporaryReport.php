@@ -16,6 +16,7 @@ class TemporaryReport extends Component
     public $openingBalance = 0;
     public $openingSavings = 0;
     public $addSavings = 0;
+    public $notes;
 
     public function render()
     {
@@ -124,19 +125,24 @@ class TemporaryReport extends Component
 
     public function generateReport()
     {
-        $dailyReport = DailyReport::where('report_date', now()->toDateString())->first();
+        $this->inisiateFormat();
+        $reportDate = now()->format('Y-m-d');
 
-        if (!$dailyReport) {
-            return 'Laporan untuk hari ini belum ada.';
-        }
+        DailyReport::updateOrCreate(
+            ['report_date' => $reportDate],
+            [
+                'total_income' => $this->totalIncome,
+                'total_outcome' => $this->totalOutcome,
+                'opening_savings' => $this->openingSavings,
+                'savings' => $this->savings,
+                'opening_balance' => $this->openingBalance,
+                'balance' => $this->balance,
+                'notes' => $this->notes,
+            ]
+        );
 
-        return [
-            'report_date' => $dailyReport->report_date,
-            'opening_balance' => $dailyReport->opening_balance,
-            'total_income' => $dailyReport->total_income,
-            'total_outcome' => $dailyReport->total_outcome,
-            'balance' => $dailyReport->balance,
-        ];
+        session(['daily_report_saved' => true]);
+        session()->flash('message', 'Laporan berhasil disimpan.');
     }
 
     private function inisiateFormat()
@@ -146,6 +152,7 @@ class TemporaryReport extends Component
         $this->savings = str_replace('.', '', $this->savings);
         $this->openingBalance = str_replace('.', '', $this->openingBalance);
         $this->openingSavings = str_replace('.', '', $this->openingSavings);
+        $this->balance = str_replace('.', '', $this->balance);
     }
 
     public function updatedTotalIncome()
