@@ -57,7 +57,8 @@
             <div class="label">
                 <span class="label-text">Tambah Tabungan</span>
             </div>
-            <input type="number" wire:model="addSavings" class="input input-bordered w-full max-w-32 rounded-md" />
+            <input type="number" wire:model="addSavings" wire:change="setAddSavings"
+                class="input input-bordered w-full max-w-32 rounded-md" />
         </label>
 
     </div>

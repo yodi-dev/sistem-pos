@@ -62,6 +62,7 @@ class TemporaryReport extends Component
         $this->savings = number_format($this->savings, 0, ',', '.');
         $this->balance = number_format($this->balance, 0, ',', '.');
         $this->openingSavings = number_format($this->openingSavings, 0, ',', '.');
+        $this->addSavings = number_format($this->addSavings, 0, ',', '.');
     }
 
     private function updateSavings()
@@ -76,7 +77,6 @@ class TemporaryReport extends Component
         // Hitung balance
         $currentSavings = $this->openingSavings + $previousSavings;
 
-        // dd($this->openingSavings);
         $this->savings = $currentSavings;
     }
 
@@ -98,7 +98,6 @@ class TemporaryReport extends Component
         );
 
         session()->flash('message', 'Saldo awal berhasil disimpan.');
-        $this->reset('openingBalance'); // Reset properti saldo awal
         $this->mount();
     }
 
@@ -120,7 +119,6 @@ class TemporaryReport extends Component
         );
 
         session()->flash('message', 'Tabungan awal berhasil disimpan.');
-        $this->reset('openingSavings');
         $this->mount();
     }
 
@@ -141,13 +139,18 @@ class TemporaryReport extends Component
         ];
     }
 
-    public function updatedTotalIncome()
+    private function inisiateFormat()
     {
         $this->totalIncome = str_replace('.', '', $this->totalIncome);
         $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
         $this->savings = str_replace('.', '', $this->savings);
         $this->openingBalance = str_replace('.', '', $this->openingBalance);
         $this->openingSavings = str_replace('.', '', $this->openingSavings);
+    }
+
+    public function updatedTotalIncome()
+    {
+        $this->inisiateFormat();
         $this->updateBalance();
         $this->setFormat();
         session()->flash('message', 'Total pemasukkan berhasil diubah.');
@@ -155,13 +158,20 @@ class TemporaryReport extends Component
 
     public function updatedTotalOutcome()
     {
-        $this->totalIncome = str_replace('.', '', $this->totalIncome);
-        $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
-        $this->savings = str_replace('.', '', $this->savings);
-        $this->openingBalance = str_replace('.', '', $this->openingBalance);
-        $this->openingSavings = str_replace('.', '', $this->openingSavings);
+        $this->inisiateFormat();
         $this->updateBalance();
         $this->setFormat();
         session()->flash('message', 'Total pengeluaran berhasil diubah.');
+    }
+
+    public function setAddSavings()
+    {
+        $this->inisiateFormat();
+        $this->addSavings ? $this->addSavings = str_replace('.', '', $this->addSavings) : 0;
+        $this->savings += $this->addSavings;
+
+        session()->flash('message', 'Berhasil tambah tabungan.');
+        $this->updateBalance();
+        $this->setFormat();
     }
 }
