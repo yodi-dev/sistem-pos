@@ -16,7 +16,6 @@ class TemporaryReport extends Component
     public $openingBalance = 0;
     public $openingSavings = 0;
     public $addSavings = 0;
-    public $tes;
 
     public function render()
     {
@@ -36,9 +35,9 @@ class TemporaryReport extends Component
         $this->totalOutcome = Expense::whereDate('created_at', $reportDate)->sum('amount');
 
         // Perbarui balance dengan memperhitungkan saldo awal
-        $this->updateBalance();
-
         $this->updateSavings();
+        $this->updateBalance();
+        $this->setFormat();
     }
 
     private function updateBalance()
@@ -52,10 +51,17 @@ class TemporaryReport extends Component
 
         // Hitung balance
         $currentBalance = $this->openingBalance + $previousBalance - $this->totalOutcome - $this->savings + $this->totalIncome;
-        $this->balance = number_format($currentBalance, 0, ',', '.');
+        $this->balance = $currentBalance;
+    }
+
+    private function setFormat()
+    {
         $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
         $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
         $this->openingBalance = number_format($this->openingBalance, 0, ',', '.');
+        $this->savings = number_format($this->savings, 0, ',', '.');
+        $this->balance = number_format($this->balance, 0, ',', '.');
+        $this->openingSavings = number_format($this->openingSavings, 0, ',', '.');
     }
 
     private function updateSavings()
@@ -70,8 +76,8 @@ class TemporaryReport extends Component
         // Hitung balance
         $currentSavings = $this->openingSavings + $previousSavings;
 
-        $this->savings = number_format($currentSavings, 0, ',', '.');
-        $this->openingSavings = number_format($this->openingSavings, 0, ',', '.');
+        // dd($this->openingSavings);
+        $this->savings = $currentSavings;
     }
 
     public function setOpeningBalance()
