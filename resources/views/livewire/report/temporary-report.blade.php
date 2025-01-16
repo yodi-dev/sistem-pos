@@ -12,6 +12,7 @@
 
     @if (session('daily_report_saved'))
         <x-card title="Laporan Harian" class="text-neutral bg-base-200" shadow separator>
+            <table></table>
         </x-card>
     @else
         <x-card title="Laporan Sementara" class="text-neutral bg-base-200" shadow separator>
