@@ -16,6 +16,10 @@
                 <thead>
                     <tr>
                         <th>tanggal</th>
+                        <th>Total Pemasukkan</th>
+                        <th>Total Pengeluaran</th>
+                        <th>Tabungan</th>
+                        <th>Catatan</th>
                     </tr>
                 </thead>
             </table>
