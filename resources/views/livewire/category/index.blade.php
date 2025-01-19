@@ -50,7 +50,6 @@
                         @endforeach
                     </tbody>
                 </table>
-
             @endif
         </x-card>
     </div>
