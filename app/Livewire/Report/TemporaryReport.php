@@ -20,6 +20,7 @@ class TemporaryReport extends Component
 
     public function render()
     {
+
         return view('livewire.report.temporary-report');
     }
 
@@ -142,7 +143,7 @@ class TemporaryReport extends Component
         );
 
         session(['daily_report_saved' => true]);
-        session()->flash('message', 'Laporan berhasil disimpan.');
+        $this->dispatch("daily_report_saved");
     }
 
     private function inisiateFormat()

@@ -6,9 +6,11 @@ use App\Models\Expense;
 use Livewire\Component;
 use App\Models\DailyReport;
 use App\Models\Transaction;
+use Livewire\Attributes\On;
 
 class ReportManager extends Component
 {
+    #[On('daily_report_saved')]
     public function render()
     {
         return view('livewire.report.report-manager');
