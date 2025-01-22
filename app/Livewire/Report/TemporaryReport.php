@@ -51,8 +51,15 @@ class TemporaryReport extends Component
             ->orderBy('report_date', 'desc')
             ->value('balance') ?? 0;
 
-        // Hitung balance
-        $currentBalance = $this->openingBalance + $previousBalance - $this->totalOutcome - $this->savings + $this->totalIncome;
+        // saldo sekarang
+        $currentBalance = $this->openingBalance + $previousBalance;
+        // total pengeluaran
+        $totalOutcome = $this->totalOutcome - $this->openingSavings - $this->addSavings;
+        // saldo sekarang dikurangi total pengeluaran
+        $currentBalance -= $totalOutcome;
+        // saldo sekarang ditambah total pemasukkan
+        $currentBalance += $this->totalIncome;
+        // update saldo dengan saldo sekarang
         $this->balance = $currentBalance;
     }
 

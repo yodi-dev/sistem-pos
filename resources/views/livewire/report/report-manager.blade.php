@@ -4,6 +4,8 @@
             @livewire('report.report-table')
         @else
             @livewire('report.temporary-report')
+            <div class="divider"></div>
+            @livewire('report.report-table')
         @endif
     </div>
 
