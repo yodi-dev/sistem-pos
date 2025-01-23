@@ -6,6 +6,7 @@ use App\Models\Expense;
 use Livewire\Component;
 use App\Models\DailyReport;
 use App\Models\Transaction;
+use Livewire\Attributes\On;
 
 class TemporaryReport extends Component
 {
@@ -54,13 +55,19 @@ class TemporaryReport extends Component
         // saldo sekarang
         $currentBalance = $this->openingBalance + $previousBalance;
         // total pengeluaran
-        $totalOutcome = $this->totalOutcome - $this->openingSavings - $this->addSavings;
+        $totalOutcome = $this->totalOutcome + $this->openingSavings + $this->addSavings;
         // saldo sekarang dikurangi total pengeluaran
         $currentBalance -= $totalOutcome;
         // saldo sekarang ditambah total pemasukkan
         $currentBalance += $this->totalIncome;
         // update saldo dengan saldo sekarang
         $this->balance = $currentBalance;
+    }
+
+    #[On('daily_report_saved')]
+    public function handler()
+    {
+        $this->setFormat();
     }
 
     private function setFormat()
