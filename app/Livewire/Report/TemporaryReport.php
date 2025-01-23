@@ -149,7 +149,7 @@ class TemporaryReport extends Component
             ]
         );
 
-        session(['daily_report_saved' => true]);
+        session()->flash('message', 'Berhasil menyimpan data laporan harian.');
         $this->dispatch("daily_report_saved");
     }
 

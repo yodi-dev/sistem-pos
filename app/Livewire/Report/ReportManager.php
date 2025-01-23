@@ -10,6 +10,7 @@ use Livewire\Attributes\On;
 
 class ReportManager extends Component
 {
+
     #[On('daily_report_saved')]
     public function render()
     {

@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Report;
 
-use App\Models\DailyReport;
 use Livewire\Component;
+use App\Models\DailyReport;
+use Livewire\Attributes\On;
 
 class ReportTable extends Component
 {
@@ -14,6 +15,7 @@ class ReportTable extends Component
         return view('livewire.report.report-table');
     }
 
+    #[On('daily_report_saved')]
     public function mount()
     {
         // Mengambil semua data laporan harian dan memformatnya
@@ -22,6 +24,7 @@ class ReportTable extends Component
             $report->formatted_total_income = number_format($report->total_income, 0, ',', '.');
             $report->formatted_total_outcome = number_format($report->total_outcome, 0, ',', '.');
             $report->formatted_balance = number_format($report->balance, 0, ',', '.');
+            $report->formatted_opening_balance = number_format($report->opening_balance, 0, ',', '.');
             $report->formatted_savings = number_format($report->savings, 0, ',', '.');
 
             return $report;

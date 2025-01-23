@@ -72,7 +72,7 @@
         </div>
         <div>
             <button wire:click="generateReport" class="btn btn-neutral w-full text-base-100 mt-4 rounded-md">
-                Buat Laporan
+                Simpan
             </button>
         </div>
 

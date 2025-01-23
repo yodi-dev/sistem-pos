@@ -1,21 +1,11 @@
 <div>
-    @if (session()->has('message'))
-        <div role="alert" class="alert alert-neutral mb-3 rounded-md">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>{{ session('message') }}</span>
-        </div>
-    @endif
     <x-card title="Laporan Harian" class="text-neutral bg-base-200" shadow separator>
-        <table class="table w-full border-1 border-neutral shadow">
+        <table class="table table-auto w-full max-w-94 border-1 border-neutral shadow">
             <thead class="bg-neutral text-base-100 text-lg text-center">
                 <tr>
                     <th class="border-r">Tanggal</th>
-                    <th class="border-r">Total Pemasukkan</th>
-                    <th class="border-r">Total Pengeluaran</th>
+                    <th class="border-r">Pemasukkan</th>
+                    <th class="border-r">Pengeluaran</th>
                     <th class="border-r">Tabungan</th>
                     <th class="border-r">Saldo</th>
                     <th class="border-r">Catatan</th>
@@ -33,7 +23,7 @@
                         <td>{{ $report->notes }}</td>
                         <td class="flex justify-center">
                             <button wire:click="delete({{ $report->id }})"
-                                class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
+                                class="px-2 text-sm text-neutral dark:text-red-400">
                                 <x-icon name="s-trash" />
                             </button>
                         </td>
