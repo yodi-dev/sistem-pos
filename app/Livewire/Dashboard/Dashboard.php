@@ -34,12 +34,12 @@ class Dashboard extends Component
 
         if ($this->minimum) {
             $products->where('stock', '<=', $this->minimum);
-        } else
+        }
         if ($this->category) {
             $products->whereHas('category', function ($query) {
                 $query->where('name', $this->category);
             });
-        } else
+        }
         if ($this->supplier) {
             $products->whereHas('suppliers', function ($query) {
                 $query->where('name', $this->supplier);
@@ -61,7 +61,6 @@ class Dashboard extends Component
     public function selectProduct($productId)
     {
         $product = Product::with('suppliers')->find($productId);
-        // dd($product->suppliers->count());
 
         if ($product->suppliers->isEmpty()) {
             // Jika tidak ada supplier, tampilkan modal
@@ -90,11 +89,9 @@ class Dashboard extends Component
             if ($unit) {
                 $unitId = $unit->id;
                 $unitName = $unit->name;
-                $unitMultiplier = $unit->multiplier;
             } else {
                 $unitId = '';
                 $unitName = '';
-                $unitMultiplier = 1;
             }
 
             $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
@@ -111,7 +108,6 @@ class Dashboard extends Component
                     'units' => $product->units,
                     'unit_id' => $unitId,
                     'unit_name' => $unitName,
-                    'multiplier' => $unitMultiplier,
                 ];
             }
 
@@ -203,19 +199,10 @@ class Dashboard extends Component
                         'wholesale_id' => $wholesale->id,
                         'product_id' => $item['id'],
                         'quantity' => $item['quantity'],
-                        'unit' => $unit->name,
-                        'total_stock' => $item['quantity'] * $item['multiplier'], // Hitung stok total
+                        'unit' => $unit->name ?? '',
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
-
-                    // Update stok produk
-                    $product = Product::find($item['id']);
-                    if ($product) {
-                        // Misalkan stok diupdate berdasarkan total_stock dari wholesale item
-                        $product->stock += $item['quantity'] * $item['multiplier']; // Update stok produk
-                        $product->save();
-                    }
                 }
                 WholesaleItem::insert($itemsData);
             }
