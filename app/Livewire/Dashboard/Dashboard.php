@@ -84,7 +84,8 @@ class Dashboard extends Component
 
         if ($product) {
             $unit = $product->units->first();
-            $supplier = $product->suppliers->first();
+            $supplier = Supplier::find($this->selectedSupplier);
+            // $supplier = $product->suppliers->first();
 
             if ($unit) {
                 $unitId = $unit->id;
@@ -145,7 +146,7 @@ class Dashboard extends Component
         $this->addToCart($this->selectedProduct);
 
         // Reset data dan tutup modal
-        $this->reset(['selectedProduct', 'selectedSupplier']);
+        // $this->reset(['selectedProduct', 'selectedSupplier']);
         $this->closeModal();
     }
 
