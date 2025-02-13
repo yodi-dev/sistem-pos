@@ -54,6 +54,9 @@ class Dashboard extends Component
 
     public function mount()
     {
+        $this->cart = session()->get('cartWholesale', []);
+        $this->updateGroupedCart();
+
         $this->categories = Category::all();
         $this->suppliers = Supplier::all();
     }
@@ -84,15 +87,11 @@ class Dashboard extends Component
 
         if ($product) {
             $unit = $product->units->first();
-            $supplier = Supplier::find($this->selectedSupplier);
-            // $supplier = $product->suppliers->first();
+            $supplier = $this->selectedSupplier ? Supplier::find($this->selectedSupplier) : $product->suppliers->first();
 
             if ($unit) {
                 $unitId = $unit->id;
                 $unitName = $unit->name;
-            } else {
-                $unitId = '';
-                $unitName = '';
             }
 
             $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id && $item['supplier_id'] === $supplier->id);
@@ -107,11 +106,12 @@ class Dashboard extends Component
                     'supplier_id' => $supplier->id ?? "Tidak ada supplier",
                     'supplier_name' => $supplier->name ?? "Tidak ada supplier",
                     'units' => $product->units,
-                    'unit_id' => $unitId,
-                    'unit_name' => $unitName,
+                    'unit_id' => $unitId ?? '',
+                    'unit_name' => $unitName ?? '',
                 ];
             }
 
+            session()->put('cartWholesale', $this->cart);
             $this->updateGroupedCart();
         }
     }
@@ -146,27 +146,24 @@ class Dashboard extends Component
         $this->addToCart($this->selectedProduct);
 
         // Reset data dan tutup modal
-        // $this->reset(['selectedProduct', 'selectedSupplier']);
+        $this->reset(['selectedProduct', 'selectedSupplier']);
         $this->closeModal();
     }
 
     public function removeFromCart($id)
     {
-        // $this->cart = session()->get('cart', []);
         $index = collect($this->cart)->search(fn($item) => $item['id'] === $id);
 
-        // dd($id);
         if ($index !== false) {
             unset($this->cart[$index]);
             $this->cart = array_values($this->cart);
-            // session()->put('cart', $this->cart);
+            session()->put('cartWholesale', $this->cart);
         }
 
         if (empty($this->cart)) {
             $this->dispatch('close-modal');
         }
 
-        // Perbarui groupedCart
         $this->updateGroupedCart();
     }
 
@@ -176,7 +173,6 @@ class Dashboard extends Component
 
         try {
             foreach ($this->groupedCart as $supplierName => $items) {
-                // dd($items);
 
                 $supplier = Supplier::where('name', $supplierName)->first();
 
@@ -185,12 +181,10 @@ class Dashboard extends Component
                 }
 
                 $supplierId = $supplier->id;
-                // Simpan wholesale
                 $wholesale = Wholesale::create([
                     'supplier_id' => $supplierId,
                     'date' => now(),
                 ]);
-
 
                 $itemsData = [];
                 foreach ($items as $item) {
@@ -210,6 +204,7 @@ class Dashboard extends Component
 
             DB::commit();
             $this->resetCart();
+            session()->forget('cartWholesale');
             session()->flash('message', 'Berhasil menyimpan data kulakan.');
         } catch (\Exception $e) {
             DB::rollBack();

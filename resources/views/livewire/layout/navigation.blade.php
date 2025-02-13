@@ -39,7 +39,8 @@
                     request()->routeIs('duplikat.product') ||
                     request()->routeIs('update.products')"
                     wire:navigate />
-                <x-menu-item title="Pembeli" icon="s-user-group" :href="route('customers')" :active="request()->routeIs('customers')" wire:navigate />
+                <x-menu-item title="Pelanggan" icon="s-user-group" :href="route('customers')" :active="request()->routeIs('customers')"
+                    wire:navigate />
                 <x-menu-item title="Kategori Produk" icon="s-wallet" :href="route('categories')" :active="request()->routeIs('categories')"
                     wire:navigate />
                 <x-menu-item title="Supplier" icon="m-users" :href="route('suppliers')" :active="request()->routeIs('suppliers')" wire:navigate />

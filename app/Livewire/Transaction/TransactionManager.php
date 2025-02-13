@@ -40,7 +40,6 @@ class TransactionManager extends Component
     {
         $product = Product::with('units')->find($productId);
 
-
         if (!$product) {
             return;
         }
@@ -64,8 +63,6 @@ class TransactionManager extends Component
             ];
         }
 
-
-        // $this->updateQuantityOnUnitChange($index);
         $this->updateTotal();
         $this->calculateSubtotal($index ?? count($this->cart) - 1);
 
@@ -102,7 +99,6 @@ class TransactionManager extends Component
     {
         $selectedUnitId = $this->cart[$index]['unit'];
         $unit = Unit::find($selectedUnitId);
-        // dd($unit);
 
         if (empty($unit)) {
             $this->cart[$index]['quantity'] = $quantity;
@@ -117,7 +113,6 @@ class TransactionManager extends Component
         $this->cart = session()->get('cart', []);
         $index = collect($this->cart)->search(fn($item) => $item['id'] === $id);
 
-        // dd($id);
         if ($index !== false) {
             unset($this->cart[$index]);
             $this->cart = array_values($this->cart);
@@ -229,7 +224,6 @@ class TransactionManager extends Component
 
     private function saveTransaction()
     {
-        // validasi customer jika pembayaran dengan utang
         if ($this->paymentMethod === 'utang' && empty($this->customer)) {
             $this->addError('customer', 'Data customer harus diisi jika metode pembayaran adalah utang.');
             return false;
@@ -259,7 +253,6 @@ class TransactionManager extends Component
                         'subtotal' => $item['subtotal'],
                     ]);
 
-                    // mengurangi stok produk
                     $product = Product::find($item['id']);
                     $product->stock -= $item['quantity'];
                     $product->save();

@@ -34,15 +34,8 @@
                                     {{ $wholesale->total_barang }}</td>
                                 <td wire:click="show({{ $wholesale->id }})">{{ $wholesale->formatted_date }}</td>
                                 <td class="flex justify-center">
-                                    <a class="px-2 text-sm text-neutral dark:text-blue-400 border-neutral">
-                                        <x-icon name="m-pencil-square" />
-                                    </a>
-                                    {{-- <a wire:navigate href="{{ route('edit.selling', $wholesale->id) }}"
-                                        class="px-2 text-sm text-neutral dark:text-blue-400 border-neutral">
-                                        <x-icon name="m-pencil-square" />
-                                    </a> --}}
                                     <button wire:click="delete({{ $wholesale->id }})"
-                                        class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
+                                        class="px-2 text-sm text-neutral dark:text-red-400">
                                         <x-icon name="s-trash" />
                                     </button>
                                 </td>

@@ -9,7 +9,7 @@ class WholesaleItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['wholesale_id', 'product_id', 'quantity', 'unit', 'total_stock'];
+    protected $fillable = ['wholesale_id', 'product_id', 'quantity', 'unit'];
 
     public function product()
     {
