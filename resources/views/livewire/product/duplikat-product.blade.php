@@ -82,8 +82,6 @@
                                     class="w-full text-black p-2 border rounded">
                             </div>
 
-
-
                             <div>
                                 <div class="label">
                                     <div class="label-text">Stok</div>

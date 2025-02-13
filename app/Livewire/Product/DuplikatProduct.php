@@ -26,7 +26,7 @@ class DuplikatProduct extends Component
         $this->code = $product->code;
         $this->name = $product->name;
         $this->name .= " - copy";
-        $this->category_id = $product->category->id;
+        $this->category_id = $product->category->id ?? '';
         $this->purchase_price = number_format($product->purchase_price, 0, ',', '.');
         $this->retail_price = number_format($product->retail_price, 0, ',', '.');
         $this->wholesale_price = number_format($product->wholesale_price, 0, ',', '.');
