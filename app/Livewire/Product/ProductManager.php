@@ -58,6 +58,22 @@ class ProductManager extends Component
         session()->flash('message', 'Berhasil menambahkan supplier ke produk.');
     }
 
+    public function removeSupplier($supplierId)
+    {
+        if (!$this->selectedProduct) {
+            session()->flash('error', 'Produk belum dipilih.');
+            return;
+        }
+
+        $this->selectedProduct->suppliers()->detach($supplierId);
+
+        $this->assignedSuppliers = $this->selectedProduct->suppliers;
+
+        $this->closeModal();
+        session()->flash('message', 'Supplier berhasil dihapus.');
+    }
+
+
 
     public function showDetails($productId)
     {

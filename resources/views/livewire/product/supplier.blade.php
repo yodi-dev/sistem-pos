@@ -14,7 +14,13 @@
                                 <p>Belum ada supplier</p>
                             @else
                                 @foreach ($assignedSuppliers as $supplier)
-                                    <x-list-item class="hover:bg-base-300" :item="$supplier" />
+                                    <x-list-item class="hover:bg-base-300" :item="$supplier">
+                                        <x-slot:actions>
+                                            <x-button icon="o-trash"
+                                                class="btn btn-sm text-red-500 bg-base-100 hover:bg-base-100 rounded-md"
+                                                wire:click="removeSupplier({{ $supplier->id }})" spinner />
+                                        </x-slot:actions>
+                                    </x-list-item>
                                 @endforeach
                             @endif
                         </ul>
@@ -22,7 +28,7 @@
                     <div class="mt-2 text-base-content">
                         <x-select wire:model="selectedSupplier" label="Tambah Supplier" :options="$suppliers"
                             option-value="id" option-label="name" placeholder="nama supplier" placeholder-value="0"
-                            {{-- Set a value for placeholder. Default is `null` --}} class="rounded-md" />
+                            class="rounded-md" />
                     </div>
                 </div>
                 <div class="flex space-x-2 w-full">
