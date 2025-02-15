@@ -55,7 +55,8 @@ class ProductManager extends Component
         $this->assignedSuppliers = $this->selectedProduct->suppliers;
         $this->closeModal();
 
-        session()->flash('message', 'Berhasil menambahkan supplier ke produk.');
+        // session()->flash('message', 'Berhasil menambahkan supplier ke produk.');
+        $this->dispatch('showToast', 'Supplier berhasil ditambahkan.');
     }
 
     public function removeSupplier($supplierId)
@@ -70,7 +71,7 @@ class ProductManager extends Component
         $this->assignedSuppliers = $this->selectedProduct->suppliers;
 
         $this->closeModal();
-        session()->flash('message', 'Supplier berhasil dihapus.');
+        // session()->flash('message', 'Supplier berhasil dihapus.');
     }
 
 

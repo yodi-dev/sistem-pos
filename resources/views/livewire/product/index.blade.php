@@ -112,3 +112,19 @@
         </x-card>
     </div>
 </div>
+@script
+    <script>
+        $wire.on("showToast", (message) => {
+            let toast = document.createElement("div");
+            toast.className =
+                `toast toast-top toast-end`;
+            toast.innerHTML = `<div class="alert text-base-content rounded-md">${message}</div>`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000); // Hilang setelah 3 detik
+        });
+    </script>
+@endscript
