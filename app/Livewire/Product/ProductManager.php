@@ -38,13 +38,20 @@ class ProductManager extends Component
     {
         $this->isModalSupplier = true;
         $this->selectedProduct = Product::find($productId);
-        $this->suppliers = Supplier::all(); // Ambil semua supplier
-        $this->assignedSuppliers = $this->selectedProduct->suppliers; // Ambil supplier yang sudah dimiliki
+        $this->suppliers = Supplier::all();
+        $this->assignedSuppliers = $this->selectedProduct->suppliers;
     }
 
     public function assignSupplier()
     {
-        $data = $this->selectedProduct->suppliers()->attach($this->selectedSupplier);
+        if ($this->selectedProduct->suppliers()->where('supplier_id', $this->selectedSupplier)->exists()) {
+            $this->closeModal();
+            session()->flash('error', 'Gagal menambahkan Supplier karna sudah ada.');
+
+            return;
+        }
+
+        $this->selectedProduct->suppliers()->attach($this->selectedSupplier);
         $this->assignedSuppliers = $this->selectedProduct->suppliers;
         $this->closeModal();
 
