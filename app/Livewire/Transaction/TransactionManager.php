@@ -135,6 +135,12 @@ class TransactionManager extends Component
 
     public function andprint()
     {
+        // dd($this->isPrinterConnected());
+        if (!$this->isPrinterConnected()) {
+            session()->flash('error', 'Printer tidak terhubung. Pastikan printer sudah menyala dan tersambung.');
+            return;
+        }
+
         $transaction = $this->saveTransaction();
 
         if ($transaction) {
@@ -143,6 +149,37 @@ class TransactionManager extends Component
             session()->forget('cart');
         }
     }
+
+    private function isPrinterConnected()
+    {
+        $printerName = "thermal"; // Sesuaikan dengan nama printer di Windows
+
+        $output = [];
+        exec("wmic printer where Name='{$printerName}' get PrinterStatus", $output);
+
+        if (isset($output[1]) && trim($output[1]) == "3") { // Status "3" biasanya berarti printer siap
+            return true;
+        }
+
+        return false;
+    }
+
+
+    // private function isPrinterConnected()
+    // {
+    //     try {
+    //         $connector = new WindowsPrintConnector("thermal");
+    //         $printer = new Printer($connector);
+
+    //         $printer->text("\n");
+    //         $printer->cut();
+    //         $printer->close();
+    //         return true;
+    //     } catch (\Exception $e) {
+    //         return false;
+    //     }
+    // }
+
 
     public function printNota()
     {
