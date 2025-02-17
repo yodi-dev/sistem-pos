@@ -46,7 +46,7 @@ class ProductManager extends Component
     {
         if ($this->selectedProduct->suppliers()->where('supplier_id', $this->selectedSupplier)->exists()) {
             $this->closeModal();
-            session()->flash('error', 'Gagal menambahkan Supplier karna sudah ada.');
+            $this->dispatch('showToastError', 'Gagal menambahkan supplier!');
 
             return;
         }
@@ -55,7 +55,6 @@ class ProductManager extends Component
         $this->assignedSuppliers = $this->selectedProduct->suppliers;
         $this->closeModal();
 
-        // session()->flash('message', 'Berhasil menambahkan supplier ke produk.');
         $this->dispatch('showToast', 'Supplier berhasil ditambahkan.');
     }
 
@@ -71,7 +70,7 @@ class ProductManager extends Component
         $this->assignedSuppliers = $this->selectedProduct->suppliers;
 
         $this->closeModal();
-        // session()->flash('message', 'Supplier berhasil dihapus.');
+        $this->dispatch('showToast', 'Supplier berhasil dihapus.');
     }
 
 
