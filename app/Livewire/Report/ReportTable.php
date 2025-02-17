@@ -50,6 +50,7 @@ class ReportTable extends Component
         $pdf = Pdf::loadView('daily_report.print-report', compact('reports'))
             ->setPaper('a4', 'portrait');
 
+        $this->mount();
         // Kirim file ke browser untuk diunduh
         return response()->streamDownload(
             fn() => print($pdf->output()),
