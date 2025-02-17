@@ -8,7 +8,7 @@
             <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="mt-3 mb-4 text-center sm:mt-0  sm:text-left">
                     <div class="mt-2 text-base-content">
-                        <h3 class="text-lg font-bold mb-4">Supplier Produk</h3>
+                        <h3 class="text-lg font-bold mb-4">Supplier Produk - {{ $selectedProduct->name }}</h3>
                         <ul class="list-disc list-inside mb-4">
                             @if ($assignedSuppliers->isEmpty())
                                 <p>Belum ada supplier</p>
