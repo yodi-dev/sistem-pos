@@ -6,17 +6,6 @@
             </div>
         </div>
 
-        @if (session()->has('message'))
-            <div role="alert" class="alert my-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{{ session('message') }}</span>
-            </div>
-        @endif
-
         <x-card title="Stok" class="text-neutral bg-base-200 mt-3" shadow separator>
             <x-slot:menu class="flex justify-end w-full">
                 @if ($modalSupplier)
@@ -135,10 +124,57 @@
                 {{ $products->links() }}
             </div>
         </x-card>
+
     </div>
+
     <script>
         window.addEventListener('close-modal', () => {
             document.getElementById('modalCart').close();
         });
     </script>
+
 </div>
+
+@script
+    <script>
+        $wire.on("showToast", (message) => {
+            let toast = document.createElement("div");
+            toast.className =
+                `toast toast-top toast-end`;
+            toast.innerHTML = `
+                <div class="alert text-base-100 bg-neutral rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ${message}</div>`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000); // Hilang setelah 3 detik
+        });
+
+        $wire.on("showToastError", (message) => {
+            let toast = document.createElement("div");
+            toast.className =
+                `toast toast-top toast-end`;
+            toast.innerHTML = `
+                <div class="alert text-base-100 bg-error rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12M12 2a10 10 0 1010 10A10 10 0 0012 2z" />
+                </svg>
+                ${message}</div>`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000); // Hilang setelah 3 detik
+        });
+    </script>
+@endscript

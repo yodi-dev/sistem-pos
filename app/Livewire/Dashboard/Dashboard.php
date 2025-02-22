@@ -172,45 +172,58 @@ class Dashboard extends Component
         DB::beginTransaction();
 
         try {
+            $unitIds = collect($this->groupedCart)->flatten(1)->pluck('unit_id')->unique();
+            $units = Unit::whereIn('id', $unitIds)->pluck('name', 'id');
+
             foreach ($this->groupedCart as $supplierName => $items) {
-
-                $supplier = Supplier::where('name', $supplierName)->first();
-
-                if (!$supplier) {
+                $supplierId = Supplier::where('name', $supplierName)->value('id');
+                if (!$supplierId) {
                     throw new \Exception("Supplier $supplierName tidak ditemukan.");
                 }
 
-                $supplierId = $supplier->id;
-                $wholesale = Wholesale::create([
-                    'supplier_id' => $supplierId,
-                    'date' => now(),
-                ]);
+                // Cek apakah sudah ada wholesale untuk supplier ini pada hari yang sama
+                $wholesale = Wholesale::where('supplier_id', $supplierId)
+                    ->whereDate('date', today())
+                    ->first();
 
-                $itemsData = [];
-                foreach ($items as $item) {
-                    $unit = Unit::where('id', $item['unit_id'])->first();
-
-                    $itemsData[] = [
-                        'wholesale_id' => $wholesale->id,
-                        'product_id' => $item['id'],
-                        'quantity' => $item['quantity'],
-                        'unit' => $unit->name ?? '',
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
+                // Jika tidak ada, buat wholesale baru
+                if (!$wholesale) {
+                    $wholesale = Wholesale::create([
+                        'supplier_id' => $supplierId,
+                        'date' => now(),
+                    ]);
                 }
-                WholesaleItem::insert($itemsData);
+
+                foreach ($items as $item) {
+                    $existingItem = WholesaleItem::where('wholesale_id', $wholesale->id)
+                        ->where('product_id', $item['id'])
+                        ->first();
+
+                    if ($existingItem) {
+                        // Jika produk sudah ada, update quantity
+                        $existingItem->increment('quantity', $item['quantity']);
+                    } else {
+                        // Jika produk belum ada, tambahkan sebagai item baru
+                        WholesaleItem::create([
+                            'wholesale_id' => $wholesale->id,
+                            'product_id' => $item['id'],
+                            'quantity' => $item['quantity'],
+                            'unit' => $units[$item['unit_id']] ?? '',
+                        ]);
+                    }
+                }
             }
 
             DB::commit();
             $this->resetCart();
             session()->forget('cartWholesale');
-            session()->flash('message', 'Berhasil menyimpan data kulakan.');
+            $this->dispatch('showToast', 'Berhasil menyimpan data kulakan.');
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
     }
+
 
     private function resetCart()
     {
