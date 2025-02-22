@@ -27,5 +27,8 @@
                 @endforeach
             </tbody>
         </table>
+
+        {{-- <p class="text-base-content mt-5">Penghasilan Cash : {{ $incomeCash }}</p> --}}
+        {{-- <p class="text-base-content">Penghasilan QRIS : {{ $incomeQRIS }}</p> --}}
     </x-card>
 </div>

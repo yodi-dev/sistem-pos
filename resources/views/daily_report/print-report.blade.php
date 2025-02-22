@@ -54,6 +54,11 @@
             background-color: #f1f1f1;
         }
 
+        p {
+            color: #555;
+            font-size: 12px;
+        }
+
         footer {
             margin-top: 50px;
             text-align: center;
@@ -90,6 +95,9 @@
                 @endforeach
             </tbody>
         </table>
+
+        {{-- <p>Saldo QRIS : Rp. </p> --}}
+        {{-- <p>Saldo Cash : Rp. </p> --}}
 
         <footer>
             <p>Oleh Habiba Store | dicetak pada {{ now()->format('d M Y H:i') }}</p>

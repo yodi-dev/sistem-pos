@@ -15,12 +15,11 @@ class WholesaleManager extends Component
 
     public function render()
     {
-        $this->wholesales = Wholesale::with('supplier', 'wholesaleItems') // Memuat relasi wholesaleItems
+        $this->wholesales = Wholesale::with('supplier', 'wholesaleItems')
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($wholesale) {
-                // Hitung total jumlah barang untuk setiap wholesale
-                $totalBarang = $wholesale->wholesaleItems->sum('quantity'); // Menjumlahkan quantity dari wholesaleItems
+                $totalBarang = $wholesale->wholesaleItems->sum('quantity');
                 $wholesale->total_barang = $totalBarang;
                 return $wholesale;
             });
@@ -41,18 +40,14 @@ class WholesaleManager extends Component
 
     public function print($id)
     {
-        // Ambil data wholesale berdasarkan ID
         $selectedWholesale = Wholesale::with(['supplier', 'wholesaleItems.product'])->findOrFail($id);
 
-        // Siapkan data untuk view
         $data = [
             'selectedWholesale' => $selectedWholesale,
         ];
 
-        // Generate PDF
         $pdf = Pdf::loadView('wholesale.print', $data);
 
-        // Unduh atau tampilkan PDF
         return $pdf->download('detail_kulakan.pdf');
     }
 
@@ -60,7 +55,7 @@ class WholesaleManager extends Component
     public function delete($id)
     {
         Wholesale::find($id)->delete();
-        session()->flash('message', 'Produk berhasil dihapus.');
+        $this->dispatch('showToast', 'Berhasil menghapus data kulakan.');
     }
 
     #[On('closeModal')]
