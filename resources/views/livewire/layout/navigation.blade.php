@@ -28,8 +28,9 @@
                     wire:navigate />
                 <x-menu-item title="Data Kulakan" icon="s-building-storefront" :href="route('wholesales')" :active="request()->routeIs('wholesales')"
                     wire:navigate />
+                <x-menu-item title="Barang Masuk" icon="c-inbox-arrow-down" :href="route('selling')" :active="request()->routeIs('selling')"
+                    wire:navigate />
                 <x-menu-item title="Utang" icon="m-credit-card" :href="route('debts')" :active="request()->routeIs('debts')" wire:navigate />
-
                 <x-menu-item title="Laporan" icon="s-document-text" :href="route('reports')" :active="request()->routeIs('reports')"
                     wire:navigate />
             </x-menu-sub>
