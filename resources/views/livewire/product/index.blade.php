@@ -6,10 +6,6 @@
                     class="btn btn-sm btn-neutral text-base-100 rounded-md">
                     Tambah
                 </a>
-                <a title="Klik untuk memperbarui jumlah stok pada produk" wire:navigate
-                    href="{{ route('update.products') }}" class="btn btn-sm btn-neutral text-base-100 rounded-md">
-                    Perbarui Stok
-                </a>
                 <a title="Klik untuk mengekspor data produk" href="{{ route('export.products') }}"
                     class="btn btn-sm btn-neutral text-base-100 rounded-md">
                     Export

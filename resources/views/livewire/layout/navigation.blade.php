@@ -28,7 +28,7 @@
                     wire:navigate />
                 <x-menu-item title="Data Kulakan" icon="s-building-storefront" :href="route('wholesales')" :active="request()->routeIs('wholesales')"
                     wire:navigate />
-                <x-menu-item title="Barang Masuk" icon="c-inbox-arrow-down" :href="route('selling')" :active="request()->routeIs('selling')"
+                <x-menu-item title="Barang Masuk" icon="c-inbox-arrow-down" :href="route('update.products')" :active="request()->routeIs('update.products')"
                     wire:navigate />
                 <x-menu-item title="Utang" icon="m-credit-card" :href="route('debts')" :active="request()->routeIs('debts')" wire:navigate />
                 <x-menu-item title="Laporan" icon="s-document-text" :href="route('reports')" :active="request()->routeIs('reports')"
@@ -37,8 +37,7 @@
             <x-menu-sub title="Data Master" icon="s-square-3-stack-3d">
                 <x-menu-item title="Produk" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products') ||
                     request()->routeIs('barcode.print') ||
-                    request()->routeIs('duplikat.product') ||
-                    request()->routeIs('update.products')"
+                    request()->routeIs('duplikat.product')"
                     wire:navigate />
                 <x-menu-item title="Pelanggan" icon="s-user-group" :href="route('customers')" :active="request()->routeIs('customers')"
                     wire:navigate />

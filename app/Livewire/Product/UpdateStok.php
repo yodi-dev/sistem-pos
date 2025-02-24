@@ -13,6 +13,18 @@ class UpdateStok extends Component
     public $cart = [];
     public $highlightIndex = 0;
 
+    public function render()
+    {
+        return view('livewire.product.update-stok', [
+            'products' => $this->products,
+        ]);
+    }
+
+    public function mount()
+    {
+        $this->cart = session()->get('cartUpdate', []);
+    }
+
     public function updatedSearch()
     {
         $this->products = Product::where('name', 'like', "%{$this->search}%")
@@ -106,6 +118,8 @@ class UpdateStok extends Component
                 'print_barcode' => false,
             ];
         }
+
+        session()->put('cartUpdate', $this->cart);
         $this->resetSearch();
     }
 
@@ -170,6 +184,8 @@ class UpdateStok extends Component
         // Tutup ZIP setelah semua file ditambahkan
         $zip->close();
 
+        session()->forget('cartUpdate');
+
         // Bersihkan keranjang dan berikan feedback
         $this->cart = [];
         session()->flash('success', 'Data berhasil diperbarui.');
@@ -178,12 +194,5 @@ class UpdateStok extends Component
         if ($barcodeGenerated) {
             return response()->download($zipFileName)->deleteFileAfterSend();
         }
-    }
-
-    public function render()
-    {
-        return view('livewire.product.update-stok', [
-            'products' => $this->products,
-        ]);
     }
 }

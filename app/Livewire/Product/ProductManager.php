@@ -73,8 +73,6 @@ class ProductManager extends Component
         $this->dispatch('showToast', 'Supplier berhasil dihapus.');
     }
 
-
-
     public function showDetails($productId)
     {
         $this->Product = Product::with('category')->find($productId);

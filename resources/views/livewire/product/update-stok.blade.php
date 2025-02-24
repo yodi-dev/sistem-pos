@@ -12,7 +12,7 @@
         @endif
         <div class="row mb-3">
             <div class="col-12 ">
-                <x-card title="Perbarui Stok Produk" class="text-neutral bg-base-200" shadow separator>
+                <x-card title="Barang Masuk" class="text-neutral bg-base-200" shadow separator>
                     <div class="flex justify-center">
                         <div class="w-full relative">
                             <div x-data="{
