@@ -58,6 +58,10 @@
         <div class="bg-base-200 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
                 <div>
+                    <input type="text" id="searchSupplier" {{-- wire:model.live="searchSupplier"
+                        wire:keydown.arrow-down="selectNext" wire:keydown.arrow-up="selectPrevious"
+                        wire:keydown.enter="confirmSupplier" --}}
+                        class="text-base-content input input-bordered w-fit rounded-md mb-3" placeholder="Supplier" />
                     <table
                         class="table table-zebra table-auto text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
                         <thead class="bg-neutral text-lg text-base-100 dark:bg-gray-700">
@@ -67,6 +71,7 @@
                                 <th class="p-2 border-r">Harga Jual</th>
                                 <th class="p-2 border-r">Harga Grosir</th>
                                 <th class="p-2 border-r">Tambah Stok</th>
+                                <th class="p-2 border-r">Total Harga</th>
                                 <th class="p-2 border-r">Cetak Barcode</th>
                             </tr>
                         </thead>
@@ -96,6 +101,9 @@
                                             wire:change="updateCartStock({{ $key }}, $event.target.value)"
                                             class="input input-sm w-16 rounded-md" value="{{ $item['stock'] }}"
                                             min="0">
+                                    </td>
+                                    <td class="">
+                                        Rp. .....
                                     </td>
                                     <td>
                                         <div class="form-control">
