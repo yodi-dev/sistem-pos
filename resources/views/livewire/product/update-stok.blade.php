@@ -58,10 +58,22 @@
         <div class="bg-base-200 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
                 <div>
-                    <input type="text" id="searchSupplier" {{-- wire:model.live="searchSupplier"
-                        wire:keydown.arrow-down="selectNext" wire:keydown.arrow-up="selectPrevious"
-                        wire:keydown.enter="confirmSupplier" --}}
+                    <input type="text" id="searchSupplier" wire:model.live="searchSupplier"
+                        wire:model.live="searchSupplier" wire:keydown.arrow-down="selectNext"
+                        wire:keydown.arrow-up="selectPrevious" wire:keydown.enter="confirmSupplier"
                         class="text-base-content input input-bordered w-fit rounded-md mb-3" placeholder="Supplier" />
+                    @if (!empty($suppliers) && $searchSupplier !== ($selectedSupplier->name ?? ''))
+                        <ul
+                            class="absolute bg-white border border-gray-300 w-fit max-h-80 overflow-y-auto top-0 mt-20 rounded-lg z-10">
+                            @foreach ($suppliers as $index => $supplier)
+                                <li {{-- wire:click="addCustomer({{ $customer->id }})" --}}
+                                    class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
+                {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
+                                    {{ $supplier->name }} - {{ $supplier->address }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                     <table
                         class="table table-zebra table-auto text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
                         <thead class="bg-neutral text-lg text-base-100 dark:bg-gray-700">

@@ -3,13 +3,16 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
+use App\Models\Supplier;
 use Livewire\Component;
 use Milon\Barcode\DNS1D;
 
 class UpdateStok extends Component
 {
     public $search = '';
+    public $searchSupplier = '';
     public $products = [];
+    public $suppliers = [];
     public $cart = [];
     public $highlightIndex = 0;
 
@@ -23,6 +26,15 @@ class UpdateStok extends Component
     public function mount()
     {
         $this->cart = session()->get('cartUpdate', []);
+    }
+
+    public function updatedSearchSupplier()
+    {
+        $this->suppliers = Supplier::where('name', 'like', '%' . $this->searchSupplier . '%')->get();
+
+        if (empty($this->searchSupplier)) {
+            $this->suppliers = [];
+        }
     }
 
     public function updatedSearch()
