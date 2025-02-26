@@ -37,6 +37,22 @@ class UpdateStok extends Component
         }
     }
 
+    public function selectNextSupplier()
+    {
+        if ($this->highlightIndex < count($this->suppliers) - 1) {
+            $this->highlightIndex++;
+        }
+    }
+
+    public function confirmSupplier()
+    {
+        if (!empty($this->suppliers)) {
+            $selectedSupplier = $this->suppliers[$this->highlightIndex];
+            // $this->addCustomer($selectedCustomer->id);
+            $this->highlightIndex = 0;
+        }
+    }
+
     public function updatedSearch()
     {
         $this->products = Product::where('name', 'like', "%{$this->search}%")
@@ -124,7 +140,6 @@ class UpdateStok extends Component
                 'purchase_price' => $product->purchase_price,
                 'retail_price' => $product->retail_price,
                 'wholesale_price' => $product->wholesale_price,
-                'current_stock' => $product->stock,
                 'stock' => 0,
                 'checked' => false,
                 'print_barcode' => false,

@@ -59,17 +59,18 @@
             <div class="p-6">
                 <div>
                     <input type="text" id="searchSupplier" wire:model.live="searchSupplier"
-                        wire:model.live="searchSupplier" wire:keydown.arrow-down="selectNext"
+                        wire:model.live="searchSupplier" wire:keydown.arrow-down="selectNextSupplier"
                         wire:keydown.arrow-up="selectPrevious" wire:keydown.enter="confirmSupplier"
-                        class="text-base-content input input-bordered w-fit rounded-md mb-3" placeholder="Supplier" />
+                        class="text-base-content input input-bordered w-64 rounded-md mb-3" placeholder="Supplier" />
+
                     @if (!empty($suppliers) && $searchSupplier !== ($selectedSupplier->name ?? ''))
                         <ul
-                            class="absolute bg-white border border-gray-300 w-fit max-h-80 overflow-y-auto top-0 mt-20 rounded-lg z-10">
+                            class="absolute bg-white text-base-content max-h-80 overflow-y-scroll w-64 rounded-md shadow-md z-10">
                             @foreach ($suppliers as $index => $supplier)
                                 <li {{-- wire:click="addCustomer({{ $customer->id }})" --}}
                                     class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
                 {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
-                                    {{ $supplier->name }} - {{ $supplier->address }}
+                                    {{ $supplier->name }}
                                 </li>
                             @endforeach
                         </ul>
@@ -83,8 +84,8 @@
                                 <th class="p-2 border-r">Harga Jual</th>
                                 <th class="p-2 border-r">Harga Grosir</th>
                                 <th class="p-2 border-r">Tambah Stok</th>
-                                <th class="p-2 border-r">Total Harga</th>
-                                <th class="p-2 border-r">Cetak Barcode</th>
+                                <th colspan="2" class="p-2 border-r">Total Harga</th>
+                                {{-- <th class="p-2 border-r">Aksi</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -108,26 +109,34 @@
                                             value="{{ number_format($item['wholesale_price'], 0, ',', '.') }}">
                                     </td>
                                     <td class="flex items-center space-x-2">
-                                        <span title="Stok sekarang"> {{ $item['current_stock'] }} + </span>
                                         <input type="number"
                                             wire:change="updateCartStock({{ $key }}, $event.target.value)"
-                                            class="input input-sm w-16 rounded-md" value="{{ $item['stock'] }}"
+                                            class="input input-sm w-24 rounded-md" value="{{ $item['stock'] }}"
                                             min="0">
                                     </td>
                                     <td class="">
                                         Rp. .....
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <div class="form-control">
                                             <input type="checkbox" wire:click="togglePrintBarcode({{ $key }})"
                                                 class="checkbox checkbox-neutral bg-base-100 mx-auto rounded-md"
                                                 {{ $item['print_barcode'] ? 'checked' : '' }}>
                                         </div>
+                                    </td> --}}
+                                    <td class="p-2">
+                                        <button wire:click="removeFromCart({{ $item['id'] }})">
+                                            <x-icon name="s-trash" class=" text-error" />
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+
+                    @if (!$cart)
+                        <p class="text-center text-gray-500 my-5">Belum ada data.</p>
+                    @endif
 
                     <div class="flex space-x-2 mt-5">
                         <button wire:navigate href="{{ route('products') }}"
