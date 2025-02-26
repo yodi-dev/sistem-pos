@@ -262,32 +262,31 @@
             </div>
         </div>
     </div>
-
-    @script
-        <script>
-            $wire.on('focusQty', (index) => {
-                const input = document.getElementById(`quantity-${index}`);
-                if (input) {
-                    input.focus();
-                    input.select(); // Opsional: Menyorot teks di dalam input
-                }
-            });
-
-
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'F9') {
-                    event.preventDefault();
-                    $wire.dispatch('uangPas');
-                } else
-                if (event.key === 'F10') {
-                    event.preventDefault();
-                    $wire.dispatch('simpanTransaksi');
-                } else
-                if (event.key === 'F11') {
-                    event.preventDefault();
-                    $wire.dispatch('andPrint');
-                }
-            });
-        </script>
-    @endscript
 </div>
+@script
+    <script>
+        $wire.on('focusQty', (index) => {
+            const input = document.getElementById(`quantity-${index}`);
+            if (input) {
+                input.focus();
+                input.select(); // Opsional: Menyorot teks di dalam input
+            }
+        });
+
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F9') {
+                event.preventDefault();
+                $wire.dispatch('uangPas');
+            } else
+            if (event.key === 'F10') {
+                event.preventDefault();
+                $wire.dispatch('simpanTransaksi');
+            } else
+            if (event.key === 'F11') {
+                event.preventDefault();
+                $wire.dispatch('andPrint');
+            }
+        });
+    </script>
+@endscript
