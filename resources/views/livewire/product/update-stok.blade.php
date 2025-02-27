@@ -83,9 +83,9 @@
                                 <th class="p-2 border-r">Harga Beli</th>
                                 <th class="p-2 border-r">Harga Jual</th>
                                 <th class="p-2 border-r">Harga Grosir</th>
-                                <th class="p-2 border-r">Tambah Stok</th>
-                                <th colspan="2" class="p-2 border-r">Total Harga</th>
-                                {{-- <th class="p-2 border-r">Aksi</th> --}}
+                                <th class="p-2 border-r">Stok</th>
+                                <th class="p-2 border-r">Total Harga</th>
+                                <th class="p-2 border-r">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,8 +114,9 @@
                                             class="input input-sm w-24 rounded-md" value="{{ $item['stock'] }}"
                                             min="0">
                                     </td>
-                                    <td class="">
-                                        Rp. .....
+                                    <td>
+                                        <input type="number" class="input input-sm w-24 rounded-md" disabled
+                                            value="{{ number_format($item['amount'], 0, ',', '.') }}">
                                     </td>
                                     {{-- <td>
                                         <div class="form-control">

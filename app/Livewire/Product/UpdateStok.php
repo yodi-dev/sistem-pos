@@ -10,7 +10,7 @@ use Milon\Barcode\DNS1D;
 class UpdateStok extends Component
 {
     public $search = '';
-    public $searchSupplier = '';
+    public $searchSupplier;
     public $supplier;
     public $selectedSupplier;
     public $products = [];
@@ -28,6 +28,8 @@ class UpdateStok extends Component
     public function mount()
     {
         $this->cart = session()->get('cartUpdate', []);
+        $this->selectedSupplier = session()->get('selectedSupplier', '');
+        $this->selectedSupplier ? $this->searchSupplier = $this->selectedSupplier->name : '';
     }
 
     public function removeFromCart($id)
@@ -76,7 +78,9 @@ class UpdateStok extends Component
             $this->supplier = $supplier;
             $this->selectedSupplier = $supplier;
             $this->searchSupplier = $supplier->name;
+            session()->put('selectedSupplier', $supplier);
         }
+
         $this->resetErrorBag('supplier');
         // $this->resetSearch();
     }
@@ -119,12 +123,12 @@ class UpdateStok extends Component
         }
     }
 
-    public function updateCartStock($productId, $stock)
+    public function updateCartStock($key, $value)
     {
-        if (isset($this->cart[$productId])) {
-            $this->cart[$productId]['stock'] = max(0, (int)$stock);
-        }
+        $this->cart[$key]['stock'] = (int) $value;
+        $this->cart[$key]['amount'] = $this->cart[$key]['stock'] * $this->cart[$key]['purchase_price'];
     }
+
 
     public function updateCartPurchase($productId, $purchase_price)
     {
@@ -169,7 +173,8 @@ class UpdateStok extends Component
                 'retail_price' => $product->retail_price,
                 'wholesale_price' => $product->wholesale_price,
                 'stock' => 0,
-                'print_barcode' => false,
+                'amount' => 0,
+                // 'print_barcode' => false,
             ];
         }
 
