@@ -115,7 +115,7 @@
                                             min="0">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm w-24 rounded-md" disabled
+                                        <input type="number" class="input input-sm w-24 rounded-md" readonly
                                             value="{{ number_format($item['amount'], 0, ',', '.') }}">
                                     </td>
                                     {{-- <td>
