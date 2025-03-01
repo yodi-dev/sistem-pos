@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class StockIn extends Model
 {
     use HasFactory;
+
+    public function details()
+    {
+        return $this->hasMany(StockInDetail::class);
+    }
 }

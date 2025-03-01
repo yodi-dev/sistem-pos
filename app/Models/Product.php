@@ -42,6 +42,11 @@ class Product extends Model
         return $this->hasMany(Unit::class);
     }
 
+    public function stockInDetails()
+    {
+        return $this->hasMany(StockInDetail::class);
+    }
+
     public function suppliers()
     {
         return $this->belongsToMany(Supplier::class);

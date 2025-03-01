@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class StockInDetail extends Model
 {
     use HasFactory;
+
+    public function stockIn()
+    {
+        return $this->belongsTo(StockIn::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }
