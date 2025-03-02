@@ -1,5 +1,5 @@
 <div class="text-base-content dark:text-gray-100">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
+    <div class="mx-auto sm:px-6 lg:px-0">
         @if (session('success'))
             <div role="alert" class="alert mb-3">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
@@ -93,30 +93,31 @@
                                 <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-200' }}">
                                     <td>{{ $item['name'] }}</td>
                                     <td>
-                                        <input type="number"
-                                            wire:change="updateCartPurchase({{ $key }}, $event.target.value)"
-                                            class="input input-sm w-24 rounded-md"
-                                            value="{{ $item['purchase_price'] }}">
+                                        <input type="text" wire:model.defer="cart.{{ $key }}.purchase_price"
+                                            x-data
+                                            x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                                            class="input input-sm max-w-28 rounded-md text-right">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm w-24 rounded-md"
-                                            wire:change="updateCartRetail({{ $key }}, $event.target.value)"
-                                            value="{{ $item['retail_price'] }}">
+                                        <input type="text" wire:model.defer="cart.{{ $key }}.retail_price"
+                                            x-data
+                                            x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                                            class="input input-sm max-w-28 rounded-md text-right">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm w-24 rounded-md"
+                                        <input type="number" class="input input-sm max-w-28 rounded-md text-right"
                                             wire:change="updateCartWholesale({{ $key }}, $event.target.value)"
                                             value="{{ $item['wholesale_price'] }}">
                                     </td>
                                     <td class="flex items-center space-x-2">
                                         <input type="number"
                                             wire:change="updateCartStock({{ $key }}, $event.target.value)"
-                                            class="input input-sm w-24 rounded-md" value="{{ $item['stock'] }}"
-                                            min="0">
+                                            class="input input-sm max-w-28 rounded-md text-right"
+                                            value="{{ $item['stock'] }}" min="0">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm w-24 rounded-md" readonly
-                                            value="{{ number_format($item['amount'], 0, ',', '.') }}">
+                                        <input type="number" class="input input-sm max-w-28 rounded-md text-right"
+                                            readonly value="{{ number_format($item['amount'], 0, ',', '.') }}">
                                     </td>
                                     {{-- <td>
                                         <div class="form-control">

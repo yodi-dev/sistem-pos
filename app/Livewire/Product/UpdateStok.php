@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Product;
 
+use App\Helpers\Format;
 use App\Models\Product;
-use App\Models\Supplier;
 use Livewire\Component;
+use App\Models\Supplier;
 use Milon\Barcode\DNS1D;
 
 class UpdateStok extends Component
@@ -28,22 +29,22 @@ class UpdateStok extends Component
     public function mount()
     {
         $this->cart = session()->get('cartUpdate', []);
-        if ($this->cart) {
-            foreach ($this->cart as &$item) {
-                $item['purchase_price'] = number_format($item['purchase_price'], 0, ',', '.');
-                $item['retail_price'] = number_format($item['retail_price'], 0, ',', '.');
-                $item['wholesale_price'] = number_format($item['wholesale_price'], 0, ',', '.');
-            }
-        }
+        $this->formatData();
 
         $this->selectedSupplier = session()->get('selectedSupplier', '');
         $this->selectedSupplier ? $this->searchSupplier = $this->selectedSupplier->name : '';
     }
 
-    // private function formatData()
-    // {
-    //     $this
-    // }
+    private function formatData()
+    {
+        if ($this->cart) {
+            foreach ($this->cart as &$item) {
+                $item['purchase_price'] = Format::rupiah($item['purchase_price']);
+                $item['retail_price'] = Format::rupiah($item['retail_price']);
+                $item['wholesale_price'] = Format::rupiah($item['wholesale_price']);
+            }
+        }
+    }
 
     public function removeFromCart($id)
     {
@@ -136,38 +137,39 @@ class UpdateStok extends Component
         }
     }
 
+    private function filterData($key)
+    {
+        $this->cart[$key]['purchase_price'] = str_replace('.', '', $this->cart[$key]['purchase_price']);
+        $this->cart[$key]['retail_price'] = str_replace('.', '', $this->cart[$key]['retail_price']);
+        $this->cart[$key]['purchase_price'] = str_replace('.', '', $this->cart[$key]['purchase_price']);
+    }
+
     public function updateCartStock($key, $value)
     {
+        $this->filterData($key);
+
         $this->cart[$key]['stock'] = (int) $value;
         $this->cart[$key]['amount'] = $this->cart[$key]['stock'] * $this->cart[$key]['purchase_price'];
+
+        $this->formatData();
+
     }
 
+    // public function updatePurchase($index, $purchase_price)
+    // {
+    //     $this->cart[$index]['purchase_price'] = str_replace('.', '', $purchase_price);
+    // }
 
-    public function updateCartPurchase($productId, $purchase_price)
-    {
-        $purchase_price = str_replace('.', '', $purchase_price);
-        if (isset($this->cart[$productId])) {
-            $this->cart[$productId]['purchase_price'] = $purchase_price;
-        }
-    }
+    // public function updateRetail($index, $retail_price)
+    // {
+    //     $this->cart[$index]['retail_price'] = str_replace('.', '', $retail_price);
+    // }
+    
+    // public function updateWholesale($index, $wholesale_price)
+    // {
+    //     $this->cart[$index]['wholesale_price'] = str_replace('.', '', $wholesale_price);
+    // }
 
-    public function updateCartRetail($productId, $retail_price)
-    {
-        $retail_price = str_replace('.', '', $retail_price);
-        $stock = $this->cart[$productId]['stock'];
-        if (isset($this->cart[$productId])) {
-            $this->cart[$productId]['retail_price'] = $retail_price;
-        }
-        $this->updateCartStock($productId, $stock);
-    }
-
-    public function updateCartWholesale($productId, $wholesale_price)
-    {
-        $wholesale_price = str_replace('.', '', $wholesale_price);
-        if (isset($this->cart[$productId])) {
-            $this->cart[$productId]['wholesale_price'] = $wholesale_price;
-        }
-    }
 
     public function togglePrintBarcode($productId)
     {
