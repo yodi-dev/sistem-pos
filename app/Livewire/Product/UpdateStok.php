@@ -28,9 +28,22 @@ class UpdateStok extends Component
     public function mount()
     {
         $this->cart = session()->get('cartUpdate', []);
+        if ($this->cart) {
+            foreach ($this->cart as &$item) {
+                $item['purchase_price'] = number_format($item['purchase_price'], 0, ',', '.');
+                $item['retail_price'] = number_format($item['retail_price'], 0, ',', '.');
+                $item['wholesale_price'] = number_format($item['wholesale_price'], 0, ',', '.');
+            }
+        }
+
         $this->selectedSupplier = session()->get('selectedSupplier', '');
         $this->selectedSupplier ? $this->searchSupplier = $this->selectedSupplier->name : '';
     }
+
+    // private function formatData()
+    // {
+    //     $this
+    // }
 
     public function removeFromCart($id)
     {
@@ -141,9 +154,11 @@ class UpdateStok extends Component
     public function updateCartRetail($productId, $retail_price)
     {
         $retail_price = str_replace('.', '', $retail_price);
+        $stock = $this->cart[$productId]['stock'];
         if (isset($this->cart[$productId])) {
             $this->cart[$productId]['retail_price'] = $retail_price;
         }
+        $this->updateCartStock($productId, $stock);
     }
 
     public function updateCartWholesale($productId, $wholesale_price)

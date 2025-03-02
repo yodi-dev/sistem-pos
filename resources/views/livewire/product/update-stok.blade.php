@@ -96,17 +96,17 @@
                                         <input type="number"
                                             wire:change="updateCartPurchase({{ $key }}, $event.target.value)"
                                             class="input input-sm w-24 rounded-md"
-                                            value="{{ number_format($item['purchase_price'], 0, ',', '.') }}">
+                                            value="{{ $item['purchase_price'] }}">
                                     </td>
                                     <td>
                                         <input type="number" class="input input-sm w-24 rounded-md"
                                             wire:change="updateCartRetail({{ $key }}, $event.target.value)"
-                                            value="{{ number_format($item['retail_price'], 0, ',', '.') }}">
+                                            value="{{ $item['retail_price'] }}">
                                     </td>
                                     <td>
                                         <input type="number" class="input input-sm w-24 rounded-md"
                                             wire:change="updateCartWholesale({{ $key }}, $event.target.value)"
-                                            value="{{ number_format($item['wholesale_price'], 0, ',', '.') }}">
+                                            value="{{ $item['wholesale_price'] }}">
                                     </td>
                                     <td class="flex items-center space-x-2">
                                         <input type="number"
