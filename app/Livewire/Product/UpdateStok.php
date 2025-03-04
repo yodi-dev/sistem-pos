@@ -21,6 +21,10 @@ class UpdateStok extends Component
 
     public function render()
     {
+        $this->formatData();
+
+
+
         return view('livewire.product.update-stok', [
             'products' => $this->products,
         ]);
@@ -29,8 +33,6 @@ class UpdateStok extends Component
     public function mount()
     {
         $this->cart = session()->get('cartUpdate', []);
-        $this->formatData();
-
         $this->selectedSupplier = session()->get('selectedSupplier', '');
         $this->selectedSupplier ? $this->searchSupplier = $this->selectedSupplier->name : '';
     }
@@ -144,6 +146,11 @@ class UpdateStok extends Component
         $this->cart[$key]['purchase_price'] = str_replace('.', '', $this->cart[$key]['purchase_price']);
     }
 
+    public function updateHarga($index)
+    {
+        $this->cart[$index]['amount'] = $this->cart[$index]['purchase_price'] * $this->cart[$index]['qty'];
+    }
+
     public function updateCartStock($key, $value)
     {
         $this->filterData($key);
@@ -152,24 +159,7 @@ class UpdateStok extends Component
         $this->cart[$key]['amount'] = $this->cart[$key]['stock'] * $this->cart[$key]['purchase_price'];
 
         $this->formatData();
-
     }
-
-    // public function updatePurchase($index, $purchase_price)
-    // {
-    //     $this->cart[$index]['purchase_price'] = str_replace('.', '', $purchase_price);
-    // }
-
-    // public function updateRetail($index, $retail_price)
-    // {
-    //     $this->cart[$index]['retail_price'] = str_replace('.', '', $retail_price);
-    // }
-    
-    // public function updateWholesale($index, $wholesale_price)
-    // {
-    //     $this->cart[$index]['wholesale_price'] = str_replace('.', '', $wholesale_price);
-    // }
-
 
     public function togglePrintBarcode($productId)
     {

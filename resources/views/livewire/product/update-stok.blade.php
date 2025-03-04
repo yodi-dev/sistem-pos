@@ -102,6 +102,7 @@
                                         <input type="text" wire:model.defer="cart.{{ $key }}.retail_price"
                                             x-data
                                             x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                                            wire:blur="updateHarga({{ $key }}"
                                             class="input input-sm max-w-28 rounded-md text-right">
                                     </td>
                                     <td>
@@ -117,7 +118,8 @@
                                     </td>
                                     <td>
                                         <input type="number" class="input input-sm max-w-28 rounded-md text-right"
-                                            readonly value="{{ number_format($item['amount'], 0, ',', '.') }}">
+                                            {{-- wire:model.change="cart.{{ $key }}.amount"  --}} readonly
+                                            value="{{ number_format($item['amount'], 0, ',', '.') }}">
                                     </td>
                                     {{-- <td>
                                         <div class="form-control">
