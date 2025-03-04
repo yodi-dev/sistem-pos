@@ -102,8 +102,7 @@
                                         <input type="text" wire:model.defer="cart.{{ $key }}.retail_price"
                                             x-data
                                             x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
-                                            wire:blur="updateHarga({{ $key }}"
-                                            class="input input-sm max-w-28 rounded-md text-right">
+                                            {{-- wire:blur="updateHarga({{ $key }}" --}} class="input input-sm max-w-28 rounded-md text-right">
                                     </td>
                                     <td>
                                         <input type="number" class="input input-sm max-w-28 rounded-md text-right"
@@ -113,7 +112,7 @@
                                     <td class="flex items-center space-x-2">
                                         <input type="number"
                                             wire:change="updateCartStock({{ $key }}, $event.target.value)"
-                                            class="input input-sm max-w-28 rounded-md text-right"
+                                            class="input input-sm max-w-20 rounded-md text-right"
                                             value="{{ $item['stock'] }}" min="0">
                                     </td>
                                     <td>

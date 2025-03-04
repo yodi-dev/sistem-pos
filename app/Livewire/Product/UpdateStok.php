@@ -21,10 +21,6 @@ class UpdateStok extends Component
 
     public function render()
     {
-        $this->formatData();
-
-
-
         return view('livewire.product.update-stok', [
             'products' => $this->products,
         ]);
@@ -33,20 +29,27 @@ class UpdateStok extends Component
     public function mount()
     {
         $this->cart = session()->get('cartUpdate', []);
+        // if ($this->cart) {
+        //     $this->formatData();
+        // }
+
         $this->selectedSupplier = session()->get('selectedSupplier', '');
         $this->selectedSupplier ? $this->searchSupplier = $this->selectedSupplier->name : '';
     }
 
-    private function formatData()
-    {
-        if ($this->cart) {
-            foreach ($this->cart as &$item) {
-                $item['purchase_price'] = Format::rupiah($item['purchase_price']);
-                $item['retail_price'] = Format::rupiah($item['retail_price']);
-                $item['wholesale_price'] = Format::rupiah($item['wholesale_price']);
-            }
-        }
-    }
+    // private function formatData()
+    // {
+    //     // dd($this->cart);
+    //     foreach ($this->cart as $key => $value) {
+    //         $value['purchase_price'] = Format::rupiah($value['purchase_price']); 
+    //     }
+
+    //     // foreach ($this->cart as $item) {
+    //     //     $item = Format::rupiah($item['purchase_price']);
+    //     //     $item['retail_price'] = Format::rupiah($item['retail_price']);
+    //     //     $item['wholesale_price'] = Format::rupiah($item['wholesale_price']);
+    //     // }
+    // }
 
     public function removeFromCart($id)
     {
@@ -56,6 +59,8 @@ class UpdateStok extends Component
         if ($index !== false) {
             unset($this->cart[$index]);
             $this->cart = array_values($this->cart);
+
+            // $this->formatData();
             session()->put('cartUpdate', $this->cart);
             $this->dispatch('showToast', 'Berhasil menghapus item.');
         }
@@ -98,7 +103,6 @@ class UpdateStok extends Component
         }
 
         $this->resetErrorBag('supplier');
-        // $this->resetSearch();
     }
 
     public function updatedSearch()
@@ -158,7 +162,11 @@ class UpdateStok extends Component
         $this->cart[$key]['stock'] = (int) $value;
         $this->cart[$key]['amount'] = $this->cart[$key]['stock'] * $this->cart[$key]['purchase_price'];
 
-        $this->formatData();
+        $this->cart[$key]['purchase_price'] = Format::rupiah($this->cart[$key]['purchase_price']);
+        $this->cart[$key]['retail_price'] = Format::rupiah($this->cart[$key]['retail_price']);
+
+        session()->put('cartUpdate', $this->cart);
+
     }
 
     public function togglePrintBarcode($productId)
@@ -172,16 +180,19 @@ class UpdateStok extends Component
     {
         $product = Product::find($productId);
 
-        if (!isset($this->cart[$productId])) {
+        $index = collect($this->cart)->search(fn($item) => $item['id'] === $product->id);
+
+        if ($index !== false) {
+            $this->cart[$index]['stock'] += 1;
+        } else {
             $this->cart[$productId] = [
                 'id' => $product->id,
                 'name' => $product->name,
-                'purchase_price' => $product->purchase_price,
-                'retail_price' => $product->retail_price,
-                'wholesale_price' => $product->wholesale_price,
-                'stock' => 0,
-                'amount' => 0,
-                // 'print_barcode' => false,
+                'purchase_price' => Format::rupiah($product->purchase_price),
+                'retail_price' => Format::rupiah($product->retail_price),
+                'wholesale_price' => Format::rupiah($product->wholesale_price),
+                'stock' => 1,
+                'amount' => 1 * $product->purchase_price,
             ];
         }
 
