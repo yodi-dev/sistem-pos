@@ -96,7 +96,8 @@
                                         <input type="text" wire:model.defer="cart.{{ $key }}.purchase_price"
                                             x-data
                                             x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
-                                            class="input input-sm max-w-28 rounded-md text-right">
+                                            class="input input-sm max-w-28 rounded-md text-right"
+                                            wire:change="updateTotal({{ $key }}, $event.target.value)">
                                     </td>
                                     <td>
                                         <input type="text" wire:model.defer="cart.{{ $key }}.retail_price"
@@ -105,7 +106,7 @@
                                             {{-- wire:blur="updateHarga({{ $key }}" --}} class="input input-sm max-w-28 rounded-md text-right">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm max-w-28 rounded-md text-right"
+                                        <input type="text" class="input input-sm max-w-28 rounded-md text-right"
                                             wire:change="updateCartWholesale({{ $key }}, $event.target.value)"
                                             value="{{ $item['wholesale_price'] }}">
                                     </td>
@@ -116,7 +117,7 @@
                                             value="{{ $item['stock'] }}" min="0">
                                     </td>
                                     <td>
-                                        <input type="number" class="input input-sm max-w-28 rounded-md text-right"
+                                        <input type="text" class="input input-sm w-32 rounded-md text-right"
                                             {{-- wire:model.change="cart.{{ $key }}.amount"  --}} readonly
                                             value="{{ number_format($item['amount'], 0, ',', '.') }}">
                                     </td>

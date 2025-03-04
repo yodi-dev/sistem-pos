@@ -29,27 +29,9 @@ class UpdateStok extends Component
     public function mount()
     {
         $this->cart = session()->get('cartUpdate', []);
-        // if ($this->cart) {
-        //     $this->formatData();
-        // }
-
         $this->selectedSupplier = session()->get('selectedSupplier', '');
         $this->selectedSupplier ? $this->searchSupplier = $this->selectedSupplier->name : '';
     }
-
-    // private function formatData()
-    // {
-    //     // dd($this->cart);
-    //     foreach ($this->cart as $key => $value) {
-    //         $value['purchase_price'] = Format::rupiah($value['purchase_price']); 
-    //     }
-
-    //     // foreach ($this->cart as $item) {
-    //     //     $item = Format::rupiah($item['purchase_price']);
-    //     //     $item['retail_price'] = Format::rupiah($item['retail_price']);
-    //     //     $item['wholesale_price'] = Format::rupiah($item['wholesale_price']);
-    //     // }
-    // }
 
     public function removeFromCart($id)
     {
@@ -147,12 +129,21 @@ class UpdateStok extends Component
     {
         $this->cart[$key]['purchase_price'] = str_replace('.', '', $this->cart[$key]['purchase_price']);
         $this->cart[$key]['retail_price'] = str_replace('.', '', $this->cart[$key]['retail_price']);
-        $this->cart[$key]['purchase_price'] = str_replace('.', '', $this->cart[$key]['purchase_price']);
+        $this->cart[$key]['wholesale_price'] = str_replace('.', '', $this->cart[$key]['wholesale_price']);
     }
 
     public function updateHarga($index)
     {
         $this->cart[$index]['amount'] = $this->cart[$index]['purchase_price'] * $this->cart[$index]['qty'];
+    }
+
+    public function updateTotal($index, $value)
+    {
+        $value = str_replace('.','', $value);
+        $this->cart[$index]['purchase_price'] = Format::rupiah($value);
+        $this->cart[$index]['amount'] = $value * $this->cart[$index]['stock'];
+        // dd($this->cart[$index]['purchase_price']);
+        // $this->cart[$index]['purchase_price'] = Format::rupiah($this->cart[$index]['purchase_price']);
     }
 
     public function updateCartStock($key, $value)
