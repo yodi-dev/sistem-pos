@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('total_outcome', 15, 2);
             $table->decimal('savings', 15, 2);
             $table->decimal('balance', 15, 2);
+            $table->decimal('opening_balance', 15, 2);
+            $table->decimal('opening_savings', 15, 2);
             $table->string('notes')->nullable();
             $table->timestamps();
         });

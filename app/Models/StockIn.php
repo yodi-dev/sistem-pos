@@ -9,6 +9,8 @@ class StockIn extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['supplier_id', 'date'];
+
     public function details()
     {
         return $this->hasMany(StockInDetail::class);

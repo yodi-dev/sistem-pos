@@ -44,17 +44,6 @@
             </div>
         </div>
 
-        @if (session('error'))
-            <div role="alert" class="alert alert-error mb-3 rounded-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{{ session('error') }}</span>
-            </div>
-        @endif
-
         <div class="bg-base-200 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
                 <div>
@@ -68,8 +57,7 @@
                             class="absolute bg-white text-base-content max-h-80 overflow-y-scroll w-64 rounded-md shadow-md z-10">
                             @foreach ($suppliers as $index => $supplier)
                                 <li {{-- wire:click="addCustomer({{ $customer->id }})" --}}
-                                    class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200
-                {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
+                                    class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200 {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
                                     {{ $supplier->name }}
                                 </li>
                             @endforeach
@@ -93,8 +81,8 @@
                                 <tr class="{{ $loop->odd ? 'bg-base-300' : 'bg-base-200' }}">
                                     <td>{{ $item['name'] }}</td>
                                     <td>
-                                        <input type="text" wire:model.defer="cart.{{ $key }}.purchase_price"
-                                            x-data
+                                        <input type="text"
+                                            wire:model.debounce.500ms="cart.{{ $key }}.purchase_price" x-data
                                             x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
                                             class="input input-sm max-w-28 rounded-md text-right"
                                             wire:change="updateTotal({{ $key }}, $event.target.value)">
@@ -118,16 +106,9 @@
                                     </td>
                                     <td>
                                         <input type="text" class="input input-sm w-32 rounded-md text-right"
-                                            {{-- wire:model.change="cart.{{ $key }}.amount"  --}} readonly
-                                            value="{{ number_format($item['amount'], 0, ',', '.') }}">
+                                            wire:model.debounce.500ms="cart.{{ $key }}.amount" readonly
+                                            value="{{ $item['amount'] }}">
                                     </td>
-                                    {{-- <td>
-                                        <div class="form-control">
-                                            <input type="checkbox" wire:click="togglePrintBarcode({{ $key }})"
-                                                class="checkbox checkbox-neutral bg-base-100 mx-auto rounded-md"
-                                                {{ $item['print_barcode'] ? 'checked' : '' }}>
-                                        </div>
-                                    </td> --}}
                                     <td class="p-2">
                                         <button wire:click="removeFromCart({{ $item['id'] }})">
                                             <x-icon name="s-trash" class=" text-error" />
@@ -142,13 +123,12 @@
                         <p class="text-center text-gray-500 my-5">Belum ada data.</p>
                     @endif
 
-                    <div class="flex space-x-2 mt-5">
-                        <button wire:navigate href="{{ route('products') }}"
-                            class="btn btn-outline btn-error w-1/2  hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
-                            Kembali</button>
-                        <button wire:click="save"
-                            class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">Simpan</button>
-                    </div>
+                    <button wire:click="save"
+                        class="btn btn-sm w-full btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700 mt-5">Simpan</button>
+
+                    @error('supplier')
+                        <span class="text-red-600 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
         </div>

@@ -4,9 +4,13 @@ namespace App\Livewire\Product;
 
 use App\Helpers\Format;
 use App\Models\Product;
+use App\Models\StockIn;
 use Livewire\Component;
 use App\Models\Supplier;
 use Milon\Barcode\DNS1D;
+use Livewire\Attributes\On;
+use App\Models\StockInDetail;
+use Illuminate\Support\Facades\DB;
 
 class UpdateStok extends Component
 {
@@ -30,6 +34,7 @@ class UpdateStok extends Component
     {
         $this->cart = session()->get('cartUpdate', []);
         $this->selectedSupplier = session()->get('selectedSupplier', '');
+        $this->supplier = $this->selectedSupplier;
         $this->selectedSupplier ? $this->searchSupplier = $this->selectedSupplier->name : '';
     }
 
@@ -139,11 +144,12 @@ class UpdateStok extends Component
 
     public function updateTotal($index, $value)
     {
-        $value = str_replace('.','', $value);
+
+        $value = str_replace('.', '', $value);
         $this->cart[$index]['purchase_price'] = Format::rupiah($value);
-        $this->cart[$index]['amount'] = $value * $this->cart[$index]['stock'];
-        // dd($this->cart[$index]['purchase_price']);
-        // $this->cart[$index]['purchase_price'] = Format::rupiah($this->cart[$index]['purchase_price']);
+        $this->cart[$index]['amount'] = Format::rupiah($value * $this->cart[$index]['stock']);
+
+        session()->put('cartUpdate', $this->cart);
     }
 
     public function updateCartStock($key, $value)
@@ -151,13 +157,12 @@ class UpdateStok extends Component
         $this->filterData($key);
 
         $this->cart[$key]['stock'] = (int) $value;
-        $this->cart[$key]['amount'] = $this->cart[$key]['stock'] * $this->cart[$key]['purchase_price'];
+        $this->cart[$key]['amount'] = Format::rupiah($this->cart[$key]['stock'] * $this->cart[$key]['purchase_price']);
 
         $this->cart[$key]['purchase_price'] = Format::rupiah($this->cart[$key]['purchase_price']);
         $this->cart[$key]['retail_price'] = Format::rupiah($this->cart[$key]['retail_price']);
 
         session()->put('cartUpdate', $this->cart);
-
     }
 
     public function togglePrintBarcode($productId)
@@ -183,7 +188,7 @@ class UpdateStok extends Component
                 'retail_price' => Format::rupiah($product->retail_price),
                 'wholesale_price' => Format::rupiah($product->wholesale_price),
                 'stock' => 1,
-                'amount' => 1 * $product->purchase_price,
+                'amount' => Format::rupiah(1 * $product->purchase_price),
             ];
         }
 
@@ -191,76 +196,55 @@ class UpdateStok extends Component
         $this->resetSearch();
     }
 
-    // public function save()
-    // {
-    //     $generator = new DNS1D();
-    //     $barcodesData = [];
-    //     $zip = new \ZipArchive();
-    //     $zipFileName = storage_path('app/public/barcodes.zip');
-    //     $barcodeGenerated = false;
+    public function save()
+    {
+        $this->validate([
+            'supplier' => 'required',
+            'cart' => 'required|array|min:1',
+            'cart.*.id' => 'required|exists:products,id',
+            'cart.*.stock' => 'required|integer|min:1',
+            'cart.*.purchase_price' => 'required|numeric|min:0',
+            'cart.*.retail_price' => 'required|numeric|min:0',
+            'cart.*.wholesale_price' => 'required|numeric|min:0',
+        ], [
+            'supplier.required' => 'Supplier harus dipilih.',
+        ]);
 
-    //     // Buat ZIP baru
-    //     if ($zip->open($zipFileName, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
-    //         session()->flash('error', 'Gagal membuat file ZIP.');
-    //         return;
-    //     }
+        DB::transaction(function () {
+            $stockIn = StockIn::create([
+                'supplier_id' => $this->supplier->id,
+                'date' => now(),
+            ]);
 
-    //     foreach ($this->cart as $item) {
-    //         // Ambil data produk hanya sekali
-    //         $product = Product::find($item['id']);
+            foreach ($this->cart as $item) {
+                $purchase_price = (int) str_replace(['.', ','], '', $item['purchase_price']);
+                $retail_price = (int) str_replace(['.', ','], '', $item['retail_price']);
+                $wholesale_price = (int) str_replace(['.', ','], '', $item['wholesale_price']);
 
-    //         $product->stock += $item['stock'];
-    //         $product->purchase_price = $item['purchase_price'];
-    //         $product->retail_price = $item['retail_price'];
-    //         $product->wholesale_price = $item['wholesale_price'];
-    //         $product->save();
+                StockInDetail::create([
+                    'stock_in_id' => $stockIn->id,
+                    'product_id' => $item['id'],
+                    'purchase_price' => $purchase_price,
+                    'quantity' => $item['stock'],
+                    'total_price' => $item['amount'],
+                ]);
 
-    //         // Proses cetak barcode jika "print_barcode"
-    //         if ($item['print_barcode']) {
-    //             $barcodes = [];
-    //             $barcodeGenerated = true;
+                Product::where('id', $item['id'])->update([
+                    'stock' => DB::raw("stock + {$item['stock']}"),
+                    'purchase_price' => $purchase_price,
+                    'retail_price' => $retail_price,
+                    'wholesale_price' => $wholesale_price,
+                ]);
+            }
+        });
 
-    //             // Pastikan $product->code tidak kosong
-    //             if (empty($product->code)) {
-    //                 // Berikan pesan error atau abaikan produk
-    //                 return session()->flash('error', 'Gagal mencetak barcode, kode produk belum ada.');
-    //             }
+        $this->cart = [];
+        $this->supplier = null;
+        $this->searchSupplier = '';
+        $this->suppliers = [];
+        session()->forget('cartUpdate');
+        session()->forget('selectedSupplier');
 
-    //             // Generate barcode sebanyak stok
-    //             for ($i = 0; $i < $item['stock']; $i++) {
-    //                 $barcodes[] = $generator->getBarcodePNG($product->code, 'C39', 3, 33);
-    //             }
-
-    //             // Buat file PDF untuk produk
-    //             $pdf = \PDF::loadView('livewire.barcode.print', [
-    //                 'product' => $product,
-    //                 'barcodes' => $barcodes,
-    //             ])->setPaper([0, 0, 226, 567], 'portrait'); // Kertas 58mm x panjang dinamis
-
-    //             // Simpan PDF ke storage sementara
-    //             $pdfFilePath = storage_path("app/public/{$product->name}_barcode.pdf");
-    //             file_put_contents($pdfFilePath, $pdf->output());
-
-    //             // Tambahkan file PDF ke ZIP
-    //             $zip->addFile($pdfFilePath, "{$product->code}_barcode.pdf");
-
-    //             // Simpan data barcode untuk log/debugging jika diperlukan
-    //             $barcodesData[$product->code] = $barcodes;
-    //         }
-    //     }
-
-    //     // Tutup ZIP setelah semua file ditambahkan
-    //     $zip->close();
-
-    //     session()->forget('cartUpdate');
-
-    //     // Bersihkan keranjang dan berikan feedback
-    //     $this->cart = [];
-    //     session()->flash('success', 'Data berhasil diperbarui.');
-
-    //     // Unduh file ZIP
-    //     if ($barcodeGenerated) {
-    //         return response()->download($zipFileName)->deleteFileAfterSend();
-    //     }
-    // }
+        $this->dispatch('showToast', 'Berhasil menyimpan data.');
+    }
 }
