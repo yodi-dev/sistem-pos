@@ -124,7 +124,7 @@
                     @endif
 
                     <button wire:click="save"
-                        class="btn btn-sm w-full btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700 mt-5">Simpan</button>
+                        class="btn  w-full btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700 mt-5">Simpan</button>
 
                     @error('supplier')
                         <span class="text-red-600 text-sm">{{ $message }}</span>

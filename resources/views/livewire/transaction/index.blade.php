@@ -154,9 +154,11 @@
                         </tbody>
                     </table>
 
+                    <div class="divider"></div>
+
                     <div class="grid grid-cols-2">
                         <div>
-                            <h3 class="text-xl text-base-content mt-4 dark:text-white">Metode Pembayaran</h3>
+                            <h3 class="text-xl text-base-content dark:text-white">Metode Pembayaran</h3>
 
                             <div class="flex space-x-2 mt-2">
                                 <button type="button" wire:click="addPayment('tunai')"
@@ -173,7 +175,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="mt-4 flex flex-col space-y-2 items-end">
+                        <div class=" flex flex-col space-y-2 items-end">
                             <h3
                                 class="bg-base-100 px-4 py-2 text-md text-base-content text-right font-semibold dark:text-white rounded-md w-fit h-fit border-2">
                                 Total:
@@ -203,41 +205,39 @@
 
                     <div class="grid">
 
-                        <div class="flex justify-end">
-                            <div class="w-1/2 grid grid-cols-3 gap-2">
-                                <button type="button" wire:click="addNominal(1000)"
-                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                    Rp 1.000
-                                </button>
-                                <button type="button" wire:click="addNominal(2000)"
-                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                    Rp 2.000
-                                </button>
-                                <button type="button" wire:click="addNominal(5000)"
-                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                    Rp 5.000
-                                </button>
-                                <button type="button" wire:click="addNominal(10000)"
-                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                    Rp 10.000
-                                </button>
-                                <button type="button" wire:click="addNominal(20000)"
-                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                    Rp 20.000
-                                </button>
-                                <button type="button" wire:click="addNominal(50000)"
-                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                    Rp 50.000
-                                </button>
-                                <button type="button" wire:click="addNominal(100000)"
-                                    class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
-                                    Rp 100.000
-                                </button>
-                                <button type="button" wire:click="bayarPas"
-                                    class="col-start-1 col-end-2 btn btn-sm bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100 rounded-md">
-                                    Uang Pas
-                                </button>
-                            </div>
+                        <div class="w-full grid grid-cols-3 gap-2">
+                            <button type="button" wire:click="addNominal(1000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 1.000
+                            </button>
+                            <button type="button" wire:click="addNominal(2000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 2.000
+                            </button>
+                            <button type="button" wire:click="addNominal(5000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 5.000
+                            </button>
+                            <button type="button" wire:click="addNominal(10000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 10.000
+                            </button>
+                            <button type="button" wire:click="addNominal(20000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 20.000
+                            </button>
+                            <button type="button" wire:click="addNominal(50000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 50.000
+                            </button>
+                            <button type="button" wire:click="addNominal(100000)"
+                                class="btn btn-sm bg-base-300 dark:bg-gray-800 font-normal text-base-content dark:text-gray-100 rounded-md">
+                                Rp 100.000
+                            </button>
+                            <button type="button" wire:click="bayarPas"
+                                class="col-start-2 col-end-4 btn btn-sm bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100 rounded-md">
+                                Uang Pas
+                            </button>
                         </div>
 
                         <div class="divider"></div>
