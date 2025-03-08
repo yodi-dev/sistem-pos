@@ -26,7 +26,7 @@
             <x-menu-sub title="Manajemen" icon="s-rectangle-stack">
                 <x-menu-item title="Data Jual" icon="s-presentation-chart-line" :href="route('selling')" :active="request()->routeIs('selling')"
                     wire:navigate />
-                <x-menu-item title="Data Kulakan" icon="s-building-storefront" :href="route('wholesales')" :active="request()->routeIs('wholesales')"
+                <x-menu-item title="Kulakan" icon="s-building-storefront" :href="route('wholesales')" :active="request()->routeIs('wholesales')"
                     wire:navigate />
                 <x-menu-item title="Barang Masuk" icon="c-inbox-arrow-down" :href="route('update.products')" :active="request()->routeIs('update.products')"
                     wire:navigate />
