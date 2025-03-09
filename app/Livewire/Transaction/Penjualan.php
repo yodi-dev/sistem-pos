@@ -2,8 +2,8 @@
 
 namespace App\Livewire\Transaction;
 
-use App\Models\Transaction;
 use Livewire\Component;
+use App\Models\Transaction;
 use Livewire\WithPagination;
 
 class Penjualan extends Component
@@ -20,6 +20,6 @@ class Penjualan extends Component
     public function delete($id)
     {
         Transaction::find($id)->delete();
-        session()->flash('message', 'Berhasil menghapus data jual.');
+        $this->dispatch('showToast', 'Berhasil menghapus data jual.');
     }
 }

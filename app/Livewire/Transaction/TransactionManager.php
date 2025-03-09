@@ -117,6 +117,7 @@ class TransactionManager extends Component
             unset($this->cart[$index]);
             $this->cart = array_values($this->cart);
             session()->put('cart', $this->cart);
+            $this->dispatch('showToast', 'Berhasil menghapus item.');
         }
 
         $this->updateTotal();
@@ -128,16 +129,15 @@ class TransactionManager extends Component
 
         if ($transaction) {
             session()->forget('cart');
-            session()->flash('message', 'Transaksi berhasil disimpan.');
+            $this->dispatch('showToast', 'Berhasil menyimpan transaksi.');
             $this->resetCart();
         }
     }
 
     public function andprint()
     {
-        // dd($this->isPrinterConnected());
         if (!$this->isPrinterConnected()) {
-            session()->flash('error', 'Printer tidak terhubung. Pastikan printer sudah menyala dan tersambung.');
+            $this->dispatch('showToastError', 'Printer tidak terhubung. Pastikan printer sudah menyala dan tersambung.');
             return;
         }
 
@@ -163,23 +163,6 @@ class TransactionManager extends Component
 
         return false;
     }
-
-
-    // private function isPrinterConnected()
-    // {
-    //     try {
-    //         $connector = new WindowsPrintConnector("thermal");
-    //         $printer = new Printer($connector);
-
-    //         $printer->text("\n");
-    //         $printer->cut();
-    //         $printer->close();
-    //         return true;
-    //     } catch (\Exception $e) {
-    //         return false;
-    //     }
-    // }
-
 
     public function printNota()
     {

@@ -1,23 +1,19 @@
 <div class="text-gray-900 dark:text-gray-100">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
-
         <div class="row">
             <div class="col-12 ">
-                <x-card title="Produk" class="text-neutral bg-base-200" shadow separator>
+                <x-card title="Kasa" class="text-neutral bg-base-200" shadow separator>
                     <div class="flex justify-center">
-                        <!-- Input Search untuk Produk -->
-                        <div x-data="{
-                            focusSearch() { $refs.searchInput.focus(); }
-                        }" x-init="$refs.searchInput.focus()" @keydown.window.prevent.ctrl.k="focusSearch()"
+                        <div x-data="{ focusSearch() { $refs.searchInput.focus(); } }" x-init="$refs.searchInput.focus()" @keydown.window.prevent.ctrl.k="focusSearch()"
                             class="w-full">
+
                             <input type="text" wire:model.live="search" wire:keydown.arrow-down="selectNext"
                                 wire:keydown.arrow-up="selectPrevious" wire:keydown.enter="confirmSelection"
                                 x-ref="searchInput" class="text-base-content input input-bordered w-full rounded-md"
                                 placeholder="Cari Produk..." />
+
                         </div>
 
-
-                        <!-- Dropdown Hasil Pencarian -->
                         @if (!empty($products))
                             <ul
                                 class="absolute bg-white border border-gray-300 top-40 max-h-80 overflow-y-auto w-full rounded-lg z-10">
@@ -34,47 +30,25 @@
             </div>
         </div>
 
-        @if (session()->has('message'))
-            <div role="alert" class="alert my-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{{ session('message') }}</span>
-            </div>
-        @endif
-
-        @if (session()->has('error'))
-            <div class="mt-4 p-2 bg-red-100 dark:bg-red-700 text-red-800 dark:text-red-200 rounded">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <div class="row mt-3">
             <div class="col-12">
-                <x-card title="Keranjang" class="text-neutral bg-base-200" shadow separator>
-                    <x-slot:menu>
-                        {{-- <label for="searchCustomer" class="font-medium">Pembeli</label> --}}
-                        <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
-                            wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
-                            wire:keydown.enter="confirmCustomer"
-                            class="text-base-content input input-bordered w-full rounded-md" placeholder="Pembeli" />
+                <x-card class="text-neutral bg-base-200" shadow separator>
+                    <input type="text" id="searchCustomer" wire:model.live="searchCustomer"
+                        wire:keydown.arrow-down="selectNextCust" wire:keydown.arrow-up="selectPrevious"
+                        wire:keydown.enter="confirmCustomer"
+                        class="text-base-content input input-bordered w-64 rounded-md mb-3" placeholder="Pembeli" />
 
-                        <!-- Dropdown Hasil Pencarian -->
-                        @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))
-                            <ul
-                                class="absolute bg-white border border-gray-300 w-fit max-h-80 overflow-y-auto top-0 mt-20 rounded-lg z-10">
-                                @foreach ($customers as $index => $customer)
-                                    <li wire:click="addCustomer({{ $customer->id }})"
-                                        class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200 {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
-                                        {{ $customer->name }} - {{ $customer->address }}
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-
-                    </x-slot:menu>
+                    @if (!empty($customers) && $searchCustomer !== ($selectedCustomer->name ?? ''))
+                        <ul
+                            class="absolute bg-white border border-gray-300 w-fit max-h-80 overflow-y-auto top-0 mt-20 rounded-lg z-10">
+                            @foreach ($customers as $index => $customer)
+                                <li wire:click="addCustomer({{ $customer->id }})"
+                                    class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200 {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
+                                    {{ $customer->name }} - {{ $customer->address }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                     <table
                         class="table table-zebra table-auto text-left text-base-content dark:bg-gray-800 dark:text-white border-1 shadow border-neutral">
                         <thead class="bg-neutral text-lg text-base-100 dark:bg-gray-700">
@@ -151,6 +125,10 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    @if (!$cart)
+                        <p class="text-center text-gray-500 my-5">Belum ada barang.</p>
+                    @endif
 
                     <div class="divider"></div>
 
@@ -271,7 +249,6 @@
             }
         });
 
-
         document.addEventListener('keydown', function(event) {
             if (event.key === 'F9') {
                 event.preventDefault();
@@ -285,6 +262,47 @@
                 event.preventDefault();
                 $wire.dispatch('andPrint');
             }
+        });
+
+
+        $wire.on("showToast", (message) => {
+            let toast = document.createElement("div");
+            toast.className =
+                `toast toast-top toast-end`;
+            toast.innerHTML = `
+                <div class="alert text-base-100 bg-neutral rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ${message}</div>`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000); // Hilang setelah 3 detik
+        });
+
+        $wire.on("showToastError", (message) => {
+            let toast = document.createElement("div");
+            toast.className =
+                `toast toast-top toast-end`;
+            toast.innerHTML = `
+                <div class="alert text-base-100 bg-error rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12M12 2a10 10 0 1010 10A10 10 0 0012 2z" />
+                </svg>
+                ${message}</div>`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000); // Hilang setelah 3 detik
         });
     </script>
 @endscript

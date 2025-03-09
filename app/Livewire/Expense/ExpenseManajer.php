@@ -21,7 +21,7 @@ class ExpenseManajer extends Component
     #[On('saveExpense')]
     public function hideCreateForm()
     {
-        session()->flash('message', 'Berhasil menyimpan pengeluaran!');
+        $this->dispatch('showToast', 'Berhasil menyimpan pengeluaran.');
         $this->showForm = false;
     }
 
@@ -47,6 +47,6 @@ class ExpenseManajer extends Component
     public function delete($id)
     {
         Expense::find($id)->delete();
-        session()->flash('message', 'Berhasil menghapus data pengeluaran.');
+        $this->dispatch('showToast', 'Berhasil menghapus data pengeluaran.');
     }
 }

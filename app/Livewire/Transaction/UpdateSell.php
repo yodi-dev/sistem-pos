@@ -42,7 +42,6 @@ class UpdateSell extends Component
         $this->validate([
             'customer_id' => 'nullable|numeric',
             'payment_method' => 'string|max:255',
-
         ]);
 
         $this->total_price = str_replace('.', '', $this->total_price);
@@ -61,8 +60,6 @@ class UpdateSell extends Component
             'debt_status' => $this->debt_status,
             'date' => $this->date,
         ]);
-
-        session()->flash('message', 'Transakasi berhasil diperbarui.');
 
         $this->resetForm();
 
