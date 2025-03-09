@@ -34,14 +34,14 @@
                 <x-menu-item title="Laporan" icon="s-document-text" :href="route('reports')" :active="request()->routeIs('reports')"
                     wire:navigate />
             </x-menu-sub>
-            <x-menu-sub title="Data Master" icon="s-square-3-stack-3d">
-                <x-menu-item title="Produk" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products') ||
+            <x-menu-sub title="Master Data" icon="s-square-3-stack-3d">
+                <x-menu-item title="Barang" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products') ||
                     request()->routeIs('barcode.print') ||
                     request()->routeIs('duplikat.product')"
                     wire:navigate />
                 <x-menu-item title="Pelanggan" icon="s-user-group" :href="route('customers')" :active="request()->routeIs('customers')"
                     wire:navigate />
-                <x-menu-item title="Kategori Produk" icon="s-wallet" :href="route('categories')" :active="request()->routeIs('categories')"
+                <x-menu-item title="Kategori Barang" icon="s-wallet" :href="route('categories')" :active="request()->routeIs('categories')"
                     wire:navigate />
                 <x-menu-item title="Supplier" icon="m-users" :href="route('suppliers')" :active="request()->routeIs('suppliers')" wire:navigate />
             </x-menu-sub>

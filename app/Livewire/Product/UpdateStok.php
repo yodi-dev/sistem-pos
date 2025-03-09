@@ -7,9 +7,8 @@ use App\Models\Product;
 use App\Models\StockIn;
 use Livewire\Component;
 use App\Models\Supplier;
-use Milon\Barcode\DNS1D;
-use Livewire\Attributes\On;
 use App\Models\StockInDetail;
+use Masmerise\Toaster\Toaster;
 use Illuminate\Support\Facades\DB;
 
 class UpdateStok extends Component
@@ -47,7 +46,6 @@ class UpdateStok extends Component
             unset($this->cart[$index]);
             $this->cart = array_values($this->cart);
 
-            // $this->formatData();
             session()->put('cartUpdate', $this->cart);
             $this->dispatch('showToast', 'Berhasil menghapus item.');
         }
