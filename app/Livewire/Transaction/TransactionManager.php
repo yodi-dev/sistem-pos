@@ -131,6 +131,7 @@ class TransactionManager extends Component
             session()->forget('cart');
             $this->dispatch('showToast', 'Berhasil menyimpan transaksi.');
             $this->resetCart();
+            $this->dispatch('focus-search');
         }
     }
 

@@ -4,8 +4,11 @@
             <div class="col-12 ">
                 <x-card title="Kasa" class="text-neutral bg-base-200" shadow separator>
                     <div class="flex justify-center">
-                        <div x-data="{ focusSearch() { $refs.searchInput.focus(); } }" x-init="$refs.searchInput.focus()" @keydown.window.prevent.ctrl.k="focusSearch()"
-                            class="w-full">
+                        <div x-data="{
+                            focusSearch() { $refs.searchInput.focus(); }
+                        }" x-init="focusSearch()" @keydown.window.prevent.ctrl.k="focusSearch()"
+                            @focus-search.window="focusSearch()" class="w-full">
+
 
                             <input type="text" wire:model.live="search" wire:keydown.arrow-down="selectNext"
                                 wire:keydown.arrow-up="selectPrevious" wire:keydown.enter="confirmSelection"
