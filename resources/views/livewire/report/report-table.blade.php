@@ -1,9 +1,10 @@
 <div>
+
     <x-card title="Laporan Harian" class="text-neutral bg-base-200" shadow separator>
         <x-slot:menu>
             <button wire:click="printPdf" class="btn btn-sm btn-neutral text-base-100 rounded-md">Cetak</button>
         </x-slot:menu>
-        <table class="table table-auto w-full max-w-94 border-1 border-neutral shadow">
+        <table class="table table-auto w-full border-1 border-neutral shadow">
             <thead class="bg-neutral text-base-100 text-lg text-center">
                 <tr>
                     <th class="border-r">Tanggal</th>
@@ -28,7 +29,7 @@
             </tbody>
         </table>
 
-        {{-- <p class="text-base-content mt-5">Penghasilan Cash : {{ $incomeCash }}</p> --}}
-        {{-- <p class="text-base-content">Penghasilan QRIS : {{ $incomeQRIS }}</p> --}}
+        <p class="text-base-content mt-5">Cash : {{ $incomeCash }}</p>
+        <p class="text-base-content">QRIS : {{ $incomeQRIS }}</p>
     </x-card>
 </div>

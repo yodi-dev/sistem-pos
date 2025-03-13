@@ -11,7 +11,8 @@
             </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-        <?php
+        <div class="grid grid-cols-2 gap-5 mb-5">
+            <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -27,14 +28,30 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
-        <div class="divider"></div>
+            <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('report.opening');
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-2407071180-1', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+        </div>
         <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
 [$__name, $__params] = $__split('report.report-table');
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-2407071180-1', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-2407071180-2', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 

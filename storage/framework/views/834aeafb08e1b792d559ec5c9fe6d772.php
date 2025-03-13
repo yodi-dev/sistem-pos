@@ -1,4 +1,5 @@
 <div>
+
     <?php if (isset($component)) { $__componentOriginal7f194736b6f6432dc38786f292496c34 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7f194736b6f6432dc38786f292496c34 = $attributes; } ?>
 <?php $component = Mary\View\Components\Card::resolve(['title' => 'Laporan Harian','shadow' => true,'separator' => true] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -12,7 +13,7 @@
          <?php $__env->slot('menu', null, []); ?> 
             <button wire:click="printPdf" class="btn btn-sm btn-neutral text-base-100 rounded-md">Cetak</button>
          <?php $__env->endSlot(); ?>
-        <table class="table table-auto w-full max-w-94 border-1 border-neutral shadow">
+        <table class="table table-auto w-full border-1 border-neutral shadow">
             <thead class="bg-neutral text-base-100 text-lg text-center">
                 <tr>
                     <th class="border-r">Tanggal</th>
@@ -37,8 +38,8 @@
             </tbody>
         </table>
 
-        
-        
+        <p class="text-base-content mt-5">Cash : <?php echo e($incomeCash); ?></p>
+        <p class="text-base-content">QRIS : <?php echo e($incomeQRIS); ?></p>
      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal7f194736b6f6432dc38786f292496c34)): ?>

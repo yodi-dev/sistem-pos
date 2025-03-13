@@ -11,8 +11,10 @@
             </div>
         @endif
 
-        @livewire('report.temporary-report')
-        <div class="divider"></div>
+        <div class="grid grid-cols-2 gap-5 mb-5">
+            @livewire('report.temporary-report')
+            @livewire('report.opening')
+        </div>
         @livewire('report.report-table')
     </div>
 
