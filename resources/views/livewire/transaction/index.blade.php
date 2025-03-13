@@ -4,17 +4,14 @@
             <div class="col-12 ">
                 <x-card title="Kasa" class="text-neutral bg-base-200" shadow separator>
                     <div class="flex justify-center">
-                        <div x-data="{
-                            focusSearch() { $refs.searchInput.focus(); }
-                        }" x-init="focusSearch()" @keydown.window.prevent.ctrl.k="focusSearch()"
-                            @focus-search.window="focusSearch()" class="w-full">
-
-
+                        <div x-data="{ focusSearch() { $refs.searchInput.focus(); } }" x-init="focusSearch()" @keydown.window.prevent.f8="focusSearch()"
+                            @focus-search.window="focusSearch()" class="flex w-full">
                             <input type="text" wire:model.live="search" wire:keydown.arrow-down="selectNext"
                                 wire:keydown.arrow-up="selectPrevious" wire:keydown.enter="confirmSelection"
-                                x-ref="searchInput" class="text-base-content input input-bordered w-full rounded-md"
+                                x-ref="searchInput"
+                                class="text-base-content input input-bordered w-full rounded-md me-2"
                                 placeholder="Cari Produk..." />
-
+                            <kbd class="kbd rounded-md w-12 bg-white">F8</kbd>
                         </div>
 
                         @if (!empty($products))
@@ -214,8 +211,9 @@
                                 Rp 100.000
                             </button>
                             <button type="button" wire:click="bayarPas"
-                                class="col-start-2 col-end-4 btn btn-sm bg-base-300 dark:bg-gray-800 text-base-content dark:text-gray-100 rounded-md">
+                                class="col-start-2 col-end-4 btn btn-sm bg-accent dark:bg-gray-800 text-base-content dark:text-gray-100 rounded-md">
                                 Uang Pas
+                                <kbd class="kbd kbd-xs rounded-md">F9</kbd>
                             </button>
                         </div>
 
@@ -225,10 +223,12 @@
                             <button wire:click="store"
                                 class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
                                 Simpan
+                                <kbd class="kbd kbd-xs rounded-md">F10</kbd>
                             </button>
                             <button wire:click="andprint"
                                 class="btn w-1/2 btn-neutral hover:bg-neutral text-base-100 rounded-md dark:bg-info dark:hover:bg-green-700">
                                 Simpan & Cetak Nota
+                                <kbd class="kbd kbd-xs rounded-md">F11</kbd>
                             </button>
                         </div>
 
