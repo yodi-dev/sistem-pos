@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Report;
 
+use Mary\Traits\Toast;
 use App\Models\Expense;
 use Livewire\Component;
 use App\Models\DailyReport;
 use App\Models\Transaction;
-use Livewire\Attributes\On;
 
 class TemporaryReport extends Component
 {
+    use Toast;
     public $totalIncome = 0;
     public $totalOutcome = 0;
     public $savings = 0;
@@ -28,15 +29,12 @@ class TemporaryReport extends Component
     {
         $reportDate = now()->format('Y-m-d');
 
-        // Ambil data saldo awal dari daily_reports
         $this->openingBalance = DailyReport::where('report_date', $reportDate)->value('opening_balance') ?? 0;
         $this->openingSavings = DailyReport::where('report_date', $reportDate)->value('opening_savings') ?? 0;
 
-        // Ambil data income dan outcome
         $this->totalIncome = Transaction::whereDate('created_at', $reportDate)->sum('total_price');
         $this->totalOutcome = Expense::whereDate('created_at', $reportDate)->sum('amount');
 
-        // Perbarui balance dengan memperhitungkan saldo awal
         $this->updateSavings();
         $this->updateBalance();
         $this->setFormat();
@@ -46,20 +44,14 @@ class TemporaryReport extends Component
     {
         $reportDate = now()->format('Y-m-d');
 
-        // Ambil saldo sebelumnya (jika ada)
         $previousBalance = DailyReport::where('report_date', '<', $reportDate)
             ->orderBy('report_date', 'desc')
             ->value('balance') ?? 0;
 
-        // saldo sekarang
         $currentBalance = $this->openingBalance + $previousBalance;
-        // total pengeluaran
         $totalOutcome = $this->totalOutcome + $this->openingSavings + $this->addSavings;
-        // saldo sekarang dikurangi total pengeluaran
         $currentBalance -= $totalOutcome;
-        // saldo sekarang ditambah total pemasukkan
         $currentBalance += $this->totalIncome;
-        // update saldo dengan saldo sekarang
         $this->balance = $currentBalance;
     }
 
@@ -77,57 +69,12 @@ class TemporaryReport extends Component
     {
         $reportDate = now()->format('Y-m-d');
 
-        // Ambil saldo sebelumnya (jika ada)
         $previousSavings = DailyReport::where('report_date', '<', $reportDate)
             ->orderBy('report_date', 'desc')
-            ->value('savings') ?? 0;
+            ->value('savings') ?? null;
 
-        // Hitung balance
         $currentSavings = $this->openingSavings + $previousSavings;
-
-        $this->savings = number_format($currentSavings, 0, ',', '.');
-    }
-
-    public function setOpeningBalance()
-    {
-        $reportDate = now()->format('Y-m-d');
-
-        $this->openingBalance ? $this->openingBalance = str_replace('.', '', $this->openingBalance) : 0;
-
-        DailyReport::updateOrCreate(
-            ['report_date' => $reportDate],
-            [
-                'opening_balance' => $this->openingBalance,
-                'total_income' => 0,
-                'total_outcome' => 0,
-                'savings' => 0,
-                'balance' => 0,
-            ]
-        );
-
-        session()->flash('message', 'Saldo awal berhasil disimpan.');
-        $this->mount();
-    }
-
-    public function setOpeningSavings()
-    {
-        $reportDate = now()->format('Y-m-d');
-
-        $this->openingSavings ? $this->openingSavings = str_replace('.', '', $this->openingSavings) : 0;
-
-        DailyReport::updateOrCreate(
-            ['report_date' => $reportDate],
-            [
-                'opening_savings' => $this->openingSavings,
-                'total_income' => 0,
-                'total_outcome' => 0,
-                'savings' => 0,
-                'balance' => 0,
-            ]
-        );
-
-        session()->flash('message', 'Tabungan awal berhasil disimpan.');
-        $this->mount();
+        $this->savings = $currentSavings;
     }
 
     public function generateReport()
@@ -148,7 +95,7 @@ class TemporaryReport extends Component
             ]
         );
 
-        $this->dispatch('showToast', "Berhasil membuat laporan");
+        $this->success('Berhasil membuat laporan', css: 'bg-neutral text-base-100 rounded-md');
         $this->dispatch('save-report');
         $this->setFormat();
     }
@@ -168,7 +115,7 @@ class TemporaryReport extends Component
         $this->inisiateFormat();
         $this->updateBalance();
         $this->setFormat();
-        $this->dispatch('showToast', "Berhasil ubah total pemasukkan");
+        $this->success('Berhasil ubah total pemasukkan', css: 'bg-neutral text-base-100 rounded-md');
     }
 
     public function updatedTotalOutcome()
@@ -176,7 +123,7 @@ class TemporaryReport extends Component
         $this->inisiateFormat();
         $this->updateBalance();
         $this->setFormat();
-        $this->dispatch('showToast', "Berhasil ubah total pengeluaran");
+        $this->success('Berhasil ubah total pengeluaran', css: 'bg-neutral text-base-100 rounded-md');
     }
 
     public function setAddSavings()
@@ -185,9 +132,51 @@ class TemporaryReport extends Component
         $this->addSavings ? $this->addSavings = str_replace('.', '', $this->addSavings) : 0;
         $this->savings += $this->addSavings;
 
-        $this->dispatch('showToast', "Berhasil tambah tabungan");
+        $this->success('Berhasil tambah tabungan', css: 'bg-neutral text-base-100 rounded-md');
         $this->updateBalance();
         $this->setFormat();
         $this->addSavings = number_format($this->addSavings, 0, ',', '.');
     }
+
+    // public function setOpeningBalance()
+    // {
+    //     $reportDate = now()->format('Y-m-d');
+
+    //     $this->openingBalance ? $this->openingBalance = str_replace('.', '', $this->openingBalance) : 0;
+
+    //     DailyReport::updateOrCreate(
+    //         ['report_date' => $reportDate],
+    //         [
+    //             'opening_balance' => $this->openingBalance,
+    //             'total_income' => 0,
+    //             'total_outcome' => 0,
+    //             'savings' => 0,
+    //             'balance' => 0,
+    //         ]
+    //     );
+
+    //     $this->success('Saldo awal berhasil disimpan', css: 'bg-neutral text-base-100 rounded-md');
+    //     $this->mount();
+    // }
+
+    // public function setOpeningSavings()
+    // {
+    //     $reportDate = now()->format('Y-m-d');
+
+    //     $this->openingSavings ? $this->openingSavings = str_replace('.', '', $this->openingSavings) : 0;
+
+    //     DailyReport::updateOrCreate(
+    //         ['report_date' => $reportDate],
+    //         [
+    //             'opening_savings' => $this->openingSavings,
+    //             'total_income' => 0,
+    //             'total_outcome' => 0,
+    //             'savings' => 0,
+    //             'balance' => 0,
+    //         ]
+    //     );
+
+    //     session()->flash('message', 'Tabungan awal berhasil disimpan.');
+    //     $this->mount();
+    // }
 }
