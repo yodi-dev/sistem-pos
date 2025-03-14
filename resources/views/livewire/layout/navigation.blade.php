@@ -31,8 +31,7 @@
                 <x-menu-item title="Barang Masuk" icon="c-inbox-arrow-down" :href="route('update.products')" :active="request()->routeIs('update.products')"
                     wire:navigate />
                 <x-menu-item title="Utang" icon="m-credit-card" :href="route('debts')" :active="request()->routeIs('debts')" wire:navigate />
-                <x-menu-item title="Laporan" icon="s-document-text" :href="route('reports')" :active="request()->routeIs('reports')"
-                    wire:navigate />
+
             </x-menu-sub>
             <x-menu-sub title="Master Data" icon="s-square-3-stack-3d">
                 <x-menu-item title="Barang" icon="m-archive-box-arrow-down" :href="route('products')" :active="request()->routeIs('products') ||
@@ -45,6 +44,7 @@
                     wire:navigate />
                 <x-menu-item title="Supplier" icon="m-users" :href="route('suppliers')" :active="request()->routeIs('suppliers')" wire:navigate />
             </x-menu-sub>
+            <x-menu-item title="Laporan" icon="s-document-text" :href="route('reports')" :active="request()->routeIs('reports')" wire:navigate />
 
             {{-- User --}}
             @if ($user = auth()->user())

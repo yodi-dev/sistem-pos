@@ -19,7 +19,7 @@ class ReportTable extends Component
         return view('livewire.report.report-table');
     }
 
-    #[On('daily_report_saved')]
+    #[On('save-report')]
     public function mount()
     {
         $today = now()->toDateString();

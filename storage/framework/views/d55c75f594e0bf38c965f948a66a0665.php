@@ -197,26 +197,7 @@
 <?php $component = $__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879; ?>
 <?php unset($__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879); ?>
 <?php endif; ?>
-                <?php if (isset($component)) { $__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal7c3255ff27a5c6d076ca64dbcfc1f879 = $attributes; } ?>
-<?php $component = Mary\View\Components\MenuItem::resolve(['title' => 'Laporan','icon' => 's-document-text','active' => request()->routeIs('reports')] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('menu-item'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Mary\View\Components\MenuItem::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('reports')),'wire:navigate' => true]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal7c3255ff27a5c6d076ca64dbcfc1f879)): ?>
-<?php $attributes = $__attributesOriginal7c3255ff27a5c6d076ca64dbcfc1f879; ?>
-<?php unset($__attributesOriginal7c3255ff27a5c6d076ca64dbcfc1f879); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879)): ?>
-<?php $component = $__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879; ?>
-<?php unset($__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879); ?>
-<?php endif; ?>
+
              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginald82092fa13795886cb51cb7dc7d7b48e)): ?>
@@ -328,6 +309,26 @@
 <?php if (isset($__componentOriginald82092fa13795886cb51cb7dc7d7b48e)): ?>
 <?php $component = $__componentOriginald82092fa13795886cb51cb7dc7d7b48e; ?>
 <?php unset($__componentOriginald82092fa13795886cb51cb7dc7d7b48e); ?>
+<?php endif; ?>
+            <?php if (isset($component)) { $__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal7c3255ff27a5c6d076ca64dbcfc1f879 = $attributes; } ?>
+<?php $component = Mary\View\Components\MenuItem::resolve(['title' => 'Laporan','icon' => 's-document-text','active' => request()->routeIs('reports')] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('menu-item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Mary\View\Components\MenuItem::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('reports')),'wire:navigate' => true]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal7c3255ff27a5c6d076ca64dbcfc1f879)): ?>
+<?php $attributes = $__attributesOriginal7c3255ff27a5c6d076ca64dbcfc1f879; ?>
+<?php unset($__attributesOriginal7c3255ff27a5c6d076ca64dbcfc1f879); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879)): ?>
+<?php $component = $__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879; ?>
+<?php unset($__componentOriginal7c3255ff27a5c6d076ca64dbcfc1f879); ?>
 <?php endif; ?>
 
             

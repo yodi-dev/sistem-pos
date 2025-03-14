@@ -1,15 +1,4 @@
 <div>
-    <!--[if BLOCK]><![endif]--><?php if(session()->has('message')): ?>
-        <div role="alert" class="alert alert-neutral mb-3 rounded-md">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span><?php echo e(session('message')); ?></span>
-        </div>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-
     <?php if (isset($component)) { $__componentOriginal7f194736b6f6432dc38786f292496c34 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7f194736b6f6432dc38786f292496c34 = $attributes; } ?>
 <?php $component = Mary\View\Components\Card::resolve(['title' => 'Laporan Sementara','shadow' => true,'separator' => true] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -25,21 +14,21 @@
                 <div class="label">
                     <span class="label-text">Total Pemasukkan</span>
                 </div>
-                <input type="number" wire:model.change="totalIncome" class="input input-bordered w-full rounded-md" />
+                <input type="text" wire:model.change="totalIncome" class="input input-bordered w-full rounded-md" />
             </label>
 
             <label class="form-control w-full">
                 <div class="label">
                     <span class="label-text">Total Pengeluaran</span>
                 </div>
-                <input type="number" wire:model.change="totalOutcome" class="input input-bordered w-full rounded-md" />
+                <input type="text" wire:model.change="totalOutcome" class="input input-bordered w-full rounded-md" />
             </label>
 
             <label class="form-control w-full">
                 <div class="label">
                     <span class="label-text">Tambah Tabungan</span>
                 </div>
-                <input type="number" wire:model="addSavings" wire:change="setAddSavings"
+                <input type="text" wire:model="addSavings" wire:change="setAddSavings"
                     class="input input-bordered w-full rounded-md" />
             </label>
 
@@ -65,9 +54,6 @@
             </div>
         </div>
 
-        <div class="divider"></div>
-
-
         <div>
             <button wire:click="generateReport" class="btn btn-neutral w-full text-base-100 mt-4 rounded-md">
                 Simpan
@@ -85,4 +71,55 @@
 <?php unset($__componentOriginal7f194736b6f6432dc38786f292496c34); ?>
 <?php endif; ?>
 </div>
+
+    <?php
+        $__scriptKey = '215619033-0';
+        ob_start();
+    ?>
+    <script>
+        $wire.on("showToast", (message) => {
+            let toast = document.createElement("div");
+            toast.className =
+                `toast toast-top toast-end`;
+            toast.innerHTML = `
+                <div class="alert text-base-100 bg-neutral rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ${message}</div>`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000); // Hilang setelah 3 detik
+        });
+
+        $wire.on("showToastError", (message) => {
+            let toast = document.createElement("div");
+            toast.className =
+                `toast toast-top toast-end`;
+            toast.innerHTML = `
+                <div class="alert text-base-100 bg-error rounded-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12M12 2a10 10 0 1010 10A10 10 0 0012 2z" />
+                </svg>
+                ${message}</div>`;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000); // Hilang setelah 3 detik
+        });
+    </script>
+    <?php
+        $__output = ob_get_clean();
+
+        \Livewire\store($this)->push('scripts', $__output, $__scriptKey)
+    ?>
 <?php /**PATH C:\Users\asus\Herd\sistem-pos\resources\views/livewire/report/temporary-report.blade.php ENDPATH**/ ?>

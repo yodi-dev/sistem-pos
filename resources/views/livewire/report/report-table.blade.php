@@ -1,5 +1,4 @@
 <div>
-
     <x-card title="Laporan Harian" class="text-neutral bg-base-200" shadow separator>
         <x-slot:menu>
             <button wire:click="printPdf" class="btn btn-sm btn-neutral text-base-100 rounded-md">Cetak</button>

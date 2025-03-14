@@ -21,7 +21,6 @@ class TemporaryReport extends Component
 
     public function render()
     {
-
         return view('livewire.report.temporary-report');
     }
 
@@ -64,12 +63,6 @@ class TemporaryReport extends Component
         $this->balance = $currentBalance;
     }
 
-    #[On('daily_report_saved')]
-    public function handler()
-    {
-        $this->setFormat();
-    }
-
     private function setFormat()
     {
         $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
@@ -78,7 +71,6 @@ class TemporaryReport extends Component
         $this->savings = number_format($this->savings, 0, ',', '.');
         $this->balance = number_format($this->balance, 0, ',', '.');
         $this->openingSavings = number_format($this->openingSavings, 0, ',', '.');
-        $this->addSavings = number_format($this->addSavings, 0, ',', '.');
     }
 
     private function updateSavings()
@@ -93,7 +85,7 @@ class TemporaryReport extends Component
         // Hitung balance
         $currentSavings = $this->openingSavings + $previousSavings;
 
-        $this->savings = $currentSavings;
+        $this->savings = number_format($currentSavings, 0, ',', '.');
     }
 
     public function setOpeningBalance()
@@ -156,8 +148,9 @@ class TemporaryReport extends Component
             ]
         );
 
-        session()->flash('message', 'Berhasil menyimpan data laporan harian.');
-        $this->dispatch("daily_report_saved");
+        $this->dispatch('showToast', "Berhasil membuat laporan");
+        $this->dispatch('save-report');
+        $this->setFormat();
     }
 
     private function inisiateFormat()
@@ -175,7 +168,7 @@ class TemporaryReport extends Component
         $this->inisiateFormat();
         $this->updateBalance();
         $this->setFormat();
-        session()->flash('message', 'Total pemasukkan berhasil diubah.');
+        $this->dispatch('showToast', "Berhasil ubah total pemasukkan");
     }
 
     public function updatedTotalOutcome()
@@ -183,7 +176,7 @@ class TemporaryReport extends Component
         $this->inisiateFormat();
         $this->updateBalance();
         $this->setFormat();
-        session()->flash('message', 'Total pengeluaran berhasil diubah.');
+        $this->dispatch('showToast', "Berhasil ubah total pengeluaran");
     }
 
     public function setAddSavings()
@@ -192,8 +185,9 @@ class TemporaryReport extends Component
         $this->addSavings ? $this->addSavings = str_replace('.', '', $this->addSavings) : 0;
         $this->savings += $this->addSavings;
 
-        session()->flash('message', 'Berhasil tambah tabungan.');
+        $this->dispatch('showToast', "Berhasil tambah tabungan");
         $this->updateBalance();
         $this->setFormat();
+        $this->addSavings = number_format($this->addSavings, 0, ',', '.');
     }
 }
