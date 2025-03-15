@@ -1,5 +1,11 @@
 <div>
+    @if ($isModal)
+        <livewire:report.set-balance>
+    @endif
     <x-card title="Laporan Sementara" class="text-neutral bg-base-200" shadow separator>
+        <x-slot:menu>
+            <button wire:click="openModal" class="btn btn-sm btn-neutral text-base-100 rounded-md">Set Saldo</button>
+        </x-slot:menu>
         <div class="grid grid-cols-3 gap-4 text-base-content">
             <label class="form-control w-full">
                 <div class="label">

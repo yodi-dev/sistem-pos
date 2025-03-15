@@ -97,16 +97,6 @@ class ProductManager extends Component
         $this->reset(['isModalSupplier', 'selectedProduct', 'assignedSuppliers', 'selectedSupplier']);
     }
 
-    private function resetInputFields()
-    {
-        $this->name = '';
-        $this->category_id = '';
-        $this->price = '';
-        $this->stock = '';
-        $this->description = '';
-        $this->product_id = '';
-    }
-
     public function delete($id)
     {
         Product::find($id)->delete();

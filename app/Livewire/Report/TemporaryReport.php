@@ -7,18 +7,25 @@ use App\Models\Expense;
 use Livewire\Component;
 use App\Models\DailyReport;
 use App\Models\Transaction;
+use Livewire\Attributes\On;
 
 class TemporaryReport extends Component
 {
     use Toast;
+    public $isModal = false;
     public $totalIncome = 0;
     public $totalOutcome = 0;
     public $savings = 0;
     public $balance = 0;
-    public $openingBalance = 0;
-    public $openingSavings = 0;
     public $addSavings = 0;
     public $notes;
+    public $openingBalance = 0;
+    public $openingSavings = 0;
+
+    public function openModal()
+    {
+        $this->isModal = true;
+    }
 
     public function render()
     {
@@ -138,45 +145,10 @@ class TemporaryReport extends Component
         $this->addSavings = number_format($this->addSavings, 0, ',', '.');
     }
 
-    // public function setOpeningBalance()
-    // {
-    //     $reportDate = now()->format('Y-m-d');
-
-    //     $this->openingBalance ? $this->openingBalance = str_replace('.', '', $this->openingBalance) : 0;
-
-    //     DailyReport::updateOrCreate(
-    //         ['report_date' => $reportDate],
-    //         [
-    //             'opening_balance' => $this->openingBalance,
-    //             'total_income' => 0,
-    //             'total_outcome' => 0,
-    //             'savings' => 0,
-    //             'balance' => 0,
-    //         ]
-    //     );
-
-    //     $this->success('Saldo awal berhasil disimpan', css: 'bg-neutral text-base-100 rounded-md');
-    //     $this->mount();
-    // }
-
-    // public function setOpeningSavings()
-    // {
-    //     $reportDate = now()->format('Y-m-d');
-
-    //     $this->openingSavings ? $this->openingSavings = str_replace('.', '', $this->openingSavings) : 0;
-
-    //     DailyReport::updateOrCreate(
-    //         ['report_date' => $reportDate],
-    //         [
-    //             'opening_savings' => $this->openingSavings,
-    //             'total_income' => 0,
-    //             'total_outcome' => 0,
-    //             'savings' => 0,
-    //             'balance' => 0,
-    //         ]
-    //     );
-
-    //     session()->flash('message', 'Tabungan awal berhasil disimpan.');
-    //     $this->mount();
-    // }
+    #[On('closeModal')]
+    public function closeModal()
+    {
+        $this->isModal = false;
+        $this->mount();
+    }
 }

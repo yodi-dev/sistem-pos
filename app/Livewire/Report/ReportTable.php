@@ -63,11 +63,4 @@ class ReportTable extends Component
             'laporan-harian-' . now()->format('Y-m-d') . '.pdf'
         );
     }
-
-    public function delete($id)
-    {
-        DailyReport::find($id)->delete();
-        session()->flash('message', 'Berhasil hapus data laporan harian.');
-        $this->mount();
-    }
 }

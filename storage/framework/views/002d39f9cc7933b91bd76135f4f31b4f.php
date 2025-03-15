@@ -1,4 +1,22 @@
 <div>
+    <!--[if BLOCK]><![endif]--><?php if($isModal): ?>
+        <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('report.set-balance', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-215619033-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
     <?php if (isset($component)) { $__componentOriginal7f194736b6f6432dc38786f292496c34 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7f194736b6f6432dc38786f292496c34 = $attributes; } ?>
 <?php $component = Mary\View\Components\Card::resolve(['title' => 'Laporan Sementara','shadow' => true,'separator' => true] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -9,6 +27,9 @@
 <?php $attributes = $attributes->except(\Mary\View\Components\Card::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['class' => 'text-neutral bg-base-200']); ?>
+         <?php $__env->slot('menu', null, []); ?> 
+            <button wire:click="openModal" class="btn btn-sm btn-neutral text-base-100 rounded-md">Set Saldo</button>
+         <?php $__env->endSlot(); ?>
         <div class="grid grid-cols-3 gap-4 text-base-content">
             <label class="form-control w-full">
                 <div class="label">
