@@ -1,15 +1,6 @@
 <div class="text-base-content dark:text-gray-100">
     <div class="mx-auto sm:px-6 lg:px-0">
-        <!--[if BLOCK]><![endif]--><?php if(session('success')): ?>
-            <div role="alert" class="alert mb-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span><?php echo e(session('success')); ?></span>
-            </div>
-        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+
         <div class="row mb-3">
             <div class="col-12 ">
                 <?php if (isset($component)) { $__componentOriginal7f194736b6f6432dc38786f292496c34 = $component; } ?>
@@ -28,7 +19,6 @@
                                 focusSearch() { $refs.searchInput.focus(); }
                             }" x-init="$refs.searchInput.focus()"
                                 @keydown.window.prevent.ctrl.k="focusSearch()" class="w-full">
-                                <!-- Input Search untuk Produk -->
                                 <input type="text" wire:model.live="search" placeholder="Cari barang..."
                                     class="input input-bordered text-base-content w-full rounded-md"
                                     wire:keydown.arrow-down="selectNext" wire:keydown.arrow-up="selectPrevious"
@@ -74,7 +64,7 @@
                         <ul
                             class="absolute bg-white text-base-content max-h-80 overflow-y-scroll w-64 rounded-md shadow-md z-10">
                             <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $suppliers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $supplier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li 
+                                <li
                                     class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200 <?php echo e($highlightIndex === $index ? 'bg-gray-200' : ''); ?>">
                                     <?php echo e($supplier->name); ?>
 
@@ -110,11 +100,11 @@
                                         <input type="text" wire:model.defer="cart.<?php echo e($key); ?>.retail_price"
                                             x-data
                                             x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
-                                             class="input input-sm max-w-28 rounded-md text-right">
+                                            class="input input-sm max-w-28 rounded-md text-right">
                                     </td>
                                     <td>
                                         <input type="text" class="input input-sm max-w-28 rounded-md text-right"
-                                            wire:change="updateCartWholesale(<?php echo e($key); ?>, $event.target.value)"
+                                            x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
                                             value="<?php echo e($item['wholesale_price']); ?>">
                                     </td>
                                     <td class="flex items-center space-x-2">
@@ -179,55 +169,4 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         </div>
     </div>
 </div>
-
-    <?php
-        $__scriptKey = '2063679315-0';
-        ob_start();
-    ?>
-    <script>
-        $wire.on("showToast", (message) => {
-            let toast = document.createElement("div");
-            toast.className =
-                `toast toast-top toast-end`;
-            toast.innerHTML = `
-                <div class="alert text-base-100 bg-neutral rounded-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                ${message}</div>`;
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000); // Hilang setelah 3 detik
-        });
-
-        $wire.on("showToastError", (message) => {
-            let toast = document.createElement("div");
-            toast.className =
-                `toast toast-top toast-end`;
-            toast.innerHTML = `
-                <div class="alert text-base-100 bg-error rounded-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12M12 2a10 10 0 1010 10A10 10 0 0012 2z" />
-                </svg>
-                ${message}</div>`;
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000); // Hilang setelah 3 detik
-        });
-    </script>
-    <?php
-        $__output = ob_get_clean();
-
-        \Livewire\store($this)->push('scripts', $__output, $__scriptKey)
-    ?>
 <?php /**PATH C:\Users\asus\Herd\sistem-pos\resources\views/livewire/product/update-stok.blade.php ENDPATH**/ ?>

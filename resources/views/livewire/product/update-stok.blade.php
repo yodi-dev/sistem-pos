@@ -1,15 +1,6 @@
 <div class="text-base-content dark:text-gray-100">
     <div class="mx-auto sm:px-6 lg:px-0">
-        @if (session('success'))
-            <div role="alert" class="alert mb-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
+
         <div class="row mb-3">
             <div class="col-12 ">
                 <x-card title="Barang Masuk" class="text-neutral bg-base-200" shadow separator>
@@ -19,7 +10,6 @@
                                 focusSearch() { $refs.searchInput.focus(); }
                             }" x-init="$refs.searchInput.focus()"
                                 @keydown.window.prevent.ctrl.k="focusSearch()" class="w-full">
-                                <!-- Input Search untuk Produk -->
                                 <input type="text" wire:model.live="search" placeholder="Cari barang..."
                                     class="input input-bordered text-base-content w-full rounded-md"
                                     wire:keydown.arrow-down="selectNext" wire:keydown.arrow-up="selectPrevious"
@@ -56,7 +46,7 @@
                         <ul
                             class="absolute bg-white text-base-content max-h-80 overflow-y-scroll w-64 rounded-md shadow-md z-10">
                             @foreach ($suppliers as $index => $supplier)
-                                <li {{-- wire:click="addCustomer({{ $customer->id }})" --}}
+                                <li
                                     class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200 {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
                                     {{ $supplier->name }}
                                 </li>
@@ -91,11 +81,11 @@
                                         <input type="text" wire:model.defer="cart.{{ $key }}.retail_price"
                                             x-data
                                             x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
-                                            {{-- wire:blur="updateHarga({{ $key }}" --}} class="input input-sm max-w-28 rounded-md text-right">
+                                            class="input input-sm max-w-28 rounded-md text-right">
                                     </td>
                                     <td>
                                         <input type="text" class="input input-sm max-w-28 rounded-md text-right"
-                                            wire:change="updateCartWholesale({{ $key }}, $event.target.value)"
+                                            x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
                                             value="{{ $item['wholesale_price'] }}">
                                     </td>
                                     <td class="flex items-center space-x-2">
@@ -134,47 +124,3 @@
         </div>
     </div>
 </div>
-
-@script
-    <script>
-        $wire.on("showToast", (message) => {
-            let toast = document.createElement("div");
-            toast.className =
-                `toast toast-top toast-end`;
-            toast.innerHTML = `
-                <div class="alert text-base-100 bg-neutral rounded-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                ${message}</div>`;
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000); // Hilang setelah 3 detik
-        });
-
-        $wire.on("showToastError", (message) => {
-            let toast = document.createElement("div");
-            toast.className =
-                `toast toast-top toast-end`;
-            toast.innerHTML = `
-                <div class="alert text-base-100 bg-error rounded-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12M12 2a10 10 0 1010 10A10 10 0 0012 2z" />
-                </svg>
-                ${message}</div>`;
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000); // Hilang setelah 3 detik
-        });
-    </script>
-@endscript

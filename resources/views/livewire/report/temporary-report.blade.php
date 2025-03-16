@@ -11,21 +11,27 @@
                 <div class="label">
                     <span class="label-text">Total Pemasukkan</span>
                 </div>
-                <input type="text" wire:model.change="totalIncome" class="input input-bordered w-full rounded-md" />
+                <input type="text"
+                    x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                    wire:model.change="totalIncome" class="input input-bordered w-full rounded-md" />
             </label>
 
             <label class="form-control w-full">
                 <div class="label">
                     <span class="label-text">Total Pengeluaran</span>
                 </div>
-                <input type="text" wire:model.change="totalOutcome" class="input input-bordered w-full rounded-md" />
+                <input type="text"
+                    x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                    wire:model.change="totalOutcome" class="input input-bordered w-full rounded-md" />
             </label>
 
             <label class="form-control w-full">
                 <div class="label">
                     <span class="label-text">Tambah Tabungan</span>
                 </div>
-                <input type="text" wire:model="addSavings" wire:change="setAddSavings"
+                <input type="text"
+                    x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                    wire:model="addSavings" wire:change="setAddSavings"
                     class="input input-bordered w-full rounded-md" />
             </label>
 

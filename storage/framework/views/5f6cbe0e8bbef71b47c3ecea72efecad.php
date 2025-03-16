@@ -20,15 +20,19 @@
                         <div class="label">
                             <span class="label-text">Set Saldo Awal</span>
                         </div>
-                        <input type="text" id="opening_balance" wire:model="openingBalance"
-                            wire:change="setOpeningBalance" class="input input-bordered w-full rounded-md">
+                        <input type="text" x-on:change="$wire.$refresh()"
+                            x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                            id="opening_balance" wire:model="openingBalance" wire:change="setOpeningBalance"
+                            class="input input-bordered w-full rounded-md">
                     </label>
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Set Tabungan Awal</span>
                         </div>
-                        <input type="text" id="opening_savings" wire:model="openingSavings"
-                            wire:change="setOpeningSavings" class="input input-bordered w-full rounded-md">
+                        <input type="text"
+                            x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                            id="opening_savings" wire:model="openingSavings" wire:change="setOpeningSavings"
+                            class="input input-bordered w-full rounded-md">
                     </label>
                 </div>
 

@@ -2,17 +2,19 @@
 
 namespace App\Livewire\Product;
 
+use Mary\Traits\Toast;
 use App\Helpers\Format;
 use App\Models\Product;
 use App\Models\StockIn;
 use Livewire\Component;
 use App\Models\Supplier;
 use App\Models\StockInDetail;
-use Masmerise\Toaster\Toaster;
 use Illuminate\Support\Facades\DB;
 
 class UpdateStok extends Component
 {
+    use Toast;
+
     public $search = '';
     public $searchSupplier;
     public $supplier;
@@ -47,7 +49,7 @@ class UpdateStok extends Component
             $this->cart = array_values($this->cart);
 
             session()->put('cartUpdate', $this->cart);
-            $this->dispatch('showToast', 'Berhasil menghapus item.');
+            $this->success('Berhasil menghapus item', css: 'bg-neutral text-base-100 rounded-md');
         }
     }
 
@@ -243,6 +245,6 @@ class UpdateStok extends Component
         session()->forget('cartUpdate');
         session()->forget('selectedSupplier');
 
-        $this->dispatch('showToast', 'Berhasil menyimpan data.');
+        $this->success('Berhasil menyimpan data', css: 'bg-neutral text-base-100 rounded-md');
     }
 }

@@ -42,8 +42,8 @@ class SetBalance extends Component
         );
         $report->update(['opening_balance' => $this->openingBalance]);
 
+        $this->closeModal();
         $this->success('berhasil simpan saldo awal', css: 'bg-neutral text-base-100 rounded-md');
-        $this->dispatch('closeModal');
     }
 
     public function setOpeningSavings()
@@ -66,7 +66,7 @@ class SetBalance extends Component
         $report->update(['opening_savings' => $this->openingSavings]);
 
         $this->success('berhasil simpan tabungan awal', css: 'bg-neutral text-base-100 rounded-md');
-        $this->dispatch('closeModal');
+        $this->closeModal();
     }
 
     public function closeModal()
