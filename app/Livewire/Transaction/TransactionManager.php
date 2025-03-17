@@ -234,6 +234,7 @@ class TransactionManager extends Component
         $this->changeDue = 0;
         $this->customer = null;
         $this->totalPaid = null;
+        $this->paymentMethod = 'tunai';
 
         $this->resetSearch();
     }

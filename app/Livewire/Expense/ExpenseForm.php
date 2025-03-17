@@ -37,7 +37,7 @@ class ExpenseForm extends Component
 
     public function resetForm()
     {
-        $this->date = now()->toDateString(); // Format tanggal yang diinginkan: YYYY-MM-DD
+        $this->date = now()->toDateString();
         $this->expense = '';
         $this->amount = '';
         $this->note = '';
@@ -66,6 +66,6 @@ class ExpenseForm extends Component
 
     public function closeModal()
     {
-        $this->dispatch('closeForm');
+        $this->dispatch('closeModal');
     }
 }

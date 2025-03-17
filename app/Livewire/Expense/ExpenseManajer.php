@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Expense;
 
+use Mary\Traits\Toast;
 use App\Models\Expense;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
 class ExpenseManajer extends Component
 {
+    use Toast;
+
     public $showForm;
     public $selectedExpenseId = null;
 
@@ -21,11 +24,11 @@ class ExpenseManajer extends Component
     #[On('saveExpense')]
     public function hideCreateForm()
     {
-        $this->dispatch('showToast', 'Berhasil menyimpan pengeluaran.');
+        $this->success('Berhasil menyimpan pengeluaran.', css: 'bg-neutral text-base-100 rounded-md');
         $this->showForm = false;
     }
 
-    #[On('closeForm')]
+    #[On('closeModal')]
     public function resetForm()
     {
         $this->showForm = false;
@@ -47,6 +50,6 @@ class ExpenseManajer extends Component
     public function delete($id)
     {
         Expense::find($id)->delete();
-        $this->dispatch('showToast', 'Berhasil menghapus data pengeluaran.');
+        $this->success('Berhasil menghapus data pengeluaran.', css: 'bg-neutral text-base-100 rounded-md');
     }
 }

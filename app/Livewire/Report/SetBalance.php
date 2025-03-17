@@ -23,6 +23,7 @@ class SetBalance extends Component
         $this->openingBalance = number_format($openingBalance, 0, ',', '.');
         $this->openingSavings = number_format($openingSavings, 0, ',', '.');
     }
+
     public function setOpeningBalance()
     {
         $reportDate = now()->format('Y-m-d');
