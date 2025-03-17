@@ -28,7 +28,7 @@
             </tbody>
         </table>
 
-        <p class="text-base-content mt-5">Cash : {{ $incomeCash }}</p>
-        <p class="text-base-content">QRIS : {{ $incomeQRIS }}</p>
+        <p class="text-base-content">Penghasilan QRIS: Rp. {{ $incomeQRIS }}</p>
+        <p class="text-base-content">Saldo QRIS: Rp. {{ $qrisBalance }}</p>
     </x-card>
 </div>

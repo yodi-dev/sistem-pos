@@ -37,8 +37,8 @@
             </tbody>
         </table>
 
-        <p class="text-base-content mt-5">Cash : <?php echo e($incomeCash); ?></p>
-        <p class="text-base-content">QRIS : <?php echo e($incomeQRIS); ?></p>
+        <p class="text-base-content">Penghasilan QRIS: Rp. <?php echo e($incomeQRIS); ?></p>
+        <p class="text-base-content">Saldo QRIS: Rp. <?php echo e($qrisBalance); ?></p>
      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal7f194736b6f6432dc38786f292496c34)): ?>

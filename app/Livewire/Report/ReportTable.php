@@ -11,7 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class ReportTable extends Component
 {
     public $reports;
-    public $incomeCash;
+    public $qrisBalance;
     public $incomeQRIS;
 
     public function render()
@@ -23,11 +23,11 @@ class ReportTable extends Component
     public function mount()
     {
         $today = now()->toDateString();
-        $this->incomeCash = Transaction::where('payment_method', 'tunai')->whereDate('created_at', $today)->sum('total_paid');
-        $this->incomeQRIS = Transaction::where('payment_method', 'qris')->whereDate('created_at', $today)->sum('total_paid');
+        $qrisBalance = DailyReport::where('report_date', $today)->value('qris_balance') ?? 0;
+        $incomeQRIS = Transaction::where('payment_method', 'qris')->whereDate('created_at', $today)->sum('total_paid');
 
-        $this->incomeCash = number_format($this->incomeCash, 0, ',', '.');
-        $this->incomeQRIS = number_format($this->incomeQRIS, 0, ',', '.');
+        $this->qrisBalance = number_format($qrisBalance, 0, ',', '.');
+        $this->incomeQRIS = number_format($incomeQRIS, 0, ',', '.');
 
         $this->reports = DailyReport::all()->map(function ($report) {
             $report->formatted_total_income = number_format($report->total_income, 0, ',', '.');

@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('daily_reports', function (Blueprint $table) {
             $table->id();
             $table->date('report_date')->unique();
+            $table->decimal('qris_income', 15, 2);
             $table->decimal('total_income', 15, 2);
             $table->decimal('total_outcome', 15, 2);
-            $table->decimal('savings', 15, 2);
-            $table->decimal('balance', 15, 2);
-            $table->decimal('opening_balance', 15, 2);
             $table->decimal('opening_savings', 15, 2);
+            $table->decimal('savings', 15, 2);
+            $table->decimal('opening_balance', 15, 2);
+            $table->decimal('qris_balance', 15, 2);
+            $table->decimal('balance', 15, 2);
             $table->string('notes')->nullable();
             $table->timestamps();
         });

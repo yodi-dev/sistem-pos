@@ -15,7 +15,7 @@
 <?php $attributes = $attributes->except(\Mary\View\Components\Card::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['class' => 'text-neutral bg-base-200']); ?>
-                <div class="grid grid-cols-2 gap-4 text-base-content">
+                <div class="grid grid-cols-1 text-base-content">
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Set Saldo Awal</span>
@@ -25,6 +25,17 @@
                             id="opening_balance" wire:model="openingBalance" wire:change="setOpeningBalance"
                             class="input input-bordered w-full rounded-md">
                     </label>
+
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Set Saldo QRIS</span>
+                        </div>
+                        <input type="text"
+                            x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                            wire:model="qrisBalance" wire:change="setQrisBalance"
+                            class="input input-bordered w-full rounded-md">
+                    </label>
+
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Set Tabungan Awal</span>
@@ -38,23 +49,19 @@
 
                 <div class="divider"></div>
 
-                <div class="grid grid-cols-2 text-base-content">
+                <div class="grid grid-cols-3 text-base-content">
                     <div class="text-center">
                         <h4>Saldo Awal</h4>
                         <p class="text-base-content font-bold">Rp <?php echo e($openingBalance); ?></p>
                     </div>
                     <div class="text-center">
+                        <h4>Saldo QRIS</h4>
+                        <p class="text-base-content font-bold">Rp <?php echo e($qrisBalance); ?></p>
+                    </div>
+                    <div class="text-center">
                         <h4>Tabungan Awal</h4>
                         <p class="text-base-content font-bold">Rp <?php echo e($openingSavings); ?></p>
                     </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <div>
-                    <button wire:click="closeModal()"
-                        class="btn btn-outline btn-error text-base-100 rounded dark:bg-info dark:hover:bg-green-700 w-full">
-                        Kembali</button>
                 </div>
              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

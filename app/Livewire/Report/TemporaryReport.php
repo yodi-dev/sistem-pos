@@ -56,7 +56,7 @@ class TemporaryReport extends Component
             ->value('balance') ?? 0;
 
         $currentBalance = $this->openingBalance + $previousBalance;
-        $totalOutcome = $this->totalOutcome + $this->openingSavings + $this->addSavings;
+        $totalOutcome = $this->totalOutcome + $this->addSavings;
         $currentBalance -= $totalOutcome;
         $currentBalance += $this->totalIncome;
         $this->balance = $currentBalance;

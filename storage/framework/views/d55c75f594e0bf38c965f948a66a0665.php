@@ -1,6 +1,6 @@
 <nav x-data="{ open: false }" class="bg-base-200 dark:bg-neutral border-b border-primary dark:border-gray-700 shadow-md">
     <!-- Primary Navigation Menu -->
-     <?php $__env->slot('sidebar', null, ['drawer' => 'main-drawer','collapsible' => true,'collapse-text' => 'Sembunyikan','right-mobile' => true,'class' => 'bg-base-200','lg:bg-inherit' => true]); ?> 
+     <?php $__env->slot('sidebar', null, ['drawer' => 'main-drawer','collapsible' => true,'collapse-text' => '','right-mobile' => true,'class' => 'bg-base-200','lg:bg-inherit' => true]); ?> 
 
         <!-- Page Heading -->
         <!--[if BLOCK]><![endif]--><?php if(isset($header)): ?>

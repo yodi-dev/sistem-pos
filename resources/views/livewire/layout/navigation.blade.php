@@ -1,7 +1,6 @@
 <nav x-data="{ open: false }" class="bg-base-200 dark:bg-neutral border-b border-primary dark:border-gray-700 shadow-md">
     <!-- Primary Navigation Menu -->
-    <x-slot:sidebar drawer="main-drawer" collapsible collapse-text="Sembunyikan" right-mobile class="bg-base-200"
-        lg:bg-inherit>
+    <x-slot:sidebar drawer="main-drawer" collapsible collapse-text="" right-mobile class="bg-base-200" lg:bg-inherit>
 
         <!-- Page Heading -->
         @if (isset($header))
