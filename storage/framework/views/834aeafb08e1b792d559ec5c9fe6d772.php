@@ -19,6 +19,7 @@
                     <th class="border-r">Pemasukkan</th>
                     <th class="border-r">Pengeluaran</th>
                     <th class="border-r">Tabungan</th>
+                    <th class="border-r">Saldo QRIS</th>
                     <th class="border-r">Saldo</th>
                     <th class="border-r">Catatan</th>
                 </tr>
@@ -30,15 +31,13 @@
                         <td>Rp. <?php echo e($report->formatted_total_income); ?></td>
                         <td>Rp. <?php echo e($report->formatted_total_outcome); ?></td>
                         <td>Rp. <?php echo e($report->formatted_savings); ?></td>
+                        <td>Rp. <?php echo e($report->formatted_qris_balance); ?></td>
                         <td>Rp. <?php echo e($report->formatted_balance); ?></td>
                         <td><?php echo e($report->notes); ?></td>
                     </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
             </tbody>
         </table>
-
-        <p class="text-base-content">Penghasilan QRIS: Rp. <?php echo e($incomeQRIS); ?></p>
-        <p class="text-base-content">Saldo QRIS: Rp. <?php echo e($qrisBalance); ?></p>
      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal7f194736b6f6432dc38786f292496c34)): ?>

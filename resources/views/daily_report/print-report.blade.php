@@ -78,6 +78,7 @@
                     <th>Pemasukkan</th>
                     <th>Pengeluaran</th>
                     <th>Tabungan</th>
+                    <th>Saldo QRIS</th>
                     <th>Saldo</th>
                     <th>Catatan</th>
                 </tr>
@@ -89,15 +90,13 @@
                         <td>Rp. {{ number_format($report->total_income, 0, ',', '.') }}</td>
                         <td>Rp. {{ number_format($report->total_outcome, 0, ',', '.') }}</td>
                         <td>Rp. {{ number_format($report->savings, 0, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($report->qris_balance, 0, ',', '.') }}</td>
                         <td>Rp. {{ number_format($report->balance, 0, ',', '.') }}</td>
                         <td>{{ $report->notes }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-
-        {{-- <p>Saldo QRIS : Rp. </p> --}}
-        {{-- <p>Saldo Cash : Rp. </p> --}}
 
         <footer>
             <p>Oleh Habiba Store | dicetak pada {{ now()->format('d M Y H:i') }}</p>

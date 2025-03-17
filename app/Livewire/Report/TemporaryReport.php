@@ -13,6 +13,7 @@ class TemporaryReport extends Component
 {
     use Toast;
     public $isModal = false;
+    public $qrisIncome = 0;
     public $totalIncome = 0;
     public $totalOutcome = 0;
     public $savings = 0;
@@ -39,6 +40,7 @@ class TemporaryReport extends Component
         $this->openingBalance = DailyReport::where('report_date', $reportDate)->value('opening_balance') ?? 0;
         $this->openingSavings = DailyReport::where('report_date', $reportDate)->value('opening_savings') ?? 0;
 
+        $this->qrisIncome = Transaction::where('payment_method', 'qris')->whereDate('created_at', $reportDate)->sum('total_price');
         $this->totalIncome = Transaction::whereDate('created_at', $reportDate)->sum('total_price');
         $this->totalOutcome = Expense::whereDate('created_at', $reportDate)->sum('amount');
 
@@ -64,6 +66,7 @@ class TemporaryReport extends Component
 
     private function setFormat()
     {
+        $this->qrisIncome = number_format($this->qrisIncome, 0, ',', '.');
         $this->totalIncome = number_format($this->totalIncome, 0, ',', '.');
         $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
         $this->openingBalance = number_format($this->openingBalance, 0, ',', '.');
@@ -96,6 +99,7 @@ class TemporaryReport extends Component
                 'total_outcome' => $this->totalOutcome,
                 'opening_savings' => $this->openingSavings,
                 'savings' => $this->savings,
+                'qris_balance' => $this->qrisIncome,
                 'opening_balance' => $this->openingBalance,
                 'balance' => $this->balance,
                 'notes' => $this->notes,
@@ -109,6 +113,7 @@ class TemporaryReport extends Component
 
     private function inisiateFormat()
     {
+        $this->qrisIncome = str_replace('.', '', $this->qrisIncome);
         $this->totalIncome = str_replace('.', '', $this->totalIncome);
         $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
         $this->savings = str_replace('.', '', $this->savings);

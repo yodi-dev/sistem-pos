@@ -10,6 +10,7 @@
                     <th class="border-r">Pemasukkan</th>
                     <th class="border-r">Pengeluaran</th>
                     <th class="border-r">Tabungan</th>
+                    <th class="border-r">Saldo QRIS</th>
                     <th class="border-r">Saldo</th>
                     <th class="border-r">Catatan</th>
                 </tr>
@@ -21,14 +22,12 @@
                         <td>Rp. {{ $report->formatted_total_income }}</td>
                         <td>Rp. {{ $report->formatted_total_outcome }}</td>
                         <td>Rp. {{ $report->formatted_savings }}</td>
+                        <td>Rp. {{ $report->formatted_qris_balance }}</td>
                         <td>Rp. {{ $report->formatted_balance }}</td>
                         <td>{{ $report->notes }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
-
-        <p class="text-base-content">Penghasilan QRIS: Rp. {{ $incomeQRIS }}</p>
-        <p class="text-base-content">Saldo QRIS: Rp. {{ $qrisBalance }}</p>
     </x-card>
 </div>

@@ -9,6 +9,13 @@
         <div class="grid grid-cols-3 gap-4 text-base-content">
             <label class="form-control w-full">
                 <div class="label">
+                    <span class="label-text">Pemasukkan QRIS</span>
+                </div>
+                <input type="text" wire:model="qrisIncome" class="input input-bordered w-full rounded-md" readonly />
+            </label>
+
+            <label class="form-control w-full">
+                <div class="label">
                     <span class="label-text">Total Pemasukkan</span>
                 </div>
                 <input type="text"
@@ -35,7 +42,7 @@
                     class="input input-bordered w-full rounded-md" />
             </label>
 
-            <label class="form-control w-full col-span-3">
+            <label class="form-control w-full col-span-2">
                 <div class="label">
                     <span class="label-text">Catatan</span>
                 </div>

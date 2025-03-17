@@ -89,6 +89,7 @@
                         <td>Rp. <?php echo e(number_format($report->total_income, 0, ',', '.')); ?></td>
                         <td>Rp. <?php echo e(number_format($report->total_outcome, 0, ',', '.')); ?></td>
                         <td>Rp. <?php echo e(number_format($report->savings, 0, ',', '.')); ?></td>
+                        <td>Rp. <?php echo e(number_format($report->qris_balance, 0, ',', '.')); ?></td>
                         <td>Rp. <?php echo e(number_format($report->balance, 0, ',', '.')); ?></td>
                         <td><?php echo e($report->notes); ?></td>
                     </tr>
