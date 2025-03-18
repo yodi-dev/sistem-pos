@@ -46,7 +46,7 @@
                         <ul
                             class="absolute bg-white text-base-content max-h-80 overflow-y-scroll w-64 rounded-md shadow-md z-10">
                             @foreach ($suppliers as $index => $supplier)
-                                <li
+                                <li wire:click="addSupplier({{ $supplier->id }})"
                                     class="px-4 py-2 text-base-content cursor-pointer hover:bg-gray-200 {{ $highlightIndex === $index ? 'bg-gray-200' : '' }}">
                                     {{ $supplier->name }}
                                 </li>

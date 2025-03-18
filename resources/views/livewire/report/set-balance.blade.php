@@ -23,7 +23,7 @@
                         </div>
                         <input type="text"
                             x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
-                            wire:model="qrisBalance" wire:change="setQrisBalance"
+                            wire:model="openingQris" wire:change="setQrisBalance"
                             class="input input-bordered w-full rounded-md">
                     </label>
 
@@ -47,7 +47,7 @@
                     </div>
                     <div class="text-center">
                         <h4>Saldo QRIS</h4>
-                        <p class="text-base-content font-bold">Rp {{ $qrisBalance }}</p>
+                        <p class="text-base-content font-bold">Rp {{ $openingQris }}</p>
                     </div>
                     <div class="text-center">
                         <h4>Tabungan Awal</h4>

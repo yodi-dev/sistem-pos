@@ -434,7 +434,10 @@ class TransactionManager extends Component
         $this->paymentMethod = $method;
         if ($method === 'utang') {
             $this->totalPaid = 0;
+        } else if ($method === 'QRIS') {
+            $this->totalPaid = $this->total_price;
         }
+
         $this->updateTotal();
     }
 

@@ -167,7 +167,9 @@
                             <div class="flex space-x-2 items-center">
                                 <label for="total_paid"
                                     class="block mb-2 text-base-content dark:text-white">Bayar</label>
-                                <input type="number" id="total_paid" wire:model.live="totalPaid"
+                                <input type="text"
+                                    x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))"
+                                    id="total_paid" wire:model.live="totalPaid"
                                     class="w-full p-2 text-base-content border rounded dark:bg-gray-700 dark:text-white border-2">
                                 <button type="button" icon="c-circle-stack" wire:click="clearTotalPaid"
                                     class="btn btn-sm btn-outline btn-error text-base-100 rounded-md hover:bg-red-600">X

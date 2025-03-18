@@ -22,6 +22,7 @@ class TemporaryReport extends Component
     public $notes;
     public $openingBalance = 0;
     public $openingSavings = 0;
+    public $openingQris = 0;
 
     public function openModal()
     {
@@ -39,6 +40,8 @@ class TemporaryReport extends Component
 
         $this->openingBalance = DailyReport::where('report_date', $reportDate)->value('opening_balance') ?? 0;
         $this->openingSavings = DailyReport::where('report_date', $reportDate)->value('opening_savings') ?? 0;
+        $this->openingQris = DailyReport::where('report_date', $reportDate)->value('opening_qris') ?? 0;
+
 
         $this->qrisIncome = Transaction::where('payment_method', 'qris')->whereDate('created_at', $reportDate)->sum('total_price');
         $this->totalIncome = Transaction::whereDate('created_at', $reportDate)->sum('total_price');
@@ -58,7 +61,7 @@ class TemporaryReport extends Component
             ->value('balance') ?? 0;
 
         $currentBalance = $this->openingBalance + $previousBalance;
-        $totalOutcome = $this->totalOutcome + $this->addSavings;
+        $totalOutcome = $this->totalOutcome + $this->addSavings + $this->openingSavings;
         $currentBalance -= $totalOutcome;
         $currentBalance += $this->totalIncome;
         $this->balance = $currentBalance;
@@ -71,6 +74,7 @@ class TemporaryReport extends Component
         $this->totalOutcome = number_format($this->totalOutcome, 0, ',', '.');
         $this->openingBalance = number_format($this->openingBalance, 0, ',', '.');
         $this->savings = number_format($this->savings, 0, ',', '.');
+        $this->openingQris = number_format($this->openingQris, 0, ',', '.');
         $this->balance = number_format($this->balance, 0, ',', '.');
         $this->openingSavings = number_format($this->openingSavings, 0, ',', '.');
     }
@@ -83,25 +87,28 @@ class TemporaryReport extends Component
             ->orderBy('report_date', 'desc')
             ->value('savings') ?? null;
 
-        $currentSavings = $this->openingSavings + $previousSavings;
-        $this->savings = $currentSavings;
+        $this->savings = $this->openingSavings + $previousSavings;;
     }
 
     public function generateReport()
     {
         $this->inisiateFormat();
         $reportDate = now()->format('Y-m-d');
+        $totalOutcome = $this->totalOutcome + $this->addSavings + $this->openingSavings;
+
 
         DailyReport::updateOrCreate(
             ['report_date' => $reportDate],
             [
+                'qris_income' => $this->qrisIncome,
                 'total_income' => $this->totalIncome,
-                'total_outcome' => $this->totalOutcome,
+                'total_outcome' => $totalOutcome,
                 'opening_savings' => $this->openingSavings,
                 'savings' => $this->savings,
-                'qris_balance' => $this->qrisIncome,
                 'opening_balance' => $this->openingBalance,
                 'balance' => $this->balance,
+                'opening_qris' => $this->openingQris,
+                'qris_balance' => $this->qrisIncome + $this->openingQris,
                 'notes' => $this->notes,
             ]
         );
@@ -116,9 +123,11 @@ class TemporaryReport extends Component
         $this->qrisIncome = str_replace('.', '', $this->qrisIncome);
         $this->totalIncome = str_replace('.', '', $this->totalIncome);
         $this->totalOutcome = str_replace('.', '', $this->totalOutcome);
+        $this->addSavings = str_replace('.', '', $this->addSavings);
         $this->savings = str_replace('.', '', $this->savings);
         $this->openingBalance = str_replace('.', '', $this->openingBalance);
         $this->openingSavings = str_replace('.', '', $this->openingSavings);
+        $this->openingQris = str_replace('.', '', $this->openingQris);
         $this->balance = str_replace('.', '', $this->balance);
     }
 

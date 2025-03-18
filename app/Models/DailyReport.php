@@ -10,7 +10,7 @@ class DailyReport extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['report_date', 'qris_income', 'total_income', 'total_outcome', 'opening_savings', 'savings', 'opening_balance', 'qris_balance', 'balance',  'notes'];
+    protected $fillable = ['report_date', 'qris_income', 'total_income', 'total_outcome', 'opening_savings', 'savings', 'opening_balance', 'opening_qris', 'qris_balance', 'balance',  'notes'];
 
     protected $casts = [
         'report_date' => 'date'
