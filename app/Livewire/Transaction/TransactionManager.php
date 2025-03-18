@@ -413,6 +413,7 @@ class TransactionManager extends Component
 
     public function addNominal($amount)
     {
+        $this->totalPaid = str_replace('.', '', $this->totalPaid);;
         $this->totalPaid += $amount;
         $this->updatedTotalPaid();
     }
@@ -467,7 +468,9 @@ class TransactionManager extends Component
         if (empty($this->totalPaid)) {
             $this->changeDue = 0;
         } else {
+            $this->totalPaid = str_replace('.', '', $this->totalPaid);;
             $this->changeDue = $this->totalPaid - $this->total_price;
+            $this->totalPaid = number_format($this->totalPaid, 0, ',', '.');
         }
     }
 }
