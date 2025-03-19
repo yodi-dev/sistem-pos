@@ -84,6 +84,26 @@
 <?php $component = $__componentOriginalf51438a7488970badd535e5f203e0c1b; ?>
 <?php unset($__componentOriginalf51438a7488970badd535e5f203e0c1b); ?>
 <?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginald64144c2287634503c73cd4803d6e578 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald64144c2287634503c73cd4803d6e578 = $attributes; } ?>
+<?php $component = Mary\View\Components\Select::resolve(['label' => 'Saldo','options' => $saldo,'optionValue' => 'value','optionLabel' => 'name','placeholder' => 'Pilih saldo','placeholderValue' => '0'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('select'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Mary\View\Components\Select::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'rounded-md','wire:model' => 'selectedSaldo']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald64144c2287634503c73cd4803d6e578)): ?>
+<?php $attributes = $__attributesOriginald64144c2287634503c73cd4803d6e578; ?>
+<?php unset($__attributesOriginald64144c2287634503c73cd4803d6e578); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald64144c2287634503c73cd4803d6e578)): ?>
+<?php $component = $__componentOriginald64144c2287634503c73cd4803d6e578; ?>
+<?php unset($__componentOriginald64144c2287634503c73cd4803d6e578); ?>
+<?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalf51438a7488970badd535e5f203e0c1b = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf51438a7488970badd535e5f203e0c1b = $attributes; } ?>
 <?php $component = Mary\View\Components\Input::resolve(['label' => 'Catatan'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

@@ -3,6 +3,7 @@
 namespace App\Livewire\Transaction;
 
 use App\Models\Unit;
+use Mary\Traits\Toast;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Customer;
@@ -16,6 +17,8 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 class TransactionManager extends Component
 {
+    use Toast;
+
     public $search = '';
     public $searchCustomer = '';
     public $products = [];
@@ -129,7 +132,7 @@ class TransactionManager extends Component
 
         if ($transaction) {
             session()->forget('cart');
-            $this->dispatch('showToast', 'Berhasil menyimpan transaksi.');
+            $this->success('Berhasil menyimpan transaksi.', css: 'bg-neutral text-base-100 rounded-md');
             $this->resetCart();
             $this->dispatch('focus-search');
         }
@@ -253,7 +256,11 @@ class TransactionManager extends Component
             $status = $this->paymentMethod === 'utang' ? 'Belum Lunas' : null;
             $utang = $this->paymentMethod === 'utang' ? $this->total_price - $this->totalPaid : null;
 
+            $this->totalPaid = str_replace('.', '', $this->totalPaid);;
+
             DB::beginTransaction();
+
+            // dd($this->totalPaid);
 
             try {
                 $transaction = Transaction::create([

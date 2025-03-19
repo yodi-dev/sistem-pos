@@ -8,6 +8,7 @@
                     <th class="w-2/5 border-r">Tanggal</th>
                     <th class="w-2/5 border-r">Pengeluaran</th>
                     <th class="w-2/5 border-r">Nominal</th>
+                    <th class="w-2/5 border-r">Saldo</th>
                     <th class="w-2/5 border-r">Catatan</th>
                     <th class="w-1/5 border-r">Aksi</th>
                 </tr>
@@ -18,6 +19,7 @@
                         <td><?php echo e($expense->formatted_date); ?></td>
                         <td><?php echo e($expense->expense); ?></td>
                         <td>Rp. <?php echo e(number_format($expense->amount, 0, ',', '.')); ?></td>
+                        <td><?php echo e($expense->saldo); ?></td>
                         <td><?php echo e($expense->note); ?></td>
                         <td class="flex justify-center">
                             <button wire:click="edit(<?php echo e($expense->id); ?>)"

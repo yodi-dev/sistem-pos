@@ -19,7 +19,7 @@ class ReportTable extends Component
     #[On('save-report')]
     public function mount()
     {
-        $this->reports = DailyReport::all()->map(function ($report) {
+        $this->reports = DailyReport::orderByDesc('report_date')->get()->map(function ($report) {
             $report->formatted_total_income = number_format($report->total_income, 0, ',', '.');
             $report->formatted_total_outcome = number_format($report->total_outcome, 0, ',', '.');
             $report->formatted_balance = number_format($report->balance, 0, ',', '.');

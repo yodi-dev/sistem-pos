@@ -7,12 +7,25 @@ use Livewire\Component;
 
 class ExpenseForm extends Component
 {
-    public $expenseId, $date, $expense, $amount, $note;
+    public $expenseId, $date, $expense, $amount, $note, $selectedSaldo;
+    public $saldo = [
+        [
+            'id' => 1,
+            'name' => 'Tunai',
+            'value' => 'cash',
+        ],
+        [
+            'id' => 2,
+            'name' => 'QRIS',
+            'value' => 'qris',
+        ],
+    ];
 
     protected $rules = [
         'date' => 'required|date',
         'expense' => 'required|string|max:255',
         'amount' => 'required|numeric|min:0',
+        'selectedSaldo' => 'required',
         'note' => 'nullable|string',
     ];
 
@@ -47,6 +60,8 @@ class ExpenseForm extends Component
     {
         $this->validate();
 
+        // dd($this->selectedSaldo);
+
         if ($this->expenseId) {
         }
         $this->amount = str_replace('.', '', $this->amount);
@@ -57,6 +72,7 @@ class ExpenseForm extends Component
                 'date' => $this->date,
                 'expense' => $this->expense,
                 'amount' => $this->amount,
+                'saldo' => $this->selectedSaldo,
                 'note' => $this->note,
             ]
         );

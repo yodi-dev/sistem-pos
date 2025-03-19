@@ -10,6 +10,8 @@
                     <x-input label="Pengeluaran" wire:model="expense" class="rounded-md" />
                     <x-input label="Nominal" wire:model="amount" class="rounded-md" type="text"
                         x-on:input="$event.target.value = new Intl.NumberFormat('id-ID').format($event.target.value.replace(/\D/g, ''))" />
+                    <x-select label="Saldo" :options="$saldo" option-value="value" option-label="name"
+                        class="rounded-md" placeholder="Pilih saldo" placeholder-value="0" wire:model="selectedSaldo" />
                     <x-input label="Catatan" wire:model="note" class="rounded-md" />
 
                     <div class="flex space-x-2 w-full mt-2">

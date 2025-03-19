@@ -13,6 +13,7 @@ class Penjualan extends Component
     public function render()
     {
         $transactions = Transaction::with('customer')->orderBy('id', 'desc')->paginate(10);
+        // dd($transactions);
 
         return view('livewire.transaction.penjualan', compact('transactions'));
     }

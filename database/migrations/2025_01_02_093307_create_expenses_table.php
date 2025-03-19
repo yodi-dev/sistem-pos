@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('expense');
             $table->decimal('amount', 15, 2);
+            $table->enum('saldo', ['cash', 'qris']);
             $table->text('note')->nullable();
             $table->timestamps();
         });
