@@ -12,9 +12,11 @@ use Livewire\Attributes\On;
 use App\Models\WholesaleItem;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Mary\Traits\Toast;
 
 class WholesaleManager extends Component
 {
+    use Toast;
     public $wholesales;
     public $selectedWholesale;
     public $showDetailModal = false;
@@ -264,7 +266,8 @@ class WholesaleManager extends Component
             DB::commit();
             $this->resetCart();
             session()->forget('cartWholesale');
-            $this->dispatch('showToast', 'Berhasil menyimpan data kulakan.');
+            $this->dispatch('close-modal');
+            $this->success('Berhasil menyimpan data kulakan.', css: 'bg-neutral text-base-100 rounded-md');
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
@@ -276,7 +279,6 @@ class WholesaleManager extends Component
     {
         $this->cart = [];
         $this->groupedCart = [];
-        $this->dispatch('close-modal');
     }
 
     #[On('closeModal')]

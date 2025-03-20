@@ -80,7 +80,7 @@
 <?php $component = $__componentOriginal602b228a887fab12f0012a3179e5b533; ?>
 <?php unset($__componentOriginal602b228a887fab12f0012a3179e5b533); ?>
 <?php endif; ?>
-                <dialog id="modalCart" class="modal" wire:ignore.self>
+                <dialog id="modalCart" class="modal" wire:ignore.self x-data @close-modal.window="modalCart.close()">
                     <div class="modal-box text-base-content bg-base-300 py-3 max-w-2xl">
                         <!--[if BLOCK]><![endif]--><?php if(empty($groupedCart)): ?>
                             <p class="text-center text-gray-500">Belum ada data kulakan.</p>
@@ -309,55 +309,4 @@
 
     </div>
 </div>
-
-    <?php
-        $__scriptKey = '489732183-0';
-        ob_start();
-    ?>
-    <script>
-        $wire.on("showToast", (message) => {
-            let toast = document.createElement("div");
-            toast.className =
-                `toast toast-top toast-end`;
-            toast.innerHTML = `
-                <div class="alert text-base-100 bg-neutral rounded-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                ${message}</div>`;
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000); // Hilang setelah 3 detik
-        });
-
-        $wire.on("showToastError", (message) => {
-            let toast = document.createElement("div");
-            toast.className =
-                `toast toast-top toast-end`;
-            toast.innerHTML = `
-                <div class="alert text-base-100 bg-error rounded-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12M12 2a10 10 0 1010 10A10 10 0 0012 2z" />
-                </svg>
-                ${message}</div>`;
-
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.remove();
-            }, 3000); // Hilang setelah 3 detik
-        });
-    </script>
-    <?php
-        $__output = ob_get_clean();
-
-        \Livewire\store($this)->push('scripts', $__output, $__scriptKey)
-    ?>
 <?php /**PATH C:\Users\asus\Herd\sistem-pos\resources\views/livewire/wholesale/wholesale-manager.blade.php ENDPATH**/ ?>
