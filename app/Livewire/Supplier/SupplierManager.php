@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Supplier;
 
+use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Supplier;
 use Livewire\Attributes\On;
 
 class SupplierManager extends Component
 {
+    use Toast;
+
     public $suppliers;
     public $supplier_id;
     public $name;
@@ -52,7 +55,7 @@ class SupplierManager extends Component
             'name' => $this->name,
         ]);
 
-        session()->flash('message', $this->supplier_id ? 'Berhasil memperbarui data supplier.' : 'Berhasil membuat data supplier.');
+        $this->success($this->supplier_id ? 'Berhasil memperbarui data supplier.' : 'Berhasil membuat data supplier.', css: 'bg-neutral text-base-100 rounded-md');
 
         $this->closeModal();
         $this->resetInputFields();
@@ -70,6 +73,6 @@ class SupplierManager extends Component
     public function delete($id)
     {
         Supplier::find($id)->delete();
-        session()->flash('message', 'Berhasil menghapus data supplier.');
+        $this->success('Berhasil menghapus data supplier.', css: 'bg-neutral text-base-100 rounded-md');
     }
 }
