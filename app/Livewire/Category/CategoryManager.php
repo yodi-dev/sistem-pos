@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Category;
 
+use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Category;
 use Livewire\Attributes\On;
 
 class CategoryManager extends Component
 {
+    use Toast;
+
     public $categories, $name, $description, $category_id;
     public $isModalOpen = 0;
 
@@ -53,7 +56,7 @@ class CategoryManager extends Component
             'description' => $this->description
         ]);
 
-        session()->flash('message', $this->category_id ? 'Berhasil memperbarui data kategori.' : 'Berhasil membuat data kategori.');
+        $this->success($this->category_id ? 'Berhasil memperbarui data kategori.' : 'Berhasil membuat data kategori.', css: 'bg-neutral text-base-100 rounded-md');
 
         $this->closeModal();
         $this->resetInputFields();
@@ -72,6 +75,6 @@ class CategoryManager extends Component
     public function delete($id)
     {
         Category::find($id)->delete();
-        session()->flash('message', 'Berhasil menghapus data kategori.');
+         $this->success('Berhasil menghapus data kategori.', css: 'bg-neutral text-base-100 rounded-md');
     }
 }
