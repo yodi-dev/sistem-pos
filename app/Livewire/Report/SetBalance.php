@@ -42,6 +42,7 @@ class SetBalance extends Component
                 'opening_savings' => 0,
                 'savings' => 0,
                 'opening_balance' => $this->openingBalance,
+                'opening_qris' => 0,
                 'qris_balance' => 0,
                 'balance' => 0,
             ]
@@ -93,6 +94,7 @@ class SetBalance extends Component
                 'opening_savings' => $this->openingSavings,
                 'savings' => 0,
                 'opening_balance' => 0,
+                'opening_qris' => 0,
                 'qris_balance' => 0,
                 'balance' => 0,
             ]

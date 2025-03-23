@@ -61,7 +61,7 @@ class TemporaryReport extends Component
             ->value('balance') ?? 0;
 
         $currentBalance = $this->openingBalance + $previousBalance;
-        $totalOutcome = $this->totalOutcome + $this->addSavings + $this->openingSavings;
+        $totalOutcome = $this->totalOutcome + $this->addSavings;
         $currentBalance -= $totalOutcome;
         $currentBalance += $this->totalIncome;
         $this->balance = $currentBalance;
@@ -94,7 +94,7 @@ class TemporaryReport extends Component
     {
         $this->inisiateFormat();
         $reportDate = now()->format('Y-m-d');
-        $totalOutcome = $this->totalOutcome + $this->addSavings + $this->openingSavings;
+        $totalOutcome = $this->totalOutcome + $this->addSavings;
 
 
         DailyReport::updateOrCreate(
