@@ -1,15 +1,6 @@
 <div class="text-base-content dark:text-gray-100">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
-        <!--[if BLOCK]><![endif]--><?php if(session()->has('message')): ?>
-            <div role="alert" class="alert mb-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span><?php echo e(session('message')); ?></span>
-            </div>
-        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+    <div class="mx-auto sm:px-6 lg:px-0">
+
         <?php if (isset($component)) { $__componentOriginal7f194736b6f6432dc38786f292496c34 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7f194736b6f6432dc38786f292496c34 = $attributes; } ?>
 <?php $component = Mary\View\Components\Card::resolve(['title' => 'Data Pembeli','shadow' => true,'separator' => true] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

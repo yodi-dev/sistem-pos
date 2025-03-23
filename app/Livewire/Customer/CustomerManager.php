@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Customer;
 
+use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Customer;
 use Livewire\Attributes\On;
 
 class CustomerManager extends Component
 {
+    use Toast;
+    
     public $code, $name, $address, $customer_id;
     public $search = '';
     public $isModalOpen = 0;
@@ -57,7 +60,7 @@ class CustomerManager extends Component
             'address' => $this->address
         ]);
 
-        session()->flash('message', $this->customer_id ? 'Berhasil memperbarui data pembeli.' : 'Berhasil membuat data pembeli.');
+        $this->success($this->customer_id ? 'Berhasil memperbarui data pembeli.' : 'Berhasil membuat data pembeli.', css: 'bg-neutral text-base-100 rounded-md');
 
         $this->closeModal();
         $this->resetInputFields();
@@ -77,6 +80,6 @@ class CustomerManager extends Component
     public function delete($id)
     {
         Customer::find($id)->delete();
-        session()->flash('message', 'Berhasil menghapus data pembeli.');
+        $this->success('Berhasil menghapus data pembeli.', css: 'bg-neutral text-base-100 rounded-md');
     }
 }
