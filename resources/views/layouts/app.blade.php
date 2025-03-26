@@ -47,7 +47,7 @@
     </x-main>
 
     {{-- Toast --}}
-    <x-toaster />
+    {{-- <x-toaster /> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/selectize/dist/js/standalone/selectize.min.js"></script>
 </body>
