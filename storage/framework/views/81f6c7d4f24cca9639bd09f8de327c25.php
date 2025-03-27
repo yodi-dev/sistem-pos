@@ -1,11 +1,35 @@
 <div>
-    @if ($isModal)
-        <livewire:report.set-balance>
-    @endif
-    <x-card title="Laporan Sementara" class="text-neutral bg-base-200" shadow separator>
-        <x-slot:menu>
+    <?php if($isModal): ?>
+        <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('report.set-balance', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1131192526-1', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+    <?php endif; ?>
+    <?php if (isset($component)) { $__componentOriginal7f194736b6f6432dc38786f292496c34 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal7f194736b6f6432dc38786f292496c34 = $attributes; } ?>
+<?php $component = Mary\View\Components\Card::resolve(['title' => 'Laporan Sementara','shadow' => true,'separator' => true] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('card'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Mary\View\Components\Card::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['class' => 'text-neutral bg-base-200']); ?>
+         <?php $__env->slot('menu', null, []); ?> 
             <button wire:click="openModal" class="btn btn-sm btn-neutral text-base-100 rounded-md">Set Saldo</button>
-        </x-slot:menu>
+         <?php $__env->endSlot(); ?>
         <div class="grid grid-cols-3 gap-4 text-base-content">
             <label class="form-control w-full">
                 <div class="label">
@@ -53,18 +77,14 @@
 
         <div class="divider"></div>
 
-        <div class="grid grid-cols-3 text-base-content">
+        <div class="grid grid-cols-2 text-base-content">
             <div class="text-center">
                 <h4>Saldo</h4>
-                <p class="text-base-content font-bold">Rp {{ $balance }}</p>
-            </div>
-            <div class="text-center">
-                <h4>Saldo QRIS</h4>
-                <p class="text-base-content font-bold">Rp {{ $qrisBalance }}</p>
+                <p class="text-base-content font-bold">Rp <?php echo e($balance); ?></p>
             </div>
             <div class="text-center">
                 <h4>Tabungan</h4>
-                <p class="text-base-content font-bold">Rp {{ $savings }}</p>
+                <p class="text-base-content font-bold">Rp <?php echo e($savings); ?></p>
             </div>
         </div>
 
@@ -74,5 +94,14 @@
             </button>
         </div>
 
-    </x-card>
-</div>
+     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal7f194736b6f6432dc38786f292496c34)): ?>
+<?php $attributes = $__attributesOriginal7f194736b6f6432dc38786f292496c34; ?>
+<?php unset($__attributesOriginal7f194736b6f6432dc38786f292496c34); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7f194736b6f6432dc38786f292496c34)): ?>
+<?php $component = $__componentOriginal7f194736b6f6432dc38786f292496c34; ?>
+<?php unset($__componentOriginal7f194736b6f6432dc38786f292496c34); ?>
+<?php endif; ?>
+</div><?php /**PATH C:\Users\asus\Herd\sistem-pos\resources\views\livewire\report\temporary-report.blade.php ENDPATH**/ ?>

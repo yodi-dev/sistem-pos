@@ -16,7 +16,9 @@ class TemporaryReport extends Component
     public $qrisIncome = 0;
     public $totalIncome = 0;
     public $totalOutcome = 0;
+    public $qrisOutcome = 0;
     public $savings = 0;
+    public $qrisBalance = 0;
     public $balance = 0;
     public $addSavings = 0;
     public $notes;
@@ -46,6 +48,7 @@ class TemporaryReport extends Component
         $this->qrisIncome = Transaction::where('payment_method', 'qris')->whereDate('created_at', $reportDate)->sum('total_price');
         $this->totalIncome = Transaction::whereDate('created_at', $reportDate)->sum('total_price');
         $this->totalOutcome = Expense::whereDate('created_at', $reportDate)->sum('amount');
+        $this->qrisOutcome = Expense::where('saldo', 'qris')->whereDate('created_at', $reportDate)->sum('amount');
 
         $this->updateSavings();
         $this->updateBalance();
@@ -65,6 +68,7 @@ class TemporaryReport extends Component
         $currentBalance -= $totalOutcome;
         $currentBalance += $this->totalIncome;
         $this->balance = $currentBalance;
+        $this->qrisBalance = $this->openingQris + $this->qrisIncome - $this->qrisOutcome;
     }
 
     private function setFormat()
@@ -76,6 +80,7 @@ class TemporaryReport extends Component
         $this->savings = number_format($this->savings, 0, ',', '.');
         $this->openingQris = number_format($this->openingQris, 0, ',', '.');
         $this->balance = number_format($this->balance, 0, ',', '.');
+        $this->qrisBalance = number_format($this->qrisBalance, 0, ',', '.');
         $this->openingSavings = number_format($this->openingSavings, 0, ',', '.');
     }
 
@@ -108,7 +113,7 @@ class TemporaryReport extends Component
                 'opening_balance' => $this->openingBalance,
                 'balance' => $this->balance,
                 'opening_qris' => $this->openingQris,
-                'qris_balance' => $this->qrisIncome + $this->openingQris,
+                'qris_balance' => $this->qrisIncome + $this->openingQris - $this->qrisOutcome,
                 'notes' => $this->notes,
             ]
         );
@@ -129,6 +134,7 @@ class TemporaryReport extends Component
         $this->openingSavings = str_replace('.', '', $this->openingSavings);
         $this->openingQris = str_replace('.', '', $this->openingQris);
         $this->balance = str_replace('.', '', $this->balance);
+        $this->qrisBalance = str_replace('.', '', $this->qrisBalance);
     }
 
     public function updatedTotalIncome()
