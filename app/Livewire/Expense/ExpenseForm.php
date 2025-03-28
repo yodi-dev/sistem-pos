@@ -43,6 +43,7 @@ class ExpenseForm extends Component
             $this->expense = $expense->expense;
             $this->amount = number_format($expense->amount, 0, ',', '.');
             $this->note = $expense->note;
+            $this->selectedSaldo = $expense->saldo;
         } else {
             $this->resetForm();
         }
@@ -59,8 +60,6 @@ class ExpenseForm extends Component
     public function save()
     {
         $this->validate();
-
-        // dd($this->selectedSaldo);
 
         if ($this->expenseId) {
         }
