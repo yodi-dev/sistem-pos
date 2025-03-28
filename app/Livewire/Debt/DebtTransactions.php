@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Debt;
 
+use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Transaction;
 
 class DebtTransactions extends Component
 {
+    use Toast;
     public $payment = [];
 
     public function render()
@@ -21,11 +23,10 @@ class DebtTransactions extends Component
 
     public function payDebt($transactionId, $index)
     {
-        // Temukan transaksi dan kurangi total price
+        $this->payment[$index]['amount'] = str_replace('.', '', $this->payment[$index]['amount']);
         $transaction = Transaction::find($transactionId);
         $transaction->debt -= $this->payment[$index]['amount'];
 
-        // Update status jika debt sudah lunas
         if ($transaction->debt <= 0) {
             $transaction->debt = 0;
             $transaction->debt_status = 'Lunas';
@@ -34,18 +35,17 @@ class DebtTransactions extends Component
 
         $this->payment[$index]['amount'] = '';
 
-        session()->flash('message', 'Pembayaran berhasil.');
+        $this->success('Berhasil melakukan pembayaran.', css:'bg-neutral text-base-100 rounded-md');
     }
 
     public function lunasi($transactionId)
     {
-        // Temukan transaksi dan kurangi total price
         $transaction = Transaction::find($transactionId);
         $transaction->debt = 0;
         $transaction->debt_status = 'Lunas';
 
         $transaction->save();
 
-        session()->flash('message', 'Pembayaran berhasil.');
+        $this->success('Berhasil melakukan pembayaran.', css:'bg-neutral text-base-100 rounded-md');
     }
 }
