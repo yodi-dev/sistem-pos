@@ -2,17 +2,18 @@
 
 namespace App\Livewire\Product;
 
+use Mary\Traits\Toast;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
 
 class CreateProduct extends Component
 {
+    use Toast;
     public $categories;
     public $code, $name, $category_id, $purchase_price, $retail_price, $wholesale_price, $agent_price, $reseller_price, $stock, $location;
     public $product_id;
 
-    // edit produk
     public $isEditing = false;
 
     public function render()
@@ -75,14 +76,12 @@ class CreateProduct extends Component
             'location' => $this->location,
         ]);
 
-        session()->flash(
-            'message',
-            $this->product_id ? 'Berhasil Perbarui Produk.' : 'Berhasil Menambahkan Produk.'
-        );
 
         $this->resetForm();
 
         redirect('products');
+        $this->dispatch('saveProduct');
+        $this->success($this->product_id ? 'Berhasil Perbarui Produk.' : 'Berhasil Menambahkan Produk.', css:'bg-neutral text-base-100 rounded-md');
     }
 
     public function resetForm()

@@ -71,10 +71,10 @@
                                         class="px-2 text-sm text-neutral dark:text-blue-400">
                                         <x-icon name="m-users" />
                                     </a>
-                                    <a wire:navigate href="{{ route('barcode.product', $product->id) }}"
+                                    {{-- <a wire:navigate href="{{ route('barcode.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400">
                                         <x-icon name="m-qr-code" />
-                                    </a>
+                                    </a> --}}
                                     <a wire:navigate href="{{ route('edit.product', $product->id) }}"
                                         class="px-2 text-sm text-neutral dark:text-blue-400 border-l border-neutral">
                                         <x-icon name="m-pencil-square" />

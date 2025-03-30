@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Product;
 
+use Mary\Traits\Toast;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Supplier;
@@ -14,6 +15,7 @@ use Livewire\Attributes\Title;
 class ProductManager extends Component
 {
     use WithPagination;
+    use Toast;
 
     public $search = '';
     public $isModalOpen = false;
@@ -100,6 +102,6 @@ class ProductManager extends Component
     public function delete($id)
     {
         Product::find($id)->delete();
-        session()->flash('message', 'Produk berhasil dihapus.');
+        $this->success('Berhasil menghapus barang', css:'bg-neutral text-base-100 rounded-md');
     }
 }
