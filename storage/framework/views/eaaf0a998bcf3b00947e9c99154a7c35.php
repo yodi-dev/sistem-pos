@@ -23,8 +23,8 @@
                     class="btn btn-sm btn-neutral text-base-100 rounded-md">
                     Import
                 </a>
-                <input type="text" wire:model.live="search" class="input input-sm input-bordered rounded-md"
-                    placeholder="Cari Produk..." />
+                <input type="text" wire:model.live="search"
+                    class="input input-sm text-base-content input-bordered rounded-md" placeholder="Cari Produk..." />
              <?php $__env->endSlot(); ?>
 
             <!--[if BLOCK]><![endif]--><?php if($modalImport): ?>

@@ -77,7 +77,8 @@ class ProductManager extends Component
 
     public function showDetails($productId)
     {
-        $this->Product = Product::with('category')->find($productId);
+        $this->Product = Product::with(['category', 'suppliers'])->find($productId);
+        // dd($this->Product);
         $this->isModalOpen = true;
     }
 
