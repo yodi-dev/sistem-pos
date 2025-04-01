@@ -70,7 +70,7 @@
                                     <?php else: ?>
                                         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $product->units; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <span
-                                                class="badge badge-accent py-3 px-4 my-0.5 text-base-content"><?php echo e($unit->name); ?></span>
+                                                class="badge bg-neutral rounded-md py-3 px-2 my-0.5 text-base-100"><?php echo e($unit->name); ?></span>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                 </td>
