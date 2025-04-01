@@ -1,5 +1,5 @@
 <div class="text-gray-900 dark:text-gray-100">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-0">
+    <div class="mx-auto sm:px-6 lg:px-0">
         <div class="row">
             <div class="col-12 ">
                 <x-card title="Kasa" class="text-neutral bg-base-200" shadow separator>
