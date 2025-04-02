@@ -84,7 +84,7 @@
                                         <x-icon name="m-document-duplicate" />
                                     </a>
                                     <button wire:click="delete({{ $product->id }})"
-                                        class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
+                                        class="px-2 text-sm text-error dark:text-red-400 border-l border-neutral">
                                         <x-icon name="s-trash" />
                                     </button>
                                 </td>

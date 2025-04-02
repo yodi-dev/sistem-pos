@@ -147,7 +147,7 @@
 <?php endif; ?>
                                     </a>
                                     <button wire:click="delete(<?php echo e($product->id); ?>)"
-                                        class="px-2 text-sm text-neutral dark:text-red-400 border-l border-neutral">
+                                        class="px-2 text-sm text-error dark:text-red-400 border-l border-neutral">
                                         <?php if (isset($component)) { $__componentOriginalce0070e6ae017cca68172d0230e44821 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalce0070e6ae017cca68172d0230e44821 = $attributes; } ?>
 <?php $component = Mary\View\Components\Icon::resolve(['name' => 's-trash'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
